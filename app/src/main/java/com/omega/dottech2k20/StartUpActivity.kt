@@ -12,7 +12,10 @@ import com.ramotion.paperonboarding.PaperOnboardingFragment
 import com.ramotion.paperonboarding.PaperOnboardingPage
 
 class StartUpActivity : AppCompatActivity() {
-
+    /***
+     * If App is opened for first time, then show longer version of splash screen, and proceed to OnBoarding.
+     * Otherwise show shorter version of Splash screen and proceed directly to main app.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_start_up)
@@ -25,8 +28,6 @@ class StartUpActivity : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
-//        val intent = Intent(this, MainActivity::class.java)
-
 
         var transaction = supportFragmentManager.beginTransaction()
         transaction.replace(
@@ -34,7 +35,6 @@ class StartUpActivity : AppCompatActivity() {
             SplashScreenFragment.newInstance()
         )
         transaction.commit()
-
     }
 
     fun goToMainActivity() {
