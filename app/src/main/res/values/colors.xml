@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorPrimary">#FFFFFF</color>
+    <color name="colorPrimaryDark">#E0E0E0</color>
+    <color name="colorAccent">#B3000000</color>
+    <color name="SkeletonCard">#33000000</color>
+    <color name="SkeletonText">#40000000</color>
+    <color name="IndicatorDotColor">#9FA8DA</color>
+    <color name="IndicatorSelectedDotColor">#5C6BC0</color>
+    <color name="BackgroundGreen" >#AED581</color>
+    <color name="TextGreen">#2E7D32</color>
+    <color name="LightDivider">#1A000000</color>
+
 </resources>
