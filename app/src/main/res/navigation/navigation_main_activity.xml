@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_main_activity"
-    app:startDestination="@id/mainActivity">
-
-    <activity
-        android:id="@+id/mainActivity"
-        android:name="com.omega.dottech2k20.MainActivity"
-        android:label="activity_main"
-        tools:layout="@layout/activity_main" />
+    android:label="Events"
+    app:startDestination="@id/eventsFragment3">
+    <fragment
+        android:id="@+id/eventsFragment3"
+        android:name="com.omega.dottech2k20.EventsFragment"
+        android:label="fragment_events"
+        tools:layout="@layout/fragment_events" />
 </navigation>
