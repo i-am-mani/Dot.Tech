@@ -38,10 +38,12 @@ class StartUpActivity : AppCompatActivity() {
     }
 
     fun goToMainActivity() {
-        val goToNextActivity: () -> Unit = {
-
-        }
-        Handler(Looper.getMainLooper()).postDelayed(goToNextActivity, 2000)
+        val intent = Intent(this,MainActivity::class.java)
+        startActivity(intent)
+//        val goToNextActivity: () -> Unit = {
+//
+//        }
+//        goToNextActivity()
     }
 
     fun goToOnBoardingFragment() {

@@ -1,25 +1,26 @@
 package com.omega.dottech2k20
 
 
-
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.transition.ChangeBounds
 import android.transition.TransitionManager
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.core.transition.addListener
 import kotlinx.android.synthetic.main.fragment_splash_screen.*
 import kotlinx.android.synthetic.main.fragment_splash_screen2.*
 
 class SplashScreenFragment : Fragment() {
 
-    lateinit var mainActivity:StartUpActivity
+    lateinit var mainActivity: StartUpActivity
     var isFirstTime: Boolean = false
 
 
@@ -32,14 +33,15 @@ class SplashScreenFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val sharedPref = context?.getSharedPreferences(Utils.sharedPreferenceName, Context.MODE_PRIVATE)!!
-        isFirstTime = sharedPref.getBoolean("first-time",true)
+        val sharedPref =
+            context?.getSharedPreferences(Utils.sharedPreferenceName, Context.MODE_PRIVATE)!!
+        isFirstTime = sharedPref.getBoolean("first-time", true)
 
-        return if(isFirstTime){
-            sharedPref.edit().putBoolean("first-time",false).apply()
+        return if (isFirstTime) {
+            sharedPref.edit().putBoolean("first-time", false).apply()
             inflater.inflate(R.layout.fragment_splash_screen, container, false)
-        } else{
-           return inflater.inflate(R.layout.fragment_splash_screen2, container,false )
+        } else {
+            return inflater.inflate(R.layout.fragment_splash_screen2, container, false)
         }
 
 
@@ -48,25 +50,45 @@ class SplashScreenFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if(isFirstTime) {
+        if (isFirstTime) {
             animateFirstTimeSplashScreen()
-        } else{
+        } else {
             // If Delay isn't added, then transition won't be visible.
             Handler(Looper.getMainLooper()).postDelayed({
                 var constraintSet = ConstraintSet()
                 constraintSet.clone(splash_screen_constraint_set_root)
-                constraintSet.connect(R.id.im_event_logo,ConstraintSet.BOTTOM,R.id.guideline_mid,ConstraintSet.TOP)
-                constraintSet.connect(R.id.text_fest_name,ConstraintSet.TOP,R.id.guideline_mid,ConstraintSet.BOTTOM)
+
+                // Animate Name and Logo in center
+                constraintSet.connect(
+                    R.id.im_event_logo,
+                    ConstraintSet.BOTTOM,
+                    R.id.guideline_mid,
+                    ConstraintSet.TOP
+                )
+                constraintSet.connect(
+                    R.id.text_fest_name,
+                    ConstraintSet.TOP,
+                    R.id.guideline_mid,
+                    ConstraintSet.BOTTOM
+                )
 
                 val changeBounds = ChangeBounds().apply {
                     interpolator = AccelerateDecelerateInterpolator()
                     duration = 1000
                 }
 
+                // Go to Main Activity
+                changeBounds.addListener(onEnd = {
+                    mainActivity.goToMainActivity()
+                })
+
                 constraintSet.applyTo(splash_screen_constraint_set_root)
 
-                TransitionManager.beginDelayedTransition(splash_screen_constraint_set_root,changeBounds)
-            },300)
+                TransitionManager.beginDelayedTransition(
+                    splash_screen_constraint_set_root,
+                    changeBounds
+                )
+            }, 300)
 
         }
     }
