@@ -40,6 +40,7 @@ class StartUpActivity : AppCompatActivity() {
     fun goToMainActivity() {
         val intent = Intent(this,MainActivity::class.java)
         startActivity(intent)
+        finish()
 //        val goToNextActivity: () -> Unit = {
 //
 //        }
