@@ -90,6 +90,12 @@ class EventsFragment : Fragment() {
             val event: Event = mAdapter.getItem(activeCard)
             mViewModel.joinEvent(event)
         }
+
+        btn_unjoin.setOnClickListener{
+            val activeCard: Int = mLayoutManager.activeCardPosition
+            val event: Event = mAdapter.getItem(activeCard)
+            mViewModel.unjoinEvents(event)
+        }
     }
 
     private fun initRV() {
