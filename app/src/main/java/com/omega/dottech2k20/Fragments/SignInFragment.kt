@@ -1,6 +1,7 @@
 package com.omega.dottech2k20.Fragments
 
 import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -14,6 +15,7 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.AuthResult
+import com.omega.dottech2k20.MainActivity
 import com.omega.dottech2k20.R
 import com.omega.dottech2k20.R.layout
 import com.omega.dottech2k20.Utils.AuthenticationUtils
@@ -22,6 +24,12 @@ import java.time.Duration
 
 class SignInFragment : Fragment() {
 	val TAG: String = javaClass.simpleName
+	lateinit var mActivity: MainActivity
+
+	override fun onAttach(context: Context) {
+		super.onAttach(context)
+		mActivity = context as MainActivity
+	}
 
 	override fun onCreateView(
 		inflater: LayoutInflater,
@@ -63,9 +71,8 @@ class SignInFragment : Fragment() {
 		progressbar_login.visibility = View.INVISIBLE
 		if(state){
 			Log.d(TAG, "Login Successful")
-
-			Snackbar.make(et_login_email,"Login Successful",Snackbar.LENGTH_SHORT)
-
+			Snackbar.make(root_sign_in,"Login Successful",Snackbar.LENGTH_SHORT)
+			mActivity.setNavigationMenuItems()
 			progressbar_login.findNavController().navigate(R.id.eventsFragment)
 		} else{
 			Log.d(TAG, "Login Unsuccessful")
