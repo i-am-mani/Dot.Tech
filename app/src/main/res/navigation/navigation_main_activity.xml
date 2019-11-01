@@ -7,7 +7,7 @@
     app:startDestination="@id/eventsFragment">
     <fragment
         android:id="@+id/eventsFragment"
-        android:name="com.omega.dottech2k20.EventsFragment"
+        android:name="com.omega.dottech2k20.Fragments.EventsFragment"
         android:label="fragment_events"
         tools:layout="@layout/fragment_events" >
         <action
@@ -16,23 +16,45 @@
         <action
             android:id="@+id/action_eventsFragment_to_signInFragment"
             app:destination="@id/signInFragment" />
+        <action
+            android:id="@+id/action_eventsFragment_to_signOutFragment"
+            app:destination="@id/signOutFragment" />
+        <action
+            android:id="@+id/action_eventsFragment_to_notificationsFragment"
+            app:destination="@id/notificationsFragment" />
+        <action
+            android:id="@+id/action_eventsFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="com.omega.dottech2k20.SignUpFragment"
-        android:label="fragment_sign_up"
-        tools:layout="@layout/fragment_sign_up" >
+        android:name="com.omega.dottech2k20.Fragments.SignUpFragment"
+        android:label="fragment_sign_up">
         <action
             android:id="@+id/action_signUpFragment_to_signInFragment"
             app:destination="@id/signInFragment" />
     </fragment>
     <fragment
         android:id="@+id/signInFragment"
-        android:name="com.omega.dottech2k20.SignInFragment"
-        android:label="fragment_sign_in"
-        tools:layout="@layout/fragment_sign_in" >
+        android:name="com.omega.dottech2k20.Fragments.SignInFragment"
+        android:label="fragment_sign_in">
         <action
             android:id="@+id/action_signInFragment_to_signUpFragment"
             app:destination="@id/signUpFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/signOutFragment"
+        android:name="com.omega.dottech2k20.Fragments.SignOutFragment"
+        android:label="fragment_sign_out"
+        tools:layout="@layout/fragment_sign_out" />
+    <fragment
+        android:id="@+id/notificationsFragment"
+        android:name="com.omega.dottech2k20.Fragments.NotificationsFragment"
+        android:label="fragment_notifications"
+        tools:layout="@layout/fragment_notifications" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.omega.dottech2k20.Fragments.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
 </navigation>

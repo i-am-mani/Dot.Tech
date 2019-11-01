@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:id="@+id/eventsFragment"
+        android:icon="@drawable/ic_events"
+        android:title="Events" />
+
+    <item
+        android:id="@+id/signOutFragment"
+        android:icon="@drawable/ic_sign_out"
+        android:title="Sign Out"/>
+
+    <item
+        android:id="@+id/profileFragment"
+        android:icon="@drawable/ic_profile_user"
+        android:title="Profile"/>
+
+    <item
+        android:id="@+id/notifications"
+        android:icon="@drawable/ic_notification_bell"
+        android:title="Notifications"/>
+
+
+
+</menu>
