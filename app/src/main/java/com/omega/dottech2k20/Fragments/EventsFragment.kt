@@ -12,6 +12,7 @@ import android.widget.TextSwitcher
 import android.widget.TextView
 import android.widget.ViewSwitcher.ViewFactory
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
@@ -24,7 +25,9 @@ import com.google.firebase.firestore.Query
 import com.omega.dottech2k20.Adapters.EventsHolder
 import com.omega.dottech2k20.MainActivity
 import com.omega.dottech2k20.Models.Event
+import com.omega.dottech2k20.Models.UserEventViewModel
 import com.omega.dottech2k20.R
+import com.omega.dottech2k20.Utils.AuthenticationUtils
 import com.ramotion.cardslider.CardSliderLayoutManager
 import com.ramotion.cardslider.CardSnapHelper
 import kotlinx.android.synthetic.main.fragment_events.*
@@ -47,6 +50,7 @@ class EventsFragment : Fragment() {
     lateinit var mLayoutManager: CardSliderLayoutManager
     lateinit var mMainActivity: MainActivity
     var isInitTextSet: Boolean = false
+    lateinit var mViewModel: UserEventViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +59,11 @@ class EventsFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mMainActivity = context as MainActivity
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        mViewModel = ViewModelProviders.of(this).get(UserEventViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -72,6 +81,15 @@ class EventsFragment : Fragment() {
         ts_date.setFactory(TextViewFactory(R.style.TextAppearance_MaterialComponents_Body1))
         ts_description.setFactory(TextViewFactory(R.style.TextAppearance_AppCompat_Large))
         initRV()
+        initCallbacks()
+    }
+
+    private fun initCallbacks() {
+        btn_join.setOnClickListener{
+            val activeCard: Int = mLayoutManager.activeCardPosition
+            val event: Event = mAdapter.getItem(activeCard)
+            mViewModel.joinEvent(event)
+        }
     }
 
     private fun initRV() {
@@ -147,7 +165,6 @@ class EventsFragment : Fragment() {
 
         rv_event_thumb_nails.adapter = mAdapter
         mAdapter.startListening()
-
     }
 
     private fun onCardChanged() {
