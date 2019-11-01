@@ -1,4 +1,4 @@
-package com.omega.dottech2k20
+package com.omega.dottech2k20.Fragments
 
 
 import android.content.Context
@@ -21,6 +21,10 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.omega.dottech2k20.Adapters.EventsHolder
+import com.omega.dottech2k20.MainActivity
+import com.omega.dottech2k20.Models.Event
+import com.omega.dottech2k20.R
 import com.ramotion.cardslider.CardSliderLayoutManager
 import com.ramotion.cardslider.CardSnapHelper
 import kotlinx.android.synthetic.main.fragment_events.*
@@ -127,7 +131,9 @@ class EventsFragment : Fragment() {
                 Log.d(TAG, model.title)
                 // One time Initialization
                 if (!isInitTextSet && ts_title != null) {
-                    setTitle(model.title, TextAnimationType.FADE_IN)
+                    setTitle(model.title,
+                        TextAnimationType.FADE_IN
+                    )
                     isInitTextSet = true
                 }
             }
@@ -155,17 +161,23 @@ class EventsFragment : Fragment() {
 
     private fun changeEventContent(position: Int) {
         val event: Event = mAdapter.getItem(position)
-        var animTypeHorizontal = TextAnimationType.RIGHT_TO_LEFT
-        var animTypeVertical = TextAnimationType.TOP_TO_BOTTOM
+        var animTypeHorizontal =
+            TextAnimationType.RIGHT_TO_LEFT
+        var animTypeVertical =
+            TextAnimationType.TOP_TO_BOTTOM
 
         if (position < mCurrentPosition ?: 0) {
-            animTypeHorizontal = TextAnimationType.LEFT_TO_RIGHT
-            animTypeVertical = TextAnimationType.BOTTOM_TO_TOP
+            animTypeHorizontal =
+                TextAnimationType.LEFT_TO_RIGHT
+            animTypeVertical =
+                TextAnimationType.BOTTOM_TO_TOP
         }
 
         setTitle(event.title, animTypeHorizontal)
         setDateTime(event.startTime, event.endTime, animTypeVertical)
-        setDescription(event.shortDescription, TextAnimationType.FADE_IN)
+        setDescription(event.shortDescription,
+            TextAnimationType.FADE_IN
+        )
 
         mCurrentPosition = position
 

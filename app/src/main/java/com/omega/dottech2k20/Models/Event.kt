@@ -1,4 +1,4 @@
-package com.omega.dottech2k20
+package com.omega.dottech2k20.Models
 
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.Exclude

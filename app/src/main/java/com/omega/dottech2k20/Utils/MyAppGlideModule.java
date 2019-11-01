@@ -1,4 +1,4 @@
-package com.omega.dottech2k20;
+package com.omega.dottech2k20.Utils;
 
 
 import android.content.Context;

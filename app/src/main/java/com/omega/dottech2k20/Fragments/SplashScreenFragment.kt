@@ -1,4 +1,4 @@
-package com.omega.dottech2k20
+package com.omega.dottech2k20.Fragments
 
 
 import android.content.Context
@@ -7,7 +7,6 @@ import android.os.Handler
 import android.os.Looper
 import android.transition.ChangeBounds
 import android.transition.TransitionManager
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +14,9 @@ import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.transition.addListener
+import com.omega.dottech2k20.R
+import com.omega.dottech2k20.StartUpActivity
+import com.omega.dottech2k20.Utils.Utils
 import kotlinx.android.synthetic.main.fragment_splash_screen.*
 import kotlinx.android.synthetic.main.fragment_splash_screen2.*
 
@@ -96,7 +98,9 @@ class SplashScreenFragment : Fragment() {
     private fun animateFirstTimeSplashScreen() {
         val calculateDelay = { i: Int -> i * DURATION + i * 100 }
 
-        text_welcome.animate().alpha(1f).apply { duration = DURATION }
+        text_welcome.animate().alpha(1f).apply { duration =
+            DURATION
+        }
         text_to.animate().alpha(1f).apply {
             duration = DURATION
             startDelay = calculateDelay(2) - 100
