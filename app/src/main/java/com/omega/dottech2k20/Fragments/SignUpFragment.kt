@@ -7,13 +7,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
-import com.google.android.material.textfield.TextInputEditText
+import com.omega.dottech2k20.MainActivity
 import com.omega.dottech2k20.R
 import com.omega.dottech2k20.Utils.AuthenticationUtils
 import com.omega.dottech2k20.Utils.Utils
@@ -23,10 +20,13 @@ import java.lang.Exception
 class SignUpFragment : Fragment() {
 
 	private val TAG: String = javaClass.simpleName
+	lateinit var mActivity: MainActivity
 
 	override fun onAttach(context: Context) {
 		super.onAttach(context)
+
 		try {
+			mActivity = context as MainActivity
 		} catch (e: ClassCastException) {
 			e.printStackTrace()
 		}
@@ -47,7 +47,7 @@ class SignUpFragment : Fragment() {
 
 	fun signUp(view: View?) {
 
-		progressBar?.visibility = View.VISIBLE
+		progress_bar_sign_up?.visibility = View.VISIBLE
 
 		if (isDataValid()) {
 			val email = et_sign_up_email.text.toString()
@@ -88,14 +88,16 @@ class SignUpFragment : Fragment() {
 	private fun onRegistrationCompletionCallBack(state: Boolean, exception: Exception?){
 		when(state){
 			true -> {
-				progressBar.visibility = View.INVISIBLE
+				if(progress_bar_sign_up != null){
+					progress_bar_sign_up.visibility = View.INVISIBLE
+					progress_bar_sign_up.findNavController().navigate(R.id.eventsFragment)
+				}
 				Toast.makeText(
 					context,
 					"Account has been created and Login Successful",
 					Toast.LENGTH_SHORT
 				).show()
-				progressBar.findNavController().navigate(R.id.eventsFragment)
-				// Change the navigation view menu's
+				mActivity.setNavigationMenuItems()
 			}
 		}
 	}

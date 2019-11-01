@@ -51,7 +51,6 @@ class SignInFragment : Fragment() {
 		Log.d(TAG, "singInUser: name = " + email + "password " + password)
 		if (isDataValid()) {
 			AuthenticationUtils.signInUser(
-				context!!,
 				email,
 				password,
 				this::onSignInCompletionCallback

@@ -24,7 +24,7 @@
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -42,6 +42,8 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:padding="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
             tools:layout_editor_absoluteX="88dp"
             tools:layout_editor_absoluteY="95dp">
 
@@ -146,7 +148,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.58" />
+        app:layout_constraintGuide_percent="0.63" />
 
     <ProgressBar
         android:id="@+id/progressbar_login"
