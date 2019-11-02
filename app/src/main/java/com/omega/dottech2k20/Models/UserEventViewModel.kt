@@ -4,14 +4,16 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 
 class UserEventViewModel(application: Application) : AndroidViewModel(application) {
 
-	var mUserProfileLiveData: MutableLiveData<User> = MutableLiveData()
-	var mEventsLiveData: MutableLiveData<List<Event>> = MutableLiveData()
+	private var mUserProfileLiveData: MutableLiveData<User> = MutableLiveData()
+	private var mEventsLiveData: MutableLiveData<List<Event>> = MutableLiveData()
+	private var mUserEventsLiveData: MediatorLiveData<List<Event>>? = null
 	private val mFirestore = FirebaseFirestore.getInstance()
 	private val mFireAuth = FirebaseAuth.getInstance()
 	private val TAG: String = javaClass.simpleName
@@ -20,27 +22,35 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 		val user = mFireAuth.currentUser ?: return null
 		val uid = user.uid
 
+		Log.d(TAG, "Initial value  = ${mUserProfileLiveData.value}")
+		val document: DocumentReference = mFirestore.collection("Users").document(uid)
 		if (mUserProfileLiveData.value == null) {
-			addUserProfileSnapShotListener(uid)
+			addDocumentSnapShotListener(document) {
+				mUserProfileLiveData.value = it.toObject(User::class.java)
+			}
 		}
 		return mUserProfileLiveData
 
 	}
 
-	private fun addUserProfileSnapShotListener(uid: String) {
-		val document: DocumentReference = mFirestore.collection("Users").document(uid)
-		document.addSnapshotListener { snapshot, e ->
-			if (e != null) {
-				Log.w(TAG, "Listen failed.", e)
-				return@addSnapshotListener
-			}
 
-			if (snapshot != null && snapshot.exists()) {
-				mUserProfileLiveData.value = snapshot.toObject(User::class.java)
-				Log.d(TAG, "Current data: ${mUserProfileLiveData.value.toString()}")
-
-			} else {
-				Log.d(TAG, "Current data: null")
+	/**
+	 * Attaches snapshot listener to document reference, and executes provided callback whenever
+	 * the snapshot listener is triggered ( due to change in data etc..)
+	 *
+	 */
+	private fun addDocumentSnapShotListener(
+		doc: DocumentReference,
+		callback: (snapshot: DocumentSnapshot) -> Unit
+	) {
+		doc.addSnapshotListener { snapshot, e ->
+			when {
+				e != null -> {
+					Log.w(TAG, "Listen failed.", e)
+					return@addSnapshotListener
+				}
+				snapshot != null && snapshot.exists() -> callback(snapshot)
+				else -> Log.d(TAG, "Current data: null")
 			}
 
 		}
@@ -48,27 +58,42 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 
 	fun getEvents(): LiveData<List<Event>> {
 		val eventTask = mFirestore.collection("Events")
+
 		if (mEventsLiveData.value == null) {
-			addEventsSnapShotListener(eventTask)
+			addQuerySnapShotListener(eventTask) {
+				mEventsLiveData.value = it.toObjects(Event::class.java)
+				Log.d(TAG, "Current data: ${mEventsLiveData.value.toString()}")
+			}
 		}
 		return mEventsLiveData
 	}
 
-	private fun addEventsSnapShotListener(eventTask: CollectionReference) {
-		eventTask.addSnapshotListener { snapshot, exception ->
-			if (exception != null) {
-				Log.w(TAG, "Listen failed.", exception)
-				return@addSnapshotListener
+	/**
+	 * Attaches snapshot listener to document reference, and executes provided callback whenever
+	 * the snapshot listener is triggered ( due to change in data etc..)
+	 *
+	 */
+	private fun addQuerySnapShotListener(
+		doc: CollectionReference,
+		callback: (snapshot: QuerySnapshot) -> Unit
+	) {
+		doc.addSnapshotListener { snapshot, e ->
+			when {
+				e != null -> {
+					Log.w(TAG, "Listen failed.", e)
+					return@addSnapshotListener
+				}
+				snapshot != null -> {
+					callback(snapshot)
+				}
+				else -> {
+					Log.w(TAG, "Current data: null")
+				}
 			}
 
-			if (snapshot != null) {
-				mEventsLiveData.value = snapshot.toObjects(Event::class.java)
-				Log.d(TAG, "Current data: ${mEventsLiveData.value.toString()}")
-			} else {
-				Log.d(TAG, "Current data: null")
-			}
 		}
 	}
+
 
 	fun joinEvent(event: Event) {
 
@@ -89,8 +114,6 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 		} else {
 			addUserInEvent(event, user)
 		}
-
-
 	}
 
 	private fun addUserInEvent(
@@ -158,5 +181,73 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 			}
 		}
 	}
+
+	fun getUserEvent(): LiveData<List<Event>>? {
+		// The MediatorLiveData is used to serialize data coming from two asynchronous sources
+		// i.e mUserProfileLiveData and mEventsLiveData, to get the events participated by a user
+		// we need both of them. Hence, Using MediatorLiveDat we can add them as sources and when
+		// the data of either changes the final output would be changed too.
+
+		if (mUserEventsLiveData != null) {
+			return mUserEventsLiveData
+		}
+
+		// Initialize live data in case it hasn't been
+		if (mUserProfileLiveData.value == null) {
+			getUserProfile()
+		}
+		if (mEventsLiveData.value == null) {
+			getEvents()
+		}
+
+		mUserEventsLiveData = MediatorLiveData()
+
+		mUserEventsLiveData!!.addSource(mUserProfileLiveData) {
+			mUserEventsLiveData!!.value = liveDataChanged(mUserProfileLiveData, mEventsLiveData)
+		}
+		mUserEventsLiveData!!.addSource(mEventsLiveData) {
+			mUserEventsLiveData!!.value = liveDataChanged(mUserProfileLiveData, mEventsLiveData)
+		}
+
+		return mUserEventsLiveData
+	}
+
+	private fun liveDataChanged(
+		userLiveData: MutableLiveData<User>,
+		eventsLiveData: MutableLiveData<List<Event>>
+	): List<Event>? {
+		if (userLiveData.value != null && eventsLiveData.value != null) {
+			userLiveData.value?.let { user ->
+				val eventIds = user.events
+				val events = eventsLiveData.value
+
+				if (eventIds != null && events != null) {
+					return getMatchingEventsById(eventIds, events)
+				}
+			}
+		} else{
+			Log.d(TAG, "userLiveData = ${userLiveData.value} , eventsLiveData = ${eventsLiveData.value}")
+		}
+		return null
+	}
+
+
+	private fun getMatchingEventsById(
+		eventIds: List<String>,
+		events: List<Event>
+	): ArrayList<Event> {
+		val list = arrayListOf<Event>()
+		for (id in eventIds) {
+			val event: Event? = events.find {
+				it.id.equals(id)
+			}
+			if (event != null) {
+				list.add(event)
+			}
+		}
+		Log.d("ViewModel", "Event list = ${list.count()}")
+		return list
+	}
+
 
 }
