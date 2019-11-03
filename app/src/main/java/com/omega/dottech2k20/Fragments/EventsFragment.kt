@@ -1,8 +1,6 @@
 package com.omega.dottech2k20.Fragments
 
 
-import android.animation.ArgbEvaluator
-import android.animation.ValueAnimator
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -13,28 +11,25 @@ import android.view.ViewGroup
 import android.widget.TextSwitcher
 import android.widget.TextView
 import android.widget.ViewSwitcher.ViewFactory
-import androidx.core.content.ContextCompat.getColor
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter
-import com.firebase.ui.firestore.FirestoreRecyclerOptions
-import com.firebase.ui.firestore.SnapshotParser
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
-import com.omega.dottech2k20.Adapters.EventsHolder
+import com.omega.dottech2k20.Adapters.EventItem
 import com.omega.dottech2k20.MainActivity
 import com.omega.dottech2k20.Models.Event
 import com.omega.dottech2k20.Models.UserEventViewModel
 import com.omega.dottech2k20.R
+import com.omega.dottech2k20.Utils.AuthenticationUtils
 import com.omega.dottech2k20.Utils.Utils.getEventSchedule
 import com.ramotion.cardslider.CardSliderLayoutManager
 import com.ramotion.cardslider.CardSnapHelper
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import kotlinx.android.synthetic.main.fragment_events.*
-import java.text.SimpleDateFormat
 
 class EventsFragment : Fragment() {
 
@@ -49,11 +44,13 @@ class EventsFragment : Fragment() {
 	private var mCurrentPosition: Int? = null
 	private val mFirestore = FirebaseFirestore.getInstance()
 	val TAG = javaClass.simpleName
-	lateinit var mAdapter: FirestoreRecyclerAdapter<Event?, EventsHolder?>
+	var mAdapter: GroupAdapter<GroupieViewHolder>? = null
 	lateinit var mLayoutManager: CardSliderLayoutManager
 	lateinit var mMainActivity: MainActivity
 	var isInitTextSet: Boolean = false
 	lateinit var mViewModel: UserEventViewModel
+	var mEventList: List<Event>? = null
+	var mUserEventList: List<Event>? = null
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -64,16 +61,79 @@ class EventsFragment : Fragment() {
 		mMainActivity = context as MainActivity
 	}
 
+	override fun onDestroyView() {
+		super.onDestroyView()
+		mAdapter = null
+	}
+
 	override fun onActivityCreated(savedInstanceState: Bundle?) {
 		super.onActivityCreated(savedInstanceState)
-		mViewModel = ViewModelProviders.of(this).get(UserEventViewModel::class.java)
+		Log.d(TAG, "onActivityCreated prompted, mAdapter = $mAdapter")
+		mViewModel = ViewModelProviders.of(mMainActivity).get(UserEventViewModel::class.java)
+		mViewModel.getEvents().observe(this, Observer { events ->
+			if (events != null) {
+				mEventList = events
+				if (mAdapter == null) {
+					initRV()
+				} else {
+					mAdapter?.let {
+						getEventItems(events)?.let { mAdapter?.update(it) }
+					}
+				}
+
+				initCallbacks()
+			}
+		})
+
+//		btn_join.background.colorFilter =
+
+		btn_join.isClickable = false
+
+		if (AuthenticationUtils.currentUser != null) {
+
+			mViewModel.getUserEvent()?.observe(this, Observer {
+				if (it != null) {
+					mUserEventList = it
+					btn_join.isClickable = true
+//					btn_join.setBackgroundResource(R.color.MaterialGreen)
+					btn_join.invalidate()
+					val activeCardPosition = mLayoutManager.activeCardPosition
+					val event: Event = getEvenAtPos(activeCardPosition)
+					updateButtons(event)
+				}
+			})
+		}
+	}
+
+	private fun updateButtons(event: Event) {
+
+
+		val matchingEvent = mUserEventList?.find {
+			Log.d(TAG, "it.id = ${it.id}, even.id = ${event.id}");
+			it.id == event.id
+		}
+		if (matchingEvent == null) {
+			Log.d(TAG, "Changing Visibility");
+			btn_join.animate().alpha(1f).withEndAction {
+				btn_join.visibility = View.VISIBLE
+				btn_unjoin.visibility = View.GONE
+				btn_unjoin.alpha = 1f
+				btn_join.alpha = 1f
+			}
+		} else{
+			btn_unjoin.animate().alpha(1f).withEndAction{
+				btn_join.visibility = View.GONE
+				btn_unjoin.visibility = View.VISIBLE
+				btn_unjoin.alpha = 1f
+				btn_join.alpha = 1f
+			}
+		}
 	}
 
 	override fun onCreateView(
 		inflater: LayoutInflater, container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View? {
-		// Inflate the layout for this fragment
 		val view = inflater.inflate(R.layout.fragment_events, container, false)
 		return view
 	}
@@ -83,60 +143,43 @@ class EventsFragment : Fragment() {
 		ts_title.setFactory(TextViewFactory(R.style.TextAppearance_MaterialComponents_Headline5))
 		ts_date.setFactory(TextViewFactory(R.style.TextAppearance_MaterialComponents_Body1))
 		ts_description.setFactory(TextViewFactory(R.style.TextAppearance_AppCompat_Large))
-		initRV()
-		initCallbacks()
+
 	}
 
 	private fun initCallbacks() {
-		val colorGreen = getColor(context!!, R.color.MaterialGreen)
-		val colorRed = getColor(context!!, R.color.MaterialRed)
-
 		btn_join.setOnClickListener {
+			Log.d(TAG, "btn_join triggered")
 			val activeCard: Int = mLayoutManager.activeCardPosition
-			val event: Event = mAdapter.getItem(activeCard)
-			mViewModel.joinEvent(event)
+			mViewModel.joinEvent(getEvenAtPos(activeCard))
 
-			val colorAnimation: ValueAnimator = animateColorChange(colorGreen, colorRed, btn_join)
-			colorAnimation.start()
+			btn_join.animate().alpha(0f).withEndAction {
+				btn_join.visibility = View.GONE
+				btn_join.alpha = 1f
+				btn_unjoin.visibility = View.VISIBLE
+			}
 		}
 
 		btn_unjoin.setOnClickListener {
 			val activeCard: Int = mLayoutManager.activeCardPosition
-			val event: Event = mAdapter.getItem(activeCard)
+			val event: Event = getEvenAtPos(activeCard)
 			mViewModel.unjoinEvents(event)
 
-			val colorAnimation: ValueAnimator = animateColorChange(colorGreen, colorRed, btn_unjoin)
-			colorAnimation.start()
-		}
-	}
-
-	private fun animateColorChange(colorGreen: Int, colorRed: Int, view: View): ValueAnimator {
-		val colorAnimation: ValueAnimator =
-			ValueAnimator.ofObject(ArgbEvaluator(), colorGreen, colorRed)
-		colorAnimation.apply {
-			duration = 300
-			addUpdateListener {
-				view.setBackgroundColor(it.animatedValue as Int)
+			btn_unjoin.animate().alpha(0f).withEndAction {
+				btn_unjoin.visibility = View.GONE
+				btn_join.visibility = View.VISIBLE
+				btn_unjoin.alpha = 1f
+				btn_join.alpha = 1f
 			}
 		}
-		return colorAnimation
 	}
 
 	private fun initRV() {
+		mAdapter = GroupAdapter()
 		rv_event_thumb_nails.setHasFixedSize(true)
-
-		val snapshotParser = SnapshotParser { it: DocumentSnapshot ->
-			val event = it.toObject(Event::class.java)!!
-			event.id = it.id
-			return@SnapshotParser event
-		}
-
-		val reference: Query = mFirestore.collection("Events")
-		val options: FirestoreRecyclerOptions<Event?> = getOptions(reference, snapshotParser)
-
-		setRecyclerViewAdapter(options)
 		setRecyclerViewLayoutManager()
+		setRecyclerViewAdapter()
 		setRecyclerViewListener()
+		changeEventContent(0)
 
 		CardSnapHelper().attachToRecyclerView(rv_event_thumb_nails)
 	}
@@ -149,7 +192,6 @@ class EventsFragment : Fragment() {
 	private fun setRecyclerViewListener() {
 		rv_event_thumb_nails.addOnScrollListener(object :
 			OnScrollListener() {
-
 			override fun onScrollStateChanged(
 				recyclerView: RecyclerView,
 				newState: Int
@@ -161,41 +203,27 @@ class EventsFragment : Fragment() {
 		})
 	}
 
-	private fun getOptions(
-		reference: Query,
-		snapshotParser: SnapshotParser<Event>
-	): FirestoreRecyclerOptions<Event?> {
-
-		return FirestoreRecyclerOptions.Builder<Event>()
-			.setQuery(reference, snapshotParser)
-			.build()
+	fun getEvenAtPos(position: Int): Event {
+		val value: EventItem = mAdapter?.getItem(position) as EventItem
+		return value.event
 	}
 
-	private fun setRecyclerViewAdapter(options: FirestoreRecyclerOptions<Event?>) {
-		mAdapter = object :
-			FirestoreRecyclerAdapter<Event?, EventsHolder?>(options) {
-			override fun onBindViewHolder(holder: EventsHolder, position: Int, model: Event) {
-				holder.onBind(model.thumbNail!!)
-				Log.d(TAG, model.title)
-				// One time Initialization
-				if (!isInitTextSet && ts_title != null) {
-					setTitle(
-						model.title,
-						TextAnimationType.FADE_IN
-					)
-					isInitTextSet = true
-				}
-			}
-
-			override fun onCreateViewHolder(group: ViewGroup, i: Int): EventsHolder {
-				val view: View = LayoutInflater.from(group.context)
-					.inflate(R.layout.adapter_events, group, false)
-				return EventsHolder(view)
-			}
+	private fun setRecyclerViewAdapter() {
+		mEventList?.let {
+			getEventItems(it)?.let { mAdapter?.addAll(it) }
 		}
-
 		rv_event_thumb_nails.adapter = mAdapter
-		mAdapter.startListening()
+	}
+
+	private fun getEventItems(events: List<Event>): List<EventItem>? {
+		val list = arrayListOf<EventItem>()
+		if (mEventList != null && mEventList?.count() ?: 0 > 0) {
+			for (event in events!!) {
+				list.add(EventItem(event))
+			}
+			return list
+		}
+		return null
 	}
 
 	private fun onCardChanged() {
@@ -208,7 +236,7 @@ class EventsFragment : Fragment() {
 	}
 
 	private fun changeEventContent(position: Int) {
-		val event: Event = mAdapter.getItem(position)
+		val event: Event = getEvenAtPos(position)
 		var animTypeHorizontal =
 			TextAnimationType.RIGHT_TO_LEFT
 		var animTypeVertical =
@@ -220,14 +248,13 @@ class EventsFragment : Fragment() {
 			animTypeVertical =
 				TextAnimationType.BOTTOM_TO_TOP
 		}
-
+		updateButtons(event)
 		setTitle(event.title, animTypeHorizontal)
 		setDateTime(event.startTime, event.endTime, animTypeVertical)
 		setDescription(
 			event.shortDescription,
 			TextAnimationType.FADE_IN
 		)
-
 		mCurrentPosition = position
 
 	}
@@ -237,18 +264,14 @@ class EventsFragment : Fragment() {
 		endTime: Timestamp?,
 		animTypeVertical: TextAnimationType
 	) {
-
-
-
 		if (startTime != null && endTime != null) {
 			val time = getEventSchedule(startTime, endTime)
-			Log.d(TAG, "time")
+
 			setTextSwitcherAnimation(ts_date, animTypeVertical)
 			ts_date.setText(time)
 		}
 
 	}
-
 
 
 	private fun setDescription(description: String?, animationType: TextAnimationType) {
@@ -257,7 +280,7 @@ class EventsFragment : Fragment() {
 	}
 
 	private fun setTitle(title: String?, animationType: TextAnimationType) {
-		Log.d(TAG, title)
+
 		setTextSwitcherAnimation(ts_title, animationType)
 		ts_title.setText(title)
 	}
@@ -313,7 +336,6 @@ class EventsFragment : Fragment() {
 
 	override fun onDestroy() {
 		super.onDestroy()
-		mAdapter.stopListening()
 	}
 
 

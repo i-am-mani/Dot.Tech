@@ -175,9 +175,9 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 			it.update(userEvents, FieldPath.of("events"), FieldValue.arrayRemove(event.id))
 		}.addOnCompleteListener {
 			if (it.isSuccessful) {
-				Log.d(TAG, "Joining Events Successful")
+				Log.d(TAG, "UnJoining Events Successful")
 			} else {
-				Log.d(TAG, "Joining Events Failed")
+				Log.d(TAG, "UnJoining Events Failed")
 			}
 		}
 	}
