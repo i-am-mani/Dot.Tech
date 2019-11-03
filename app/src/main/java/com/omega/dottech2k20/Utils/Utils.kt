@@ -1,8 +1,9 @@
 package com.omega.dottech2k20.Utils
 
+import android.content.Context
 import android.text.TextUtils
-import android.util.Log
 import android.util.Patterns
+import android.util.TypedValue
 import com.google.firebase.Timestamp
 import java.text.SimpleDateFormat
 
@@ -29,6 +30,17 @@ object Utils {
 		val time = "$eventDate    $eventStartTime - $eventEndTime"
 
 		return time
+	}
+
+	fun convertDPtoPX(context: Context?, dp: Int): Int? {
+		context ?: return null
+		val px = TypedValue.applyDimension(
+			TypedValue.COMPLEX_UNIT_DIP,
+			dp.toFloat(),
+			context.resources.displayMetrics
+		)
+		return px.toInt()
+
 	}
 
 }
