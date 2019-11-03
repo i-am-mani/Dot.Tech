@@ -18,7 +18,7 @@
         android:title="Profile"/>
 
     <item
-        android:id="@+id/notifications"
+        android:id="@+id/notificationsFragment"
         android:icon="@drawable/ic_notification_bell"
         android:title="Notifications"/>
 
