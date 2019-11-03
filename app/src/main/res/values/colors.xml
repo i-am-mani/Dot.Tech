@@ -11,4 +11,8 @@
     <color name="TextGreen">#2E7D32</color>
     <color name="LightDivider">#1A000000</color>
 
+    <color name="MaterialRed">#E57373</color>
+    <color name="MaterialGreen">#8BC34A</color>
+    <color name="MaterialGray">#000000</color>
+
 </resources>
