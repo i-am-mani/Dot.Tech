@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation
+import com.google.firebase.iid.FirebaseInstanceId
 import com.omega.dottech2k20.Utils.AuthenticationUtils
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -31,6 +32,13 @@ class MainActivity : AppCompatActivity() {
 		setNavigationController()
 		setDestinationListener()
 		setNavigationMenuItems()
+
+		FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener {
+			if (it.isSuccessful) {
+				Log.d(TAG, "FirebaseInstanceId = ${it.result?.token}")
+			}
+		}
+
 	}
 
 	fun setNavigationMenuItems() {
