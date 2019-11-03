@@ -9,22 +9,22 @@
     android:orientation="vertical"
     tools:context=".Fragments.ProfileFragment">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card_profile_details"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        app:cardBackgroundColor="#FFFFFF"
-        app:cardCornerRadius="20dp"
-        app:cardElevation="7dp"
-        app:cardUseCompatPadding="true"
-        app:layout_constraintTop_toTopOf="parent"
-        app:strokeColor="#00E70F0F">
+    <!--    <com.google.android.material.card.MaterialCardView-->
+    <!--        android:id="@+id/card_profile_details"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="8dp"-->
+    <!--        android:layout_marginEnd="8dp"-->
+    <!--        app:cardBackgroundColor="#FFFFFF"-->
+    <!--        app:cardCornerRadius="20dp"-->
+    <!--        app:cardElevation="7dp"-->
+    <!--        app:cardUseCompatPadding="true"-->
+    <!--        app:layout_constraintTop_toTopOf="parent"-->
+    <!--        app:strokeColor="#00E70F0F">-->
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <ImageView
@@ -34,6 +34,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_weight="3"
+                android:tint="#3F51B5"
                 android:src="@drawable/ic_profile_user"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -75,23 +76,45 @@
         </LinearLayout>
 
 
-    </com.google.android.material.card.MaterialCardView>
+    <!--    </com.google.android.material.card.MaterialCardView>-->
 
     <View
         android:id="@+id/divider"
-        android:layout_width="409dp"
+        android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp"
         android:background="?android:attr/listDivider"
         tools:layout_editor_absoluteX="1dp"
         tools:layout_editor_absoluteY="269dp" />
 
-    <androidx.recyclerview.widget.RecyclerView
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp" />
+        android:layout_height="match_parent">
+
+        <View
+            android:layout_gravity="top"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/small_shadow"
+            android:background="@drawable/fading_white_gradient"
+            android:elevation="3dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_user_events"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp" />
+
+        <View
+            android:layout_gravity="bottom"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/small_shadow"
+            android:background="@drawable/fading_white_gradient"
+            android:elevation="3dp" />
+    </FrameLayout>
 
 
 </LinearLayout>

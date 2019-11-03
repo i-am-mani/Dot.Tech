@@ -43,6 +43,7 @@
                android:id="@+id/btn_event_unjoin"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
+               android:backgroundTint="@color/MaterialRed"
                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                android:text="@string/leave_event_btn_name"/>
 
@@ -54,6 +55,7 @@
                android:id="@+id/btn_event_details"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
+               style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                android:text="View Details"/>
 
        </LinearLayout>
