@@ -1,8 +1,8 @@
 package com.omega.dottech2k20
 
 import android.app.Activity
-import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewAnimationUtils
 import androidx.appcompat.app.AppCompatActivity
@@ -16,13 +16,13 @@ import com.omega.dottech2k20.Utils.AuthenticationUtils
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
-import kotlinx.android.synthetic.main.content_main.view.*
 
 
 class MainActivity : AppCompatActivity() {
 
 	lateinit var appBarConfiguration: AppBarConfiguration
 	lateinit var navController: NavController
+	val TAG = javaClass.simpleName
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -55,21 +55,23 @@ class MainActivity : AppCompatActivity() {
 	}
 
 	override fun onSupportNavigateUp(): Boolean {
-		return NavigationUI.navigateUp(nav_host_fragment.findNavController(), drawer_layout)
-				|| super.onSupportNavigateUp()
+		return NavigationUI.navigateUp(navController, appBarConfiguration)
 	}
 
 	private fun setNavigationBar() {
 		initBottomNavigationView()
 		setSupportActionBar(toolbar)
-		window.statusBarColor = Color.TRANSPARENT
-		//        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-		//        supportActionBar!!.setDisplayShowHomeEnabled(true)
 	}
 
 	private fun setNavigationController() {
 		navController = nav_host_fragment.findNavController()
-		appBarConfiguration = AppBarConfiguration(navController.graph, drawer_layout)
+		appBarConfiguration = AppBarConfiguration(
+			setOf(
+				R.id.eventsFragment,
+				R.id.profileFragment,
+				R.id.notificationsFragment
+			), drawer_layout
+		)
 
 		NavigationUI.setupWithNavController(nav_view, navController)
 		NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration)
@@ -78,10 +80,11 @@ class MainActivity : AppCompatActivity() {
 	private fun setDestinationListener() {
 		navController.addOnDestinationChangedListener { controller, destination, arguments ->
 			run {
-				if (destination.id != R.id.eventsFragment) {
-					navigation_bar.visibility = View.INVISIBLE
-				} else {
+				if (destination.id == R.id.eventsFragment || destination.id == R.id.profileFragment || destination.id == R.id.notificationsFragment) {
+					navigation_bar.show(destination.id, true)
 					navigation_bar.visibility = View.VISIBLE
+				} else {
+					navigation_bar.visibility = View.INVISIBLE
 				}
 			}
 		}
@@ -89,22 +92,35 @@ class MainActivity : AppCompatActivity() {
 
 
 	private fun initBottomNavigationView() {
-		navigation_bar.add(MeowBottomNavigation.Model(1, R.drawable.ic_profile_user))
-		navigation_bar.add(MeowBottomNavigation.Model(2, R.drawable.ic_events))
-		navigation_bar.add(MeowBottomNavigation.Model(3, R.drawable.ic_notification_bell))
+		navigation_bar.add(
+			MeowBottomNavigation.Model(
+				R.id.profileFragment,
+				R.drawable.ic_profile_user
+			)
+		)
+		navigation_bar.add(MeowBottomNavigation.Model(R.id.eventsFragment, R.drawable.ic_events))
+		navigation_bar.add(
+			MeowBottomNavigation.Model(
+				R.id.notificationsFragment,
+				R.drawable.ic_notification_bell
+			)
+		)
 
 		navigation_bar.show(2, true)
 		navigation_bar.setOnClickMenuListener {
 			when (it.id) {
-				1 -> {
-					navController.navigate(R.id.eventsFragment)
+				R.id.profileFragment -> {
+					Log.d(TAG, "Navigating To ProfileFragment")
+					navController.navigate(R.id.profileFragment)
 				}
 
-				2 -> {
-					// todo Add navigation to profile
+				R.id.eventsFragment -> {
+					navController.navigate(R.id.eventsFragment)
+					Log.d(TAG, "Navigating To Events")
 				}
-				3 -> {
-					// todo Add navigation to Notification
+				R.id.notificationsFragment -> {
+					navController.navigate(R.id.notificationsFragment)
+					Log.d(TAG, "Navigating To Notification")
 				}
 			}
 		}
