@@ -1,5 +1,6 @@
 package com.omega.dottech2k20
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -7,6 +8,8 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
 import com.omega.dottech2k20.Fragments.SplashScreenFragment
+import com.omega.dottech2k20.Fragments.WelcomeScreenFragment
+import com.omega.dottech2k20.Utils.Utils
 import com.ramotion.paperonboarding.PaperOnboardingFragment
 import com.ramotion.paperonboarding.PaperOnboardingPage
 
@@ -18,15 +21,36 @@ class StartUpActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_start_up)
-        goToSplashScreenFragment()
+		supportActionBar?.hide()
+		window.setFlags(
+			WindowManager.LayoutParams.FLAG_FULLSCREEN,
+			WindowManager.LayoutParams.FLAG_FULLSCREEN
+		)
+
+		val sharedPref =
+			getSharedPreferences(Utils.sharedPreferenceName, Context.MODE_PRIVATE)!!
+		val isFirstTime = sharedPref.getBoolean("first-time", true)
+
+		return if (isFirstTime) {
+			sharedPref.edit().putBoolean("first-time", false).apply()
+			goToSplashWelcomeScreenFragment()
+
+		} else {
+			goToSplashScreenFragment()
+		}
+
+	}
+
+	private fun goToSplashWelcomeScreenFragment() {
+		var transaction = supportFragmentManager.beginTransaction()
+		transaction.replace(
+			R.id.start_up_activity_fragment_container,
+			WelcomeScreenFragment()
+		)
+		transaction.commit()
     }
 
-    fun goToSplashScreenFragment() {
-        supportActionBar?.hide()
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
+	private fun goToSplashScreenFragment() {
 
         var transaction = supportFragmentManager.beginTransaction()
         transaction.replace(
@@ -43,14 +67,17 @@ class StartUpActivity : AppCompatActivity() {
     }
 
     fun goToOnBoardingFragment() {
-        var pages = getOnboardingPages()
-        val onboardingFragment = PaperOnboardingFragment.newInstance(pages)
+		var pages = getOnBoardingPages()
+		val onBoardingFragment = PaperOnboardingFragment.newInstance(pages)
+		onBoardingFragment.setOnRightOutListener {
+			goToMainActivity()
+		}
         val fragmentTransaction: FragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.add(R.id.start_up_activity_fragment_container, onboardingFragment)
+		fragmentTransaction.add(R.id.start_up_activity_fragment_container, onBoardingFragment)
         fragmentTransaction.commit()
     }
 
-    private fun getOnboardingPages(): ArrayList<PaperOnboardingPage> {
+	private fun getOnBoardingPages(): ArrayList<PaperOnboardingPage> {
         val notificationPage = PaperOnboardingPage(
             "Notification",
             "Be updated with latest information on events",
