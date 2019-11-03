@@ -2,12 +2,11 @@ package com.omega.dottech2k20
 
 import android.content.Intent
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
+import com.omega.dottech2k20.Fragments.SplashScreenFragment
 import com.ramotion.paperonboarding.PaperOnboardingFragment
 import com.ramotion.paperonboarding.PaperOnboardingPage
 
@@ -41,10 +40,6 @@ class StartUpActivity : AppCompatActivity() {
         val intent = Intent(this,MainActivity::class.java)
         startActivity(intent)
         finish()
-//        val goToNextActivity: () -> Unit = {
-//
-//        }
-//        goToNextActivity()
     }
 
     fun goToOnBoardingFragment() {

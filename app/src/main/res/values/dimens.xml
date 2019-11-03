@@ -5,4 +5,5 @@
     <dimen name="text_sub_title_size">18sp</dimen>
     <dimen name="medium_margin">18dp</dimen>
     <dimen name="small_margin">8dp</dimen>
+    <dimen name="small_shadow">40dp</dimen>
 </resources>
