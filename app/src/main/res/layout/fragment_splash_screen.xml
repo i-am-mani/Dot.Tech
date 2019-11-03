@@ -1,53 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/splash_screen_linear_layout_root"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/splash_screen_constraint_set_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
-    tools:context=".Fragments.SplashScreenFragment">
+    android:orientation="vertical">
 
     <TextView
-        android:id="@+id/text_welcome"
-        android:layout_width="match_parent"
+        android:id="@+id/text_fest_name"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:alpha="0"
         android:gravity="center"
-        android:text="Welcome"
-        android:textSize="34dp" />
+        android:text="Dot.Tech 2k20"
+        android:textSize="32sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/text_to"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:alpha="0"
-        android:gravity="center"
-        android:text="To"
-        android:textSize="24dp" />
-
-    <TextView
-        android:id="@+id/text_dot_tech"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:alpha="0"
-        android:gravity="center"
-        android:text="Dot.Tech"
-        android:textSize="34dp" />
-
-    <TextView
-        android:id="@+id/text_2020"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:alpha="0"
-        android:gravity="center"
-        android:text="2k20"
-        android:textSize="24dp" />
-
-    <com.google.android.material.button.MaterialButton
+    <ImageView
+        android:id="@+id/im_event_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Go!" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@mipmap/ic_launcher_round" />
 
-
-</LinearLayout>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_mid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.40218878" />
+</androidx.constraintlayout.widget.ConstraintLayout>
