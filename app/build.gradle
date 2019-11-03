@@ -79,20 +79,25 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-core:17.2.1'
 
-    // Firestore
+    // Firebase Firestore
     implementation 'com.firebaseui:firebase-ui-firestore:6.0.2'
     implementation 'com.google.firebase:firebase-firestore:21.2.1'
+
+    // Firebase Storage
+    implementation 'com.firebaseui:firebase-ui-storage:4.3.1'
+    implementation 'com.google.firebase:firebase-storage:19.1.0'
+
+    // Firebase Authentication
+    implementation 'com.google.firebase:firebase-auth:19.1.0'
+
+    // Firebase FCM
+    implementation 'com.google.firebase:firebase-messaging:20.0.0'
 
     // Groupie library
     implementation "com.xwray:groupie:2.7.0"
     implementation "com.xwray:groupie-kotlin-android-extensions:2.7.0"
 
-    //Firebase Authentication
-    implementation 'com.google.firebase:firebase-auth:19.1.0'
 
-    // FireStorage
-    implementation 'com.firebaseui:firebase-ui-storage:4.3.1'
-    implementation 'com.google.firebase:firebase-storage:19.1.0'
 
     // Glide
     implementation 'com.github.bumptech.glide:glide:4.9.0'
