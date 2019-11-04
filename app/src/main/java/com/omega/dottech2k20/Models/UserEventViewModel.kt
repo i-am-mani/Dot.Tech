@@ -14,6 +14,7 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 	private var mUserProfileLiveData: MutableLiveData<User> = MutableLiveData()
 	private var mEventsLiveData: MutableLiveData<List<Event>> = MutableLiveData()
 	private var mUserEventsLiveData: MediatorLiveData<List<Event>>? = null
+	private var mNotificationsLiveData: MutableLiveData<List<Notification>> = MutableLiveData()
 	private val mFirestore = FirebaseFirestore.getInstance()
 	private val mFireAuth = FirebaseAuth.getInstance()
 	private val TAG: String = javaClass.simpleName
@@ -247,6 +248,18 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 		}
 		Log.d("ViewModel", "Event list = ${list.count()}")
 		return list
+	}
+
+	fun getNotification(): LiveData<List<Notification>> {
+		val notifReference = mFirestore.collection("Notifications")
+
+		addQuerySnapShotListener(notifReference) {
+			val notificationObjects = it.toObjects(Notification::class.java)
+			Log.d(TAG, "Number of Notifications = ${notificationObjects.size}")
+			mNotificationsLiveData.value = notificationObjects
+		}
+
+		return mNotificationsLiveData
 	}
 
 
