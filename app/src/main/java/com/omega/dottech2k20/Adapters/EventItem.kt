@@ -1,9 +1,5 @@
 package com.omega.dottech2k20.Adapters
 
-import android.util.Log
-import android.view.View
-import android.widget.ImageView
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.storage.FirebaseStorage
 import com.omega.dottech2k20.Models.Event
@@ -11,7 +7,6 @@ import com.omega.dottech2k20.R
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
 import kotlinx.android.synthetic.main.item_events.*
-import kotlinx.android.synthetic.main.item_events.view.*
 
 class EventItem(val event: Event) : Item() {
 
@@ -20,8 +15,12 @@ class EventItem(val event: Event) : Item() {
 		viewHolder.apply {
 			val store = FirebaseStorage.getInstance()
 			event.thumbNail?.let{
-				val reference = store.getReference(it)
-				Glide.with(itemView).load(reference).into(im_event_image)
+				if (it.contains(Regex("https|HTTPS"))) {
+					Glide.with(itemView).load(it).into(im_event_image)
+				} else {
+					val reference = store.getReference(it)
+					Glide.with(itemView).load(reference).into(im_event_image)
+				}
 			}
 		}
 	}
