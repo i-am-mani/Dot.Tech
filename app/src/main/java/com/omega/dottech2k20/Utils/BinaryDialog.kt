@@ -1,0 +1,103 @@
+package com.omega.dottech2k20.Utils
+
+import android.app.Dialog
+import android.content.Context
+import android.util.Log
+import android.view.View
+import android.view.ViewGroup
+import android.view.Window
+import android.widget.Button
+import android.widget.TextView
+import com.omega.dottech2k20.R
+
+class BinaryDialog(
+	val context: Context,
+	val layoutId: Int = R.layout.dialog_binary
+) {
+
+	private val TAG = javaClass.simpleName
+
+	var title: String = ""
+	var description: String = ""
+
+	var rightButtonId = R.id.btn_right
+	var leftButtonId = R.id.btn_left
+
+	var rightButtonName: String = ""
+	var leftButtonName: String = ""
+
+	var rightButtonCallback: () -> Unit = { Log.d(TAG, "Right Button Clicked") }
+	var leftButtonCallback: () -> Unit = { Log.d(TAG, "Right Button Clicked") }
+
+	fun build() {
+		val dialog = Dialog(context)
+		dialog.setCanceledOnTouchOutside(true)
+
+		dialog.requestWindowFeature(Window.FEATURE_SWIPE_TO_DISMISS)
+		dialog.setContentView(layoutId)
+		dialog.window.setLayout(
+			ViewGroup.LayoutParams.MATCH_PARENT,
+			ViewGroup.LayoutParams.WRAP_CONTENT
+		)
+		dialog.window.setBackgroundDrawableResource(android.R.color.transparent)
+
+		val tvTitle = dialog.findViewById<TextView>(R.id.text_title)
+		val tvSubTitle = dialog.findViewById<TextView>(R.id.text_sub_title)
+
+		val rightBtn = dialog.findViewById<Button>(rightButtonId)
+		val leftBtn = dialog.findViewById<Button>(leftButtonId)
+
+		setTitleAndDescription(tvTitle, tvSubTitle)
+
+
+		setButtonNames(rightBtn, leftBtn)
+
+		setButtonCallbacks(rightBtn, dialog, leftBtn)
+
+		dialog.show()
+	}
+
+	private fun setButtonCallbacks(
+		rightBtn: Button,
+		dialog: Dialog,
+		leftBtn: Button
+	) {
+		rightBtn.setOnClickListener {
+			rightButtonCallback()
+			dialog.dismiss()
+		}
+
+		leftBtn.setOnClickListener {
+			leftButtonCallback()
+			dialog.dismiss()
+		}
+	}
+
+	private fun setButtonNames(rightBtn: Button, leftBtn: Button) {
+		if (rightButtonName.isNotEmpty()) {
+			rightBtn.text = rightButtonName
+		}
+
+		if (leftButtonName.isNotEmpty()) {
+			leftBtn.text = leftButtonName
+		}
+	}
+
+	private fun setTitleAndDescription(
+		tvTitle: TextView,
+		tvSubTitle: TextView
+	) {
+		if (title.isEmpty()) {
+			tvTitle.visibility = View.GONE
+		} else {
+			tvTitle.text = title
+		}
+
+		if (description.isEmpty()) {
+			tvSubTitle.visibility = View.GONE
+		} else {
+			tvSubTitle.text = description
+		}
+	}
+
+}
