@@ -14,7 +14,7 @@ class EventItem(val event: Event) : Item() {
 	override fun bind(viewHolder: GroupieViewHolder, position: Int) {
 		viewHolder.apply {
 			val store = FirebaseStorage.getInstance()
-			event.thumbNail?.let{
+			event.thumbnail?.let {
 				if (it.contains(Regex("https|HTTPS"))) {
 					Glide.with(itemView).load(it).into(im_event_image)
 				} else {
