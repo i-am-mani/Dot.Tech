@@ -3,11 +3,15 @@ package com.omega.dottech2k20.Fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Html
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.widget.FrameLayout
 import android.widget.TextSwitcher
 import android.widget.TextView
 import android.widget.ViewSwitcher.ViewFactory
@@ -319,7 +323,7 @@ class EventsFragment : Fragment() {
 
 	private fun setDescription(description: String?, animationType: TextAnimationType) {
 		setTextSwitcherAnimation(ts_description, animationType)
-		ts_description.setText(description)
+		ts_description.setText(Html.fromHtml(description?.trim(), Html.FROM_HTML_MODE_COMPACT))
 	}
 
 	private fun setTitle(title: String?, animationType: TextAnimationType) {
@@ -362,9 +366,9 @@ class EventsFragment : Fragment() {
 		override fun makeView(): View {
 			val textView = TextView(mMainActivity)
 			if (resStyle != null) {
+				textView.layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
 				textView.setTextAppearance(resStyle)
 				textView.gravity = Gravity.CENTER_VERTICAL
-				textView.minHeight = ViewGroup.LayoutParams.MATCH_PARENT
 			}
 
 			return textView
