@@ -128,10 +128,12 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 			.document(event.id!!).collection("Participants").document(user.id!!)
 
 		val userEvents = mFirestore.collection("Users").document(user.id!!)
+		val events = mFirestore.collection("Events").document(event.id!!)
 
 		mFirestore.runBatch {
 			it.set(eventParticipantsDoc, user)
 			it.update(userEvents, FieldPath.of("events"), FieldValue.arrayUnion(event.id))
+			it.update(events, FieldPath.of("participantCount"), FieldValue.increment(1))
 		}.addOnCompleteListener {
 			if (it.isSuccessful) {
 				Log.d(TAG, "Joining Events Successful")
@@ -171,9 +173,12 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 
 		val userEvents = mFirestore.collection("Users").document(user.id!!)
 
+		val events = mFirestore.collection("Events").document(event.id!!)
+
 		mFirestore.runBatch {
 			it.delete(eventParticipantsDoc)
 			it.update(userEvents, FieldPath.of("events"), FieldValue.arrayRemove(event.id))
+			it.update(events, FieldPath.of("participantCount"), FieldValue.increment(-1))
 		}.addOnCompleteListener {
 			if (it.isSuccessful) {
 				Log.d(TAG, "UnJoining Events Successful")

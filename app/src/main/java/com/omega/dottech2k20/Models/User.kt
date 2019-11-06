@@ -6,5 +6,6 @@ data class User(
 	val fullName: String? = null,
 	val email: String? = null,
 	val phone: String? = null,
-	val events: List<String>? = null
+	val events: List<String>? = null,
+	val participantCount: Int? = null
 )

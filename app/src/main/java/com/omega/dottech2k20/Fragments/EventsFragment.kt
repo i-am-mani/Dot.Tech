@@ -145,6 +145,7 @@ class EventsFragment : Fragment() {
 		ts_title.setFactory(TextViewFactory(R.style.TextAppearance_MaterialComponents_Headline5))
 		ts_date.setFactory(TextViewFactory(R.style.TextAppearance_MaterialComponents_Body1))
 		ts_description.setFactory(TextViewFactory(R.style.TextAppearance_AppCompat_Large))
+		ts_participants_count.setFactory(TextViewFactory((R.style.TextAppearance_MaterialComponents_Body1)))
 
 	}
 
@@ -257,7 +258,9 @@ class EventsFragment : Fragment() {
 
 	private fun setRecyclerViewAdapter() {
 		mEventList?.let {
-			getEventItems(it)?.let { mAdapter?.addAll(it) }
+			getEventItems(it)?.let { eventItems ->
+				mAdapter?.addAll(eventItems)
+			}
 		}
 		rv_event_thumb_nails.adapter = mAdapter
 	}
@@ -298,12 +301,17 @@ class EventsFragment : Fragment() {
 		updateButtons(event)
 		setTitle(event.title, animTypeHorizontal)
 		setDateTime(event.startTime, event.endTime, animTypeVertical)
-		setDescription(
-			event.shortDescription,
-			TextAnimationType.FADE_IN
-		)
+		setDescription(event.shortDescription, TextAnimationType.FADE_IN)
+		setParticipantCount(event.participantCount, animTypeVertical)
 		mCurrentPosition = position
+	}
 
+	private fun setParticipantCount(
+		participantCount: Int?,
+		animTypeVertical: TextAnimationType
+	) {
+		ts_participants_count.setText(participantCount.toString())
+		setTextSwitcherAnimation(ts_participants_count, animTypeVertical)
 	}
 
 	private fun setDateTime(
@@ -361,8 +369,6 @@ class EventsFragment : Fragment() {
 
 
 	inner class TextViewFactory(val resStyle: Int?) : ViewFactory {
-
-
 		override fun makeView(): View {
 			val textView = TextView(mMainActivity)
 			if (resStyle != null) {
