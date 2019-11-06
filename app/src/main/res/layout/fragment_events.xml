@@ -12,7 +12,6 @@
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:textSize="28sp"
         android:textStyle="bold"
@@ -126,30 +125,60 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.9" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_join"
+    <FrameLayout
+        android:id="@+id/root_btn_join"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_marginStart="24dp"
-        android:backgroundTint="#8BC34A"
-        android:text="Join"
-        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="24dp"
+        android:layout_height="wrap_content">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_unjoin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_marginStart="24dp"
-        android:backgroundTint="@color/MaterialRed"
-        android:text="@string/leave_event_btn_name"
-        android:textSize="14sp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:background="@drawable/shape_circle"
+            android:backgroundTint="#DCEDC8"
+            android:elevation="4dp"
+            app:cardBackgroundColor="#000"
+            app:cardCornerRadius="30dp"
+            app:cardElevation="5dp">
+
+            <TextSwitcher
+                android:measureAllChildren="false"
+                android:id="@+id/ts_participants_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:gravity="center"
+                android:text="34" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_join"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:backgroundTint="#8BC34A"
+            android:text="Join"
+            android:textSize="14sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_unjoin"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/MaterialRed"
+            android:text="@string/leave_event_btn_name"
+            android:textSize="14sp"
+            android:visibility="invisible" />
+    </FrameLayout>
+
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_details"

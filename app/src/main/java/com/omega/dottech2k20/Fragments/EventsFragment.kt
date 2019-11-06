@@ -37,6 +37,7 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import kotlinx.android.synthetic.main.fragment_events.*
 
+
 class EventsFragment : Fragment() {
 
 	enum class TextAnimationType {
@@ -321,7 +322,6 @@ class EventsFragment : Fragment() {
 	) {
 		if (startTime != null && endTime != null) {
 			val time = getEventSchedule(startTime, endTime)
-
 			setTextSwitcherAnimation(ts_date, animTypeVertical)
 			ts_date.setText(time)
 		}
