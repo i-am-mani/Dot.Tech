@@ -3,6 +3,8 @@ package com.omega.dottech2k20.Fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.transition.ChangeBounds
+import android.transition.TransitionManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +14,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView.OnFlingListener
 import com.omega.dottech2k20.Adapters.UserEventItem
 import com.omega.dottech2k20.MainActivity
 import com.omega.dottech2k20.Models.Event
@@ -20,6 +23,7 @@ import com.omega.dottech2k20.Models.UserEventViewModel
 import com.omega.dottech2k20.R
 import com.omega.dottech2k20.Utils.AuthenticationUtils
 import com.omega.dottech2k20.Utils.BinaryDialog
+import com.omega.dottech2k20.Utils.Utils
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import kotlinx.android.synthetic.main.fragment_profile.*
@@ -59,15 +63,16 @@ class ProfileFragment : Fragment() {
 	}
 
 	private fun updateUserEvents(events: List<Event>) {
-		rv_user_events.layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
+		rv_user_events.layoutManager =
+			LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 		val eventItems = getEventItems(events)
 		mAdapter.addAll(eventItems)
 		rv_user_events.adapter = mAdapter
 	}
 
-	private fun getEventItems(events:List<Event>): List<UserEventItem>{
+	private fun getEventItems(events: List<Event>): List<UserEventItem> {
 		val list = arrayListOf<UserEventItem>()
-		for (event in events){
+		for (event in events) {
 			list.add(UserEventItem(event))
 		}
 		return list
@@ -85,9 +90,7 @@ class ProfileFragment : Fragment() {
 		inflater: LayoutInflater, container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View? {
-		// Inflate the layout for this fragment
 		if (AuthenticationUtils.currentUser == null) {
-//			context?.let { Utils.requestUserLoginDialog(it,findNavController()) }
 			context?.let {
 				BinaryDialog(it).apply {
 					title = "Unsigned user"
@@ -101,6 +104,36 @@ class ProfileFragment : Fragment() {
 			return inflater.inflate(R.layout.unsigned_user_layout, container, false)
 		}
 		return inflater.inflate(R.layout.fragment_profile, container, false)
+	}
+
+	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+		super.onViewCreated(view, savedInstanceState)
+		rv_user_events.onFlingListener = (object :
+			OnFlingListener() {
+			private fun updateLayout(height: Int) {
+
+				val layoutParams = root_profile_data.layoutParams
+				Utils.convertDPtoPX(context, height)?.let {
+					layoutParams.height = it
+				}
+				root_profile_data.layoutParams = layoutParams
+				TransitionManager.beginDelayedTransition(root_profile, ChangeBounds())
+			}
+
+			override fun onFling(velocityX: Int, velocityY: Int): Boolean {
+				// +ve Y = Swipe Up, -ve Y = Swipe Down
+				if (velocityY > 1000) {
+					Log.d(TAG, "Fling values = $velocityX, $velocityY")
+					updateLayout(150)
+					return true
+				} else if (velocityY < -2000) {
+					Log.d(TAG, "Fling values = $velocityX, $velocityY")
+					updateLayout(250)
+					return true
+				}
+				return false
+			}
+		})
 	}
 
 
