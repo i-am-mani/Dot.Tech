@@ -48,12 +48,12 @@ class ProfileFragment : Fragment() {
 		val currentUser = AuthenticationUtils.currentUser
 		if (currentUser != null) {
 
-			val userProfile = profile?.observe(this, Observer {
+			profile?.observe(this, Observer {
 				if (it != null) {
 					updateProfileDetails(it)
 				}
 			})
-			val userEvents = mViewModel.getUserEvent()?.observe(this, Observer {
+			mViewModel.getUserEvent()?.observe(this, Observer {
 				Log.d("ViewModel", "Event list = ${it?.count() ?: 0}")
 				if (it != null) {
 					updateUserEvents(it)
@@ -80,7 +80,7 @@ class ProfileFragment : Fragment() {
 
 
 	private fun updateProfileDetails(user: User) {
-		val (id, fullName, email, phone, events) = user
+		val (_, fullName, email, phone, _) = user
 		tv_full_name.text = fullName
 		tv_email.text = email
 		tv_phone.text = phone
