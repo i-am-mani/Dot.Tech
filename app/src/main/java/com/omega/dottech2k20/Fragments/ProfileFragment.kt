@@ -66,18 +66,25 @@ class ProfileFragment : Fragment() {
 		rv_user_events.layoutManager =
 			LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 		val eventItems = getEventItems(events)
-		mAdapter.addAll(eventItems)
+		mAdapter.update(eventItems)
 		rv_user_events.adapter = mAdapter
 	}
 
 	private fun getEventItems(events: List<Event>): List<UserEventItem> {
 		val list = arrayListOf<UserEventItem>()
 		for (event in events) {
-			list.add(UserEventItem(event))
+			list.add(UserEventItem(event, this::leaveEvent, this::viewDetails))
 		}
 		return list
 	}
 
+	private fun leaveEvent(event: Event) {
+		mViewModel.unjoinEvents(event)
+	}
+
+	private fun viewDetails(events: Event) {
+		//todo Implement View Details
+	}
 
 	private fun updateProfileDetails(user: User) {
 		val (_, fullName, email, phone, _) = user

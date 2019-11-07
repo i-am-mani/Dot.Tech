@@ -8,7 +8,11 @@ import com.xwray.groupie.kotlinandroidextensions.Item
 import kotlinx.android.synthetic.main.item_user_event.*
 
 
-class UserEventItem(val event: Event) :  Item(){
+class UserEventItem(
+	val event: Event,
+	val leaveEventCallback: (event: Event) -> Unit,
+	val viewDetailsCallback: (event: Event) -> Unit
+) : Item() {
 
 
 	override fun bind(viewHolder: GroupieViewHolder, position: Int) {
@@ -20,6 +24,9 @@ class UserEventItem(val event: Event) :  Item(){
 			if (startTime != null && endTime != null) {
 				tv_event_datetime.text = Utils.getEventSchedule(startTime,endTime)
 			}
+
+			btn_event_leave.setOnClickListener { leaveEventCallback(event) }
+			btn_event_details.setOnClickListener { viewDetailsCallback(event) }
 		}
 	}
 
