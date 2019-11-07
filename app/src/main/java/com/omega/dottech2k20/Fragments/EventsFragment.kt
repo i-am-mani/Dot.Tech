@@ -56,7 +56,6 @@ class EventsFragment : Fragment() {
 	lateinit var mMainActivity: MainActivity
 	var isInitTextSet: Boolean = false
 	lateinit var mViewModel: UserEventViewModel
-	var mEventList: List<Event>? = null
 	var mUserEventList: List<Event>? = null
 
 	override fun onAttach(context: Context) {
@@ -75,12 +74,15 @@ class EventsFragment : Fragment() {
 		mViewModel = ViewModelProviders.of(mMainActivity).get(UserEventViewModel::class.java)
 		mViewModel.getEvents().observe(this, Observer { events ->
 			if (events != null) {
-				mEventList = events
 				if (mAdapter == null) {
-					initRV()
+					initRV(events)
 				} else {
 					mAdapter?.let {
-						getEventItems(events)?.let { mAdapter?.update(it) }
+						val pos = mLayoutManager.activeCardPosition
+						setParticipantCount(
+							events[pos].participantCount,
+							TextAnimationType.LEFT_TO_RIGHT
+						)
 					}
 				}
 
@@ -88,28 +90,24 @@ class EventsFragment : Fragment() {
 			}
 		})
 
-//		btn_join.background.colorFilter =
-
-		btn_join.isClickable = false
-
 		if (AuthenticationUtils.currentUser != null) {
 
 			mViewModel.getUserEvent()?.observe(this, Observer {
 				if (it != null) {
 					mUserEventList = it
 					btn_join.isClickable = true
-//					btn_join.setBackgroundResource(R.color.MaterialGreen)
-					btn_join.invalidate()
 					val activeCardPosition = mLayoutManager.activeCardPosition
-					val event: Event = getEvenAtPos(activeCardPosition)
-					updateButtons(event)
+					if (activeCardPosition != RecyclerView.NO_POSITION) {
+						Log.d(TAG, "position = $activeCardPosition")
+						val event: Event = getEventAtPos(activeCardPosition)
+						updateButtons(event)
+					}
 				}
 			})
 		}
 	}
 
 	private fun updateButtons(event: Event) {
-
 
 		val matchingEvent = mUserEventList?.find {
 			Log.d(TAG, "it.id = ${it.id}, even.id = ${event.id}")
@@ -166,13 +164,7 @@ class EventsFragment : Fragment() {
 						rightButtonCallback = {
 							Log.d(TAG, "btn_join triggered")
 							val activeCard: Int = mLayoutManager.activeCardPosition
-							mViewModel.joinEvent(getEvenAtPos(activeCard))
-
-							btn_join.animate().alpha(0f).withEndAction {
-								btn_join.visibility = View.GONE
-								btn_join.alpha = 1f
-								btn_unjoin.visibility = View.VISIBLE
-							}
+							mViewModel.joinEvent(getEventAtPos(activeCard))
 						}
 						leftButtonCallback = { }
 					}.build()
@@ -204,15 +196,8 @@ class EventsFragment : Fragment() {
 					title = "Leave this Event ?"
 					rightButtonCallback = {
 						val activeCard: Int = mLayoutManager.activeCardPosition
-						val event: Event = getEvenAtPos(activeCard)
+						val event: Event = getEventAtPos(activeCard)
 						mViewModel.unjoinEvents(event)
-
-						btn_unjoin.animate().alpha(0f).withEndAction {
-							btn_unjoin.visibility = View.GONE
-							btn_join.visibility = View.VISIBLE
-							btn_unjoin.alpha = 1f
-							btn_join.alpha = 1f
-						}
 					}
 					leftButtonCallback = { }
 				}.build()
@@ -222,11 +207,11 @@ class EventsFragment : Fragment() {
 		}
 	}
 
-	private fun initRV() {
+	private fun initRV(events: List<Event>) {
 		mAdapter = GroupAdapter()
 		rv_event_thumb_nails.setHasFixedSize(true)
 		setRecyclerViewLayoutManager()
-		setRecyclerViewAdapter()
+		setRecyclerViewAdapter(events)
 		setRecyclerViewListener()
 		changeEventContent(0)
 
@@ -252,13 +237,13 @@ class EventsFragment : Fragment() {
 		})
 	}
 
-	fun getEvenAtPos(position: Int): Event {
+	private fun getEventAtPos(position: Int): Event {
 		val value: EventItem = mAdapter?.getItem(position) as EventItem
 		return value.event
 	}
 
-	private fun setRecyclerViewAdapter() {
-		mEventList?.let {
+	private fun setRecyclerViewAdapter(events: List<Event>) {
+		events.let {
 			getEventItems(it)?.let { eventItems ->
 				mAdapter?.addAll(eventItems)
 			}
@@ -268,7 +253,7 @@ class EventsFragment : Fragment() {
 
 	private fun getEventItems(events: List<Event>): List<EventItem>? {
 		val list = arrayListOf<EventItem>()
-		if (mEventList != null && mEventList?.count() ?: 0 > 0) {
+		if (events.count() > 0) {
 			for (event in events) {
 				list.add(EventItem(event))
 			}
@@ -287,7 +272,7 @@ class EventsFragment : Fragment() {
 	}
 
 	private fun changeEventContent(position: Int) {
-		val event: Event = getEvenAtPos(position)
+		val event: Event = getEventAtPos(position)
 		var animTypeHorizontal =
 			TextAnimationType.RIGHT_TO_LEFT
 		var animTypeVertical =
