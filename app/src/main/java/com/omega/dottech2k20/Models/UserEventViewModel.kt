@@ -131,8 +131,11 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 		val events = mFirestore.collection("Events").document(event.id!!)
 
 		mFirestore.runBatch {
-			it.set(eventParticipantsDoc, user)
+			// add event id to user's events field
 			it.update(userEvents, FieldPath.of("events"), FieldValue.arrayUnion(event.id))
+			// add Event to participant's collection inside Event
+			it.set(eventParticipantsDoc, user)
+			// increment participantCount of Event
 			it.update(events, FieldPath.of("participantCount"), FieldValue.increment(1))
 		}.addOnCompleteListener {
 			if (it.isSuccessful) {
@@ -176,8 +179,11 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 		val events = mFirestore.collection("Events").document(event.id!!)
 
 		mFirestore.runBatch {
+			// Delete User doc inside Participant collection of Event
 			it.delete(eventParticipantsDoc)
+			// Remove event id from events field of User
 			it.update(userEvents, FieldPath.of("events"), FieldValue.arrayRemove(event.id))
+			// decrement participantCount
 			it.update(events, FieldPath.of("participantCount"), FieldValue.increment(-1))
 		}.addOnCompleteListener {
 			if (it.isSuccessful) {
