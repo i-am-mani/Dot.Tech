@@ -8,7 +8,6 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
-
 class UserEventViewModel(application: Application) : AndroidViewModel(application) {
 
 	private var mUserProfileLiveData: MutableLiveData<User> = MutableLiveData()
@@ -34,11 +33,36 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 
 	}
 
+	/**
+	 * 	Update User data in Users Collection and All the User data instances in Participant collection.
+	 *
+	 * 	Note :- the data is being replaced directly
+	 */
+
+	fun updateUserProfile(user: User) {
+		mFirestore.runBatch { batch ->
+			user.id?.let { userId ->
+				// re-set User (Update user)
+				val userDoc = mFirestore.collection("Users").document(userId)
+				batch.set(userDoc, user)
+
+				val userEventIds = user.events
+				if (userEventIds != null) {
+					for (eventIds in userEventIds) {
+						// Events -> Participant -> user_doc (Update user_doc)
+						val eventParticipantDoc = mFirestore.collection("Events")
+							.document(eventIds).collection("Participants").document(userId)
+						batch.set(eventParticipantDoc, user)
+					}
+				}
+			}
+		}
+	}
+
 
 	/**
 	 * Attaches snapshot listener to document reference, and executes provided callback whenever
 	 * the snapshot listener is triggered ( due to change in data etc..)
-	 *
 	 */
 	private fun addDocumentSnapShotListener(
 		doc: DocumentReference,
@@ -275,3 +299,4 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 
 
 }
+
