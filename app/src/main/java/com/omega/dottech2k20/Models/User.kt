@@ -7,5 +7,5 @@ data class User(
 	val email: String? = null,
 	val phone: String? = null,
 	val events: List<String>? = null,
-	val participantCount: Int? = null
+	var notificationIds: List<String>? = null
 )
