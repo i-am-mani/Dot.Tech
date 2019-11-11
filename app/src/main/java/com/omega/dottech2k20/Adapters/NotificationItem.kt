@@ -15,9 +15,13 @@ class NotificationItem(private val notification: Notification) : Item() {
 	val TAG = javaClass.simpleName
 	override fun bind(viewHolder: GroupieViewHolder, position: Int) {
 		if (notification.image != null) {
-			setImage(viewHolder, notification.image)
+			setImage(viewHolder)
 		}
 		setTitleAndContent(viewHolder)
+		setDateTime(viewHolder)
+	}
+
+	private fun setDateTime(viewHolder: GroupieViewHolder) {
 
 	}
 
@@ -32,13 +36,13 @@ class NotificationItem(private val notification: Notification) : Item() {
 	}
 
 	private fun setImage(
-		viewHolder: GroupieViewHolder,
-		image: String
+		viewHolder: GroupieViewHolder
 	) {
 		val store = FirebaseStorage.getInstance()
+		val image = notification.image
 		viewHolder.apply {
 			//Set Image
-			image.trim().let {
+			image?.trim()?.let {
 				Log.d(TAG, "image = $it")
 				if (it.contains(Regex("https|HTTPS"))) {
 					Glide.with(itemView).load(it).into(im_notification)
