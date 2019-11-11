@@ -11,12 +11,11 @@ import com.xwray.groupie.kotlinandroidextensions.Item
 import kotlinx.android.synthetic.main.item_notification.*
 
 
-class NotificationItem(val notification: Notification) : Item() {
+class NotificationItem(private val notification: Notification) : Item() {
 	val TAG = javaClass.simpleName
 	override fun bind(viewHolder: GroupieViewHolder, position: Int) {
 		if (notification.image != null) {
 			setImage(viewHolder, notification.image)
-
 		}
 		setTitleAndContent(viewHolder)
 
@@ -39,9 +38,14 @@ class NotificationItem(val notification: Notification) : Item() {
 		val store = FirebaseStorage.getInstance()
 		viewHolder.apply {
 			//Set Image
-			image.let {
+			image.trim().let {
 				Log.d(TAG, "image = $it")
-				Glide.with(itemView).load(it).into(im_notification)
+				if (it.contains(Regex("https|HTTPS"))) {
+					Glide.with(itemView).load(it).into(im_notification)
+				} else {
+					val reference = store.getReference(it)
+					Glide.with(itemView).load(reference).into(im_notification)
+				}
 				root_im_notification.visibility = View.VISIBLE
 			}
 		}
