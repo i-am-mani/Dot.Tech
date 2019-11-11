@@ -3,6 +3,7 @@ package com.omega.dottech2k20.Fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -63,8 +64,10 @@ class NotificationsFragment : Fragment() {
 	private fun getNotificationItem(notificationList: List<Notification>): List<NotificationItem> {
 		val list = arrayListOf<NotificationItem>()
 
-		for (notification in notificationList) {
+		val sortedList = notificationList.sortedByDescending { it.issued_time?.toDate()?.time }
+		for (notification in sortedList) {
 			val notificationItem = NotificationItem(notification)
+			Log.d(TAG, "Timestamp = ${notification.issued_time?.toDate()?.time}}")
 			list.add(notificationItem)
 		}
 		return list
@@ -74,7 +77,7 @@ class NotificationsFragment : Fragment() {
 		mAdapter = GroupAdapter()
 
 		rv_notifications.setHasFixedSize(true)
-		rv_notifications.itemAnimator = null
+		rv_notifications.itemAnimator = null // To avoid Blinking of RV
 		rv_notifications.adapter = mAdapter
 		rv_notifications.layoutManager =
 			LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
