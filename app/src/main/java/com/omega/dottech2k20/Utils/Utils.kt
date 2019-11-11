@@ -32,6 +32,13 @@ object Utils {
 		return time
 	}
 
+	fun getFormattedTime(timestamp: Timestamp): String {
+		val dateFormatter = SimpleDateFormat("MMM, EEE")
+		val timeFormatter = SimpleDateFormat("hh:mm")
+		val date = timestamp.toDate()
+		return "${dateFormatter.format(date)}   ${timeFormatter.format(date)}"
+	}
+
 	fun convertDPtoPX(context: Context?, dp: Int): Int? {
 		context ?: return null
 		val px = TypedValue.applyDimension(
