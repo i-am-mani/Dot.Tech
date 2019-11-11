@@ -8,12 +8,15 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
+
 class UserEventViewModel(application: Application) : AndroidViewModel(application) {
 
 	private var mUserProfileLiveData: MutableLiveData<User> = MutableLiveData()
 	private var mEventsLiveData: MutableLiveData<List<Event>> = MutableLiveData()
 	private var mUserEventsLiveData: MediatorLiveData<List<Event>>? = null
-	private var mNotificationsLiveData: MutableLiveData<List<Notification>> = MutableLiveData()
+	private lateinit var mGlobalNotificationsLiveData: MutableLiveData<List<Notification>>
+	private lateinit var mUserNotificationsLiveData: MutableLiveData<List<Notification>>
+	private lateinit var mNotificationsLiveData: MediatorLiveData<List<Notification>>
 	private val mFirestore = FirebaseFirestore.getInstance()
 	private val mFireAuth = FirebaseAuth.getInstance()
 	private val TAG: String = javaClass.simpleName
@@ -285,16 +288,64 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 		return list
 	}
 
-	fun getNotification(): LiveData<List<Notification>> {
-		val notifReference = mFirestore.collection("Notifications")
+	private fun fetchGlobalNotifications() {
+		if (!::mGlobalNotificationsLiveData.isInitialized) {
+			mGlobalNotificationsLiveData = MutableLiveData()
+			val notifReference = mFirestore.collection("Notifications")
 
-		addQuerySnapShotListener(notifReference) {
-			val notificationObjects = it.toObjects(Notification::class.java)
-			Log.d(TAG, "Number of Notifications = ${notificationObjects.size}")
-			mNotificationsLiveData.value = notificationObjects
+			addQuerySnapShotListener(notifReference) {
+				val notificationObjects = it.toObjects(Notification::class.java)
+				Log.d(TAG, "Number of Notifications = ${notificationObjects.size}")
+				mGlobalNotificationsLiveData.value = notificationObjects
+			}
+		}
+	}
+
+	fun getNotification(): LiveData<List<Notification>> {
+
+		if (!::mNotificationsLiveData.isInitialized) {
+			fetchGlobalNotifications()
+			fetchUserNotifications()
+			mNotificationsLiveData = MediatorLiveData()
+			mNotificationsLiveData.addSource(mGlobalNotificationsLiveData) {
+				mNotificationsLiveData.value = getAllNotifications()
+			}
+			mNotificationsLiveData.addSource(mUserNotificationsLiveData) {
+				mNotificationsLiveData.value = getAllNotifications()
+			}
 		}
 
 		return mNotificationsLiveData
+	}
+
+	private fun fetchUserNotifications() {
+		if (!::mUserNotificationsLiveData.isInitialized) {
+			mUserNotificationsLiveData = MutableLiveData()
+			val currentUser = mFireAuth.currentUser
+			if (currentUser != null) {
+				val userNotificationColRef =
+					mFirestore.collection("Users").document(currentUser.uid)
+						.collection("Notifications")
+				addQuerySnapShotListener(userNotificationColRef) {
+					val notificationsList = it.toObjects(Notification::class.java)
+					mUserNotificationsLiveData.value = notificationsList
+				}
+			}
+		}
+	}
+
+	private fun getAllNotifications(): List<Notification>? {
+		val notificationsList: MutableList<Notification> = mutableListOf()
+
+		mUserNotificationsLiveData.value?.let {
+			notificationsList.addAll(it)
+		}
+
+		mGlobalNotificationsLiveData.value?.let {
+			notificationsList.addAll(it)
+		}
+
+		return notificationsList
 	}
 
 
