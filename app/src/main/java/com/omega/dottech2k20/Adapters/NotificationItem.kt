@@ -6,6 +6,7 @@ import com.bumptech.glide.Glide
 import com.google.firebase.storage.FirebaseStorage
 import com.omega.dottech2k20.Models.Notification
 import com.omega.dottech2k20.R
+import com.omega.dottech2k20.Utils.Utils
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
 import kotlinx.android.synthetic.main.item_notification.*
@@ -22,7 +23,17 @@ class NotificationItem(private val notification: Notification) : Item() {
 	}
 
 	private fun setDateTime(viewHolder: GroupieViewHolder) {
-
+		viewHolder.apply {
+			notification.issued_time?.let { timestamp ->
+				val formattedTime = Utils.getFormattedTime(timestamp)
+				tv_notification_date.text = formattedTime
+				tv_notification_date.animate().alpha(1f)
+					.withStartAction { tv_notification_date.visibility = View.VISIBLE }
+					.apply {
+						duration = 300
+					}.start()
+			}
+		}
 	}
 
 	private fun setTitleAndContent(viewHolder: GroupieViewHolder) {
