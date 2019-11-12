@@ -7,6 +7,15 @@
     android:layout_height="match_parent"
     tools:context=".Fragments.EventsFragment">
 
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="ts_title"
+        tools:layout_editor_absoluteX="81dp"
+        tools:layout_editor_absoluteY="16dp" />
+
     <TextSwitcher
         android:id="@+id/ts_title"
         android:layout_width="250dp"
@@ -17,21 +26,24 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+    </TextSwitcher>
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_event_thumb_nails"
         android:layout_width="match_parent"
-        android:layout_height="210dp"
+        android:layout_height="0dp"
         android:clipChildren="false"
         android:overScrollMode="never"
         app:cardWidth="250dp"
         app:cardsGap="100dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
-        app:layout_constraintTop_toBottomOf="@+id/ts_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/barrier"
         app:viewUpdater="com.ramotion.cardslider.examples.simple.cards.CardsUpdater" />
-
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
@@ -79,44 +91,42 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.55" />
 
-    <View
-        android:layout_width="450dp"
-        android:layout_height="69dp"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/fading_white_gradient"
-        android:elevation="3dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/linearLayout" />
-
-    <View
-        android:id="@+id/view"
-        android:layout_width="0dp"
-        android:layout_height="69dp"
-        android:background="@drawable/fading_white_gradient"
-        android:elevation="3dp"
-        android:rotation="180"
-        app:layout_constraintBottom_toTopOf="@+id/guideline5"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <ScrollView
-        android:id="@+id/sv_desc"
-        android:layout_width="0dp"
+    <FrameLayout
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline3">
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
 
-            <TextSwitcher
-                android:id="@+id/ts_description"
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/small_shadow"
+            android:layout_gravity="top"
+            android:background="@drawable/fading_white_gradient"
+            android:elevation="4dp" />
+
+        <ScrollView
+            android:id="@+id/sv_desc"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center">
+
+            <TextView
+                android:id="@+id/tv_description"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
-        </FrameLayout>
-    </ScrollView>
+        </ScrollView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/small_shadow"
+            android:layout_gravity="bottom"
+            android:background="@drawable/fading_white_gradient"
+            android:rotation="180" />
+    </FrameLayout>
+
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline4"
@@ -128,10 +138,10 @@
     <FrameLayout
         android:id="@+id/root_btn_join"
         android:layout_width="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_height="wrap_content">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="wrap_content"
@@ -145,15 +155,15 @@
             app:cardElevation="5dp">
 
             <TextSwitcher
-                android:measureAllChildren="false"
                 android:id="@+id/ts_participants_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp"
                 android:layout_marginStart="4dp"
+                android:layout_marginTop="2dp"
                 android:layout_marginEnd="4dp"
+                android:layout_marginBottom="2dp"
                 android:gravity="center"
+                android:measureAllChildren="false"
                 android:text="34" />
 
         </com.google.android.material.card.MaterialCardView>
@@ -161,9 +171,9 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_join"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:backgroundTint="#8BC34A"
             android:text="Join"
             android:textSize="14sp" />
@@ -190,13 +200,6 @@
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.41" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline5"

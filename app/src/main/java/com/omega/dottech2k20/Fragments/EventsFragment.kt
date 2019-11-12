@@ -143,7 +143,6 @@ class EventsFragment : Fragment() {
 		super.onViewCreated(view, savedInstanceState)
 		ts_title.setFactory(TextViewFactory(R.style.TextAppearance_MaterialComponents_Headline5))
 		ts_date.setFactory(TextViewFactory(R.style.TextAppearance_MaterialComponents_Body1))
-		ts_description.setFactory(TextViewFactory(R.style.TextAppearance_AppCompat_Large))
 		ts_participants_count.setFactory(TextViewFactory((R.style.TextAppearance_MaterialComponents_Body1)))
 
 	}
@@ -287,7 +286,7 @@ class EventsFragment : Fragment() {
 		updateButtons(event)
 		setTitle(event.title, animTypeHorizontal)
 		setDateTime(event.startTime, event.endTime, animTypeVertical)
-		setDescription(event.shortDescription, TextAnimationType.FADE_IN)
+		setDescription(event.shortDescription)
 		setParticipantCount(event.participantCount, animTypeVertical)
 		mCurrentPosition = position
 	}
@@ -310,13 +309,20 @@ class EventsFragment : Fragment() {
 			setTextSwitcherAnimation(ts_date, animTypeVertical)
 			ts_date.setText(time)
 		}
-
 	}
 
+	private fun setDescription(description: String?) {
+		tv_description.text = Html.fromHtml(description?.trim(), Html.FROM_HTML_MODE_COMPACT)
+		// animation doesn't seem to be working
+//		ts_description.animate().alpha(0f).apply {
+//			duration = 500
+//		}.start()
+//		ts_description.animate().alpha(1f).apply {
+//			duration = 600
+//			startDelay = 500
+//			withStartAction {  }
+//		}.start()
 
-	private fun setDescription(description: String?, animationType: TextAnimationType) {
-		setTextSwitcherAnimation(ts_description, animationType)
-		ts_description.setText(Html.fromHtml(description?.trim(), Html.FROM_HTML_MODE_COMPACT))
 	}
 
 	private fun setTitle(title: String?, animationType: TextAnimationType) {
