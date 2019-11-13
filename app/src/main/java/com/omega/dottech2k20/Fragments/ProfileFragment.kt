@@ -87,10 +87,9 @@ class ProfileFragment : Fragment() {
 	}
 
 	private fun updateProfileDetails(user: User) {
-		val (_, fullName, email, phone, _) = user
-		tv_full_name.text = fullName
-		tv_email.text = email
-		tv_phone.text = phone
+		tv_full_name.text = user.fullName
+		tv_email.text = user.email
+		tv_phone.text = user.phone
 	}
 
 	override fun onCreateView(
@@ -115,7 +114,7 @@ class ProfileFragment : Fragment() {
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		rv_user_events.onFlingListener = (object :
+		rv_user_events?.onFlingListener = (object :
 			OnFlingListener() {
 			private fun updateLayout(height: Int) {
 
