@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
 								val newNotificationIds = notificationIds.toMutableList()
 								newNotificationIds.add(token)
 								user.notificationIds = newNotificationIds
-								Log.d(TAG, "New User data $user")
+								Log.d("Notification", "New User data $user")
 							} else if (notificationIds == null) {
 								user.notificationIds = listOf(token)
 							}
@@ -165,7 +165,8 @@ class MainActivity : AppCompatActivity() {
 					navigation_bar.show(destination.id, true)
 					navigation_bar.visibility = View.VISIBLE
 				} else {
-					navigation_bar.visibility = View.INVISIBLE
+					// Gone so that, the navi_bar won't consume additional space.
+					navigation_bar.visibility = View.GONE
 				}
 			}
 		}
