@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_eventsFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_eventsFragment_to_fragment_event_details"
+            app:destination="@id/fragment_event_details" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
@@ -57,4 +60,8 @@
         android:name="com.omega.dottech2k20.Fragments.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/fragment_event_details"
+        android:name="com.omega.dottech2k20.Fragments.FragmentEventDetails"
+        android:label="fragment_event_details" />
 </navigation>
