@@ -58,26 +58,30 @@ class WelcomeScreenFragment : Fragment() {
 	}
 
 	private fun addButton() {
-		val params = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
-		val px = Utils.convertDPtoPX(context, 48)
+		context?.let {
+			val params = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 
-		params.setMargins(0, px ?: 0, 0, 0)
+			val px = Utils.convertDPtoPX(it, 48)
 
-		val button = MaterialButton(context)
-		button.apply {
-			layoutParams = params
-			background.setColorFilter(
-				getColor(context, R.color.MaterialGreen),
-				PorterDuff.Mode.SRC_ATOP
-			)
-			setTextSize(TypedValue.COMPLEX_UNIT_SP, 24f)
-			text = "Go"
-			alpha = 0f
+
+			params.setMargins(0, px, 0, 0)
+
+			val button = MaterialButton(context)
+			button.apply {
+				layoutParams = params
+				background.setColorFilter(
+					getColor(context, R.color.MaterialGreen),
+					PorterDuff.Mode.SRC_ATOP
+				)
+				setTextSize(TypedValue.COMPLEX_UNIT_SP, 24f)
+				text = "Go"
+				alpha = 0f
+			}
+			button.setOnClickListener {
+				mActivity.goToOnBoardingFragment()
+			}
+			root_welcome_text.addView(button)
 		}
-		button.setOnClickListener {
-			mActivity.goToOnBoardingFragment()
-		}
-		root_welcome_text.addView(button)
 	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

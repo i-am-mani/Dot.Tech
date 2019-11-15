@@ -119,8 +119,10 @@ class ProfileFragment : Fragment() {
 			private fun updateLayout(height: Int) {
 
 				val layoutParams = root_profile_data.layoutParams
-				Utils.convertDPtoPX(context, height)?.let {
-					layoutParams.height = it
+				context?.let {
+					Utils.convertDPtoPX(it, height).let {
+						layoutParams.height = it
+					}
 				}
 				root_profile_data.layoutParams = layoutParams
 				TransitionManager.beginDelayedTransition(root_profile, ChangeBounds())
