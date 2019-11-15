@@ -144,12 +144,23 @@ class EventsFragment : Fragment() {
 		ts_title.setFactory(TextViewFactory(R.style.TextAppearance_MaterialComponents_Headline5))
 		ts_date.setFactory(TextViewFactory(R.style.TextAppearance_MaterialComponents_Body1))
 		ts_participants_count.setFactory(TextViewFactory((R.style.TextAppearance_MaterialComponents_Body1)))
-
 	}
 
 	private fun initCallbacks() {
 		setJoinEventCallback()
 		setLeaveEventCallback()
+		setViewDetailsListener()
+	}
+
+	private fun setViewDetailsListener() {
+		btn_details.setOnClickListener {
+			val activeCard: Int = mLayoutManager.activeCardPosition
+			val event: Event = getEventAtPos(activeCard)
+			val bundle = Bundle()
+			Log.d(TAG, "Event = $event")
+			bundle.putParcelable("event", event)
+			findNavController().navigate(R.id.event_details, bundle)
+		}
 	}
 
 	private fun setJoinEventCallback() {
