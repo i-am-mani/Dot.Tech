@@ -15,6 +15,7 @@ import android.widget.FrameLayout
 import android.widget.TextSwitcher
 import android.widget.TextView
 import android.widget.ViewSwitcher.ViewFactory
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -141,8 +142,8 @@ class EventsFragment : Fragment() {
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		ts_title.setFactory(TextViewFactory(R.style.TextAppearance_MaterialComponents_Headline5))
-		ts_date.setFactory(TextViewFactory(R.style.TextAppearance_MaterialComponents_Body1))
+		ts_title.setFactory(TextViewFactory(R.style.TitleText))
+		ts_date.setFactory(TextViewFactory(R.style.DateTimeAppearance))
 		ts_participants_count.setFactory(TextViewFactory((R.style.TextAppearance_MaterialComponents_Body1)))
 	}
 
@@ -370,12 +371,13 @@ class EventsFragment : Fragment() {
 	}
 
 
-	inner class TextViewFactory(val resStyle: Int?) : ViewFactory {
+	inner class TextViewFactory(private val resStyle: Int?) : ViewFactory {
 		override fun makeView(): View {
 			val textView = TextView(mMainActivity)
 			if (resStyle != null) {
 				textView.layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
 				textView.setTextAppearance(resStyle)
+				textView.typeface = ResourcesCompat.getFont(context!!, R.font.eczar_medium)
 				textView.gravity = Gravity.CENTER_VERTICAL
 			}
 
