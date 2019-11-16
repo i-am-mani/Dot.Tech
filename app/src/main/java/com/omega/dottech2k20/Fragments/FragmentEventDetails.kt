@@ -3,10 +3,12 @@ package com.omega.dottech2k20.Fragments
 
 import android.os.Bundle
 import android.text.Html
+import android.transition.ChangeBounds
+import android.transition.TransitionManager
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.view.animation.AccelerateDecelerateInterpolator
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
@@ -24,6 +26,7 @@ class FragmentEventDetails : Fragment() {
 	private val TAG: String = javaClass.simpleName
 	lateinit var mEvent: Event
 	val mAdapter: GroupAdapter<GroupieViewHolder> = GroupAdapter()
+	val SWIPE_THRESHOLD = 2000
 
 	override fun onCreateView(
 		inflater: LayoutInflater, container: ViewGroup?,
@@ -38,6 +41,54 @@ class FragmentEventDetails : Fragment() {
 		super.onViewCreated(view, savedInstanceState)
 		initRV()
 		initEventDetails()
+		attachFlingListener()
+	}
+
+	private fun attachFlingListener() {
+
+		val gestureDetector = GestureDetector(context, FlingGestureListener())
+		sv_event_details.setOnTouchListener { v, event ->
+			gestureDetector.onTouchEvent(event)
+		}
+	}
+
+	inner class FlingGestureListener : GestureDetector.SimpleOnGestureListener() {
+		override fun onFling(
+			e1: MotionEvent?,
+			e2: MotionEvent?,
+			velocityX: Float,
+			velocityY: Float
+		): Boolean {
+			// Swipe from bottom to top is +ve and Swipe from top to bottom in -ve
+			if (velocityY > SWIPE_THRESHOLD) {
+				Log.d(TAG, "Swipe Detected!")
+				val layout = R.layout.fragment_event_details
+				val animDuration = 500L
+
+				applyConstraints(layout, animDuration)
+			} else if (velocityY < -SWIPE_THRESHOLD) {
+				val layout = R.layout.fragment_event_details_maximized
+				val animDuration = 500L
+				root_event_images.visibility = View.GONE
+				applyConstraints(layout, animDuration)
+			}
+
+			Log.d(TAG, "vX = $velocityX, vY = $velocityY")
+			return super.onFling(e1, e2, velocityX, velocityY)
+		}
+
+		private fun applyConstraints(layout: Int, animDuration: Long) {
+			val set = ConstraintSet()
+			set.clone(context, layout)
+			val changeBounds = ChangeBounds()
+			changeBounds.apply {
+				duration = animDuration
+				interpolator = AccelerateDecelerateInterpolator()
+			}
+
+			set.applyTo(root_event_details)
+			TransitionManager.beginDelayedTransition(root_event_details, changeBounds)
+		}
 	}
 
 	private fun initEventDetails() {
