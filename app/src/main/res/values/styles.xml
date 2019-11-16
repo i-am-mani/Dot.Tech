@@ -32,4 +32,16 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="TitleText" parent="@style/TextAppearance.AppCompat.Title">
+        <item name="android:textSize">@dimen/text_title_size</item>
+        <item name="android:fontFamily">@font/eczar_medium</item>
+    </style>
+
+    <style name="NormalText" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textSize">@dimen/text_size_normal</item>
+        <item name="android:fontFamily">@font/dosis</item>
+    </style>
+
+
 </resources>
