@@ -28,17 +28,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <View
-            android:id="@+id/shadow_top"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/medium_margin"
-            android:layout_gravity="top"
-            android:background="@drawable/fading_white_gradient"
-            android:elevation="4dp" />
+        <!--        <View-->
+        <!--            android:id="@+id/shadow_top"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="@dimen/medium_margin"-->
+        <!--            android:layout_gravity="top"-->
+        <!--            android:background="@drawable/fading_white_gradient"-->
+        <!--            android:elevation="4dp" />-->
 
         <View
             android:id="@+id/shadow_start"
-            android:layout_width="45dp"
+            android:layout_width="10dp"
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:background="@drawable/fading_white_gradient_lr"
@@ -46,7 +46,7 @@
 
         <View
             android:id="@+id/shadow_end"
-            android:layout_width="45dp"
+            android:layout_width="10dp"
             android:layout_height="match_parent"
             android:layout_gravity="end"
             android:background="@drawable/fading_white_gradient_lr"
