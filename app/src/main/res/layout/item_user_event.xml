@@ -1,66 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     app:cardCornerRadius="20dp"
-    app:cardElevation="2dp"
+    app:cardElevation="10dp"
     app:cardUseCompatPadding="true">
 
-   <LinearLayout
-       android:layout_width="match_parent"
-       android:layout_height="match_parent"
-       android:layout_marginTop="@dimen/medium_margin"
-       android:layout_marginStart="@dimen/small_margin"
-       android:layout_marginEnd="@dimen/small_margin"
-       android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/small_margin"
+        android:layout_marginTop="@dimen/medium_margin"
+        android:layout_marginEnd="@dimen/small_margin"
+        android:orientation="vertical">
 
-       <TextView
-           android:id="@+id/tv_event_name"
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           tools:text = "Event Name"
-           android:textSize="@dimen/text_title_size"/>
+        <TextView
+            android:id="@+id/tv_event_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/SubTitleText"
+            android:lineSpacingExtra="0dp"
+            android:includeFontPadding="false"
+            android:layout_marginStart="@dimen/medium_margin"
+            tools:text="Event Name" />
 
-       <TextView
-           android:id="@+id/tv_event_datetime"
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           tools:text="Jan 21 Wed  12:30 - 2:00"
-           android:textSize="@dimen/text_sub_title_size"/>
+        <TextView
+            android:id="@+id/tv_event_datetime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/medium_margin"
+            android:textAppearance="@style/CaptionText"
+            android:alpha="0.8"
+            android:includeFontPadding="false"
+            tools:text="Jan 21 Wed  12:30 - 2:00" />
 
-       <LinearLayout
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:gravity="center"
-           android:layout_marginTop="20dp"
-           android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:orientation="horizontal">
 
-           <com.google.android.material.button.MaterialButton
-               android:id="@+id/btn_event_leave"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:backgroundTint="@color/MaterialRed"
-               style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-               android:text="@string/leave_event_btn_name"/>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_event_leave"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/MaterialRed"
+                android:text="@string/leave_event_btn_name" />
 
-           <View
-               android:layout_width="30dp"
-               android:layout_height="1dp" />
+            <View
+                android:layout_width="30dp"
+                android:layout_height="1dp" />
 
-           <com.google.android.material.button.MaterialButton
-               android:id="@+id/btn_event_details"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-               android:text="View Details"/>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_event_details"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="View Details" />
 
-       </LinearLayout>
+        </LinearLayout>
 
 
-   </LinearLayout>
+    </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>
