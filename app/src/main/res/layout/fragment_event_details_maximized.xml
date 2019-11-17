@@ -90,7 +90,7 @@
             android:layout_height="match_parent">
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/floatingActionButton"
+                android:id="@+id/btn_join"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -103,6 +103,22 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:useCompatPadding="false" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btn_leave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:backgroundTint="#C62828"
+                android:elevation="10dp"
+                android:src="@drawable/ic_check"
+                android:tint="#EF9A9A"
+                app:borderWidth="0dp"
+                app:layout_constraintBottom_toTopOf="@+id/framelayout_event_details_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:useCompatPadding="false"
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/tv_event_title"
