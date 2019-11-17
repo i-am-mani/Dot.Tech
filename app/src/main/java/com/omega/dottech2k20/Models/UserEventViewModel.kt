@@ -132,6 +132,14 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 	}
 
 
+	/**
+	 * Adds currently signed in user to the Event.
+	 *
+	 * Executes queries in Batch, writes to Participants sub-collection of Event as well as Adds the
+	 * Event Id to User's profile, and increment participantCount of Event.
+	 *
+	 * @param event : Event which user will join
+	 */
 	fun joinEvent(event: Event) {
 		var user: User? = mUserProfileLiveData.value
 		if (user == null) {
@@ -162,29 +170,40 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 	) {
 		// Inside Sub-collection ( Participants ), set the id of participant document as UID
 		// done to easily retrieve the document
-		val eventParticipantsDoc = mFirestore
-			.collection("Events")
-			.document(event.id!!).collection("Participants").document(user.id!!)
+		val eventId = event.id
+		val userId = user.id
+		if (eventId != null && userId != null) {
+			val eventParticipantsDoc = mFirestore
+				.collection("Events")
+				.document(eventId).collection("Participants").document(userId)
+			val userEvents = mFirestore.collection("Users").document(userId)
+			val events = mFirestore.collection("Events").document(eventId)
 
-		val userEvents = mFirestore.collection("Users").document(user.id!!)
-		val events = mFirestore.collection("Events").document(event.id)
-
-		mFirestore.runBatch {
-			// add event id to user's events field
-			it.update(userEvents, FieldPath.of("events"), FieldValue.arrayUnion(event.id))
-			// add Event to participant's collection inside Event
-			it.set(eventParticipantsDoc, user)
-			// increment participantCount of Event
-			it.update(events, FieldPath.of("participantCount"), FieldValue.increment(1))
-		}.addOnCompleteListener {
-			if (it.isSuccessful) {
-				Log.d(TAG, "Joining Events Successful")
-			} else {
-				Log.d(TAG, "Joining Events Failed")
+			mFirestore.runBatch {
+				// add event id to user's events field
+				it.update(userEvents, FieldPath.of("events"), FieldValue.arrayUnion(eventId))
+				// add Event to participant's collection inside Event
+				it.set(eventParticipantsDoc, user)
+				// increment participantCount of Event
+				it.update(events, FieldPath.of("participantCount"), FieldValue.increment(1))
+			}.addOnCompleteListener {
+				if (it.isSuccessful) {
+					Log.d(TAG, "Joining Events Successful")
+				} else {
+					Log.d(TAG, "Joining Events Failed")
+				}
 			}
+		} else {
+			Log.w(TAG, "event or user id is null")
 		}
 	}
 
+	/**
+	 * UnJoin or Leave the Event which the currently signed in user is part of(joined).
+	 *
+	 * The user instances from this events Participants sub-collection is deleted, ParticipantCount
+	 * is decremented and from User collection the Event id is removed from `events` array.
+	 */
 	fun unjoinEvents(event: Event) {
 
 		var user: User? = mUserProfileLiveData.value
@@ -259,11 +278,13 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 
 		mUserEventsLiveData = MediatorLiveData()
 
-		mUserEventsLiveData!!.addSource(mUserProfileLiveData) {
-			mUserEventsLiveData!!.value = liveDataChanged(mUserProfileLiveData, mEventsLiveData)
-		}
-		mUserEventsLiveData!!.addSource(mEventsLiveData) {
-			mUserEventsLiveData!!.value = liveDataChanged(mUserProfileLiveData, mEventsLiveData)
+		mUserEventsLiveData?.let {
+			it.addSource(mUserProfileLiveData) {
+				mUserEventsLiveData?.value = liveDataChanged(mUserProfileLiveData, mEventsLiveData)
+			}
+			it.addSource(mEventsLiveData) {
+				mUserEventsLiveData?.value = liveDataChanged(mUserProfileLiveData, mEventsLiveData)
+			}
 		}
 
 		return mUserEventsLiveData
@@ -282,8 +303,11 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 					return getMatchingEventsById(eventIds, events)
 				}
 			}
-		} else{
-			Log.d(TAG, "userLiveData = ${userLiveData.value} , eventsLiveData = ${eventsLiveData.value}")
+		} else {
+			Log.d(
+				TAG,
+				"userLiveData = ${userLiveData.value} , eventsLiveData = ${eventsLiveData.value}"
+			)
 		}
 		return null
 	}
