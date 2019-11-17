@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:id="@+id/root_profile"
+<LinearLayout android:id="@+id/root_profile"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,29 +13,44 @@
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:animateLayoutChanges="true"
+        android:elevation="3dp"
         android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/im_avatar"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_weight="3"
-            android:src="@drawable/ic_profile_user"
-            android:tint="#BBDEFB"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_weight="3">
+
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="end"
+                android:backgroundTint="@android:color/transparent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_edit"
+                android:tint="@color/MaterialGreen" />
+
+            <ImageView
+                android:id="@+id/im_avatar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:layout_weight="3"
+                android:padding="8dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_avatar_sun" />
+
+        </FrameLayout>
 
 
         <TextView
             android:id="@+id/tv_full_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
             android:gravity="center"
-            android:textSize="24sp"
+            android:textAppearance="@style/ProfileTitleLight"
+            android:textStyle="bold"
             tools:text="Full Name" />
 
         <TextView
@@ -46,7 +59,7 @@
             android:layout_height="wrap_content"
             android:alpha="0.6"
             android:gravity="center"
-            android:textSize="18sp"
+            android:textAppearance="@style/ProfileSubTitleLight"
             tools:text="fullname@gmail.com" />
 
         <TextView
@@ -55,7 +68,7 @@
             android:layout_height="wrap_content"
             android:alpha="0.6"
             android:gravity="center"
-            android:textSize="18sp"
+            android:textAppearance="@style/ProfileSubTitleLight"
             tools:text="9022899234" />
 
 

@@ -33,8 +33,13 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="TitleText">
+    <style name="TitleText" parent="TextAppearance.AppCompat.Title">
         <item name="android:textSize">@dimen/text_title_size</item>
+        <item name="android:fontFamily">@font/eczar_medium</item>
+    </style>
+
+    <style name="SubTitleText" parent="TextAppearance.AppCompat.Title">
+        <item name="android:textSize">@dimen/text_sub_title_size</item>
         <item name="android:fontFamily">@font/eczar_medium</item>
     </style>
 
@@ -46,6 +51,16 @@
     <style name="DateTimeAppearance">
         <item name="android:textSize">18sp</item>
         <item name="android:fontFamily">@font/eczar_medium</item>
+    </style>
+
+    <style name="ProfileTitleLight">
+        <item name="android:textSize">24sp</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+
+    <style name="ProfileSubTitleLight">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">sans-serif-light</item>
     </style>
 
 
