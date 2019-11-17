@@ -37,9 +37,10 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 	}
 
 	/**
-	 * 	Update User data in Users Collection and All the User data instances in Participant collection.
+	 * 	Update User data in Users Collection and All the User instances in Participant collection
+	 * 	for the events which user is part of (joined).
 	 *
-	 * 	Note :- the data is being replaced directly
+	 * 	Note :- the data is being replaced!
 	 */
 
 	fun updateUserProfile(user: User) {
@@ -65,7 +66,7 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 
 	/**
 	 * Attaches snapshot listener to document reference, and executes provided callback whenever
-	 * the snapshot listener is triggered ( due to change in data etc..)
+	 * the snapshot listener is triggered (i.e due to change in data)
 	 */
 	private fun addDocumentSnapShotListener(
 		doc: DocumentReference,
@@ -84,6 +85,14 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 		}
 	}
 
+	/**
+	 * Return LiveData Instance of List of All Events.
+	 *
+	 * Note:- Only one snapshot listener is attached irrespective of number of calls. Once the
+	 * SnapShot listener is attached, the same is returned when requested, instead of attaching new
+	 * listener.
+	 *
+	 */
 	fun getEvents(): LiveData<List<Event>> {
 		val eventTask = mFirestore.collection("Events")
 
@@ -124,19 +133,22 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 
 
 	fun joinEvent(event: Event) {
-
 		var user: User? = mUserProfileLiveData.value
-
 		if (user == null) {
 			val uid = mFireAuth.currentUser?.uid ?: return
 
 			val document: DocumentReference = mFirestore.collection("Users").document(uid)
-			document.get().addOnCompleteListener {
-				if (it.isSuccessful) {
+			document.get().addOnCompleteListener { task ->
+				if (task.isSuccessful) {
 					// Check of nullability
-					addUserInEvent(event, it.result?.toObject(User::class.java)!!)
+					task.result?.let { documentSnapshot ->
+						documentSnapshot.toObject(User::class.java)?.let {
+							addUserInEvent(event, it)
+						}
+					}
+
 				} else {
-					Log.e(TAG, "Failed To get User : ", it.exception)
+					Log.e(TAG, "Failed To get User : ", task.exception)
 				}
 			}
 		} else {
@@ -155,7 +167,7 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 			.document(event.id!!).collection("Participants").document(user.id!!)
 
 		val userEvents = mFirestore.collection("Users").document(user.id!!)
-		val events = mFirestore.collection("Events").document(event.id!!)
+		val events = mFirestore.collection("Events").document(event.id)
 
 		mFirestore.runBatch {
 			// add event id to user's events field
@@ -203,7 +215,7 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 
 		val userEvents = mFirestore.collection("Users").document(user.id!!)
 
-		val events = mFirestore.collection("Events").document(event.id!!)
+		val events = mFirestore.collection("Events").document(event.id)
 
 		mFirestore.runBatch {
 			// Delete User doc inside Participant collection of Event
@@ -221,6 +233,12 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 		}
 	}
 
+	/**
+	 *  Returns LiveData of List of Events which the User has joined.
+	 *
+	 *  This computed from User's `events` field, which is a list of event ids, and Events.
+	 *  The events from Events data having id in common with `events` field of user are added to list.
+	 */
 	fun getUserEvent(): LiveData<List<Event>>? {
 		// The MediatorLiveData is used to serialize data coming from two asynchronous sources
 		// i.e mUserProfileLiveData and mEventsLiveData, to get the events participated by a user
