@@ -16,6 +16,7 @@ import android.widget.TextSwitcher
 import android.widget.TextView
 import android.widget.ViewSwitcher.ViewFactory
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -121,30 +122,6 @@ class EventsFragment : Fragment() {
 		}
 	}
 
-	private fun updateButtons(event: Event) {
-
-		val matchingEvent = mUserEventList?.find {
-			Log.d(TAG, "it.id = ${it.id}, even.id = ${event.id}")
-			it.id == event.id
-		}
-		if (matchingEvent == null) {
-			Log.d(TAG, "Changing Visibility")
-			btn_join.animate().alpha(1f).withEndAction {
-				btn_join.visibility = View.VISIBLE
-				btn_unjoin.visibility = View.GONE
-				btn_unjoin.alpha = 1f
-				btn_join.alpha = 1f
-			}
-		} else {
-			btn_unjoin.animate().alpha(1f).withEndAction {
-				btn_join.visibility = View.GONE
-				btn_unjoin.visibility = View.VISIBLE
-				btn_unjoin.alpha = 1f
-				btn_join.alpha = 1f
-			}
-		}
-	}
-
 	override fun onCreateView(
 		inflater: LayoutInflater, container: ViewGroup?,
 		savedInstanceState: Bundle?
@@ -170,10 +147,10 @@ class EventsFragment : Fragment() {
 		btn_details.setOnClickListener {
 			val activeCard: Int = mLayoutManager.activeCardPosition
 			val event: Event = getEventAtPos(activeCard)
-			val bundle = Bundle()
-			Log.d(TAG, "Event = $event")
-			bundle.putParcelable("event", event)
-			findNavController().navigate(R.id.event_details, bundle)
+			findNavController().navigate(
+				R.id.event_details,
+				bundleOf(FragmentEventDetails.EVENT_KEY to event)
+			)
 		}
 	}
 
@@ -274,6 +251,32 @@ class EventsFragment : Fragment() {
 
 		return mAdapter!!.getItem(position)!!
 	}
+
+
+	private fun updateButtons(event: Event) {
+
+		val matchingEvent = mUserEventList?.find {
+			Log.d(TAG, "it.id = ${it.id}, even.id = ${event.id}")
+			it.id == event.id
+		}
+		if (matchingEvent == null) {
+			Log.d(TAG, "Changing Visibility")
+			btn_join.animate().alpha(1f).withEndAction {
+				btn_join.visibility = View.VISIBLE
+				btn_unjoin.visibility = View.GONE
+				btn_unjoin.alpha = 1f
+				btn_join.alpha = 1f
+			}
+		} else {
+			btn_unjoin.animate().alpha(1f).withEndAction {
+				btn_join.visibility = View.GONE
+				btn_unjoin.visibility = View.VISIBLE
+				btn_unjoin.alpha = 1f
+				btn_join.alpha = 1f
+			}
+		}
+	}
+
 
 
 	private fun onCardChanged() {
@@ -388,12 +391,6 @@ class EventsFragment : Fragment() {
 		}
 
 	}
-
-	override fun onSaveInstanceState(outState: Bundle) {
-		super.onSaveInstanceState(outState)
-		outState.putParcelable("LAYOUT", mLayoutManager.onSaveInstanceState())
-	}
-
 
 	companion object {
 

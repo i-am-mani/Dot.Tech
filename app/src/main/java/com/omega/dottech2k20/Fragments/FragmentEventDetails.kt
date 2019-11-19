@@ -232,5 +232,8 @@ class FragmentEventDetails : Fragment() {
 		mAdapter.addAll(items)
 	}
 
+	companion object {
+		const val EVENT_KEY = "Event"
+	}
 
 }
