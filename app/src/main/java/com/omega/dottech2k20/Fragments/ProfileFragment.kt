@@ -80,7 +80,16 @@ class ProfileFragment : Fragment() {
 	}
 
 	private fun leaveEvent(event: Event) {
-		mViewModel.unjoinEvents(event)
+		context?.let { c ->
+			BinaryDialog(c, R.layout.dialog_event_confirmation).apply {
+				title = "Leave this Event ?"
+				rightButtonCallback = {
+					mViewModel.unjoinEvents(event)
+				}
+				leftButtonCallback = { }
+			}.build()
+		}
+
 	}
 
 	private fun viewDetails(events: Event) {
