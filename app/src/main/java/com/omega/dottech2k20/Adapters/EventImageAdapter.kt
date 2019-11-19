@@ -22,7 +22,7 @@ class EventImageAdapter(private val mContext: Context) :
 		viewType: Int
 	): ViewHolder {
 		val itemView: View? = LayoutInflater.from(mContext)
-			.inflate(layout.item_event_image, parent, false)
+			.inflate(layout.item_events, parent, false)
 		return ViewHolder(itemView!!)
 	}
 
