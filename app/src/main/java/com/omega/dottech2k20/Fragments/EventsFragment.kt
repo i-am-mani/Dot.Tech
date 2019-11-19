@@ -23,7 +23,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.FirebaseFirestore
 import com.omega.dottech2k20.Adapters.EventImageAdapter
 import com.omega.dottech2k20.MainActivity
 import com.omega.dottech2k20.Models.Event
@@ -48,12 +47,10 @@ class EventsFragment : Fragment() {
 	}
 
 	private var mCurrentPosition: Int? = null
-	private val mFirestore = FirebaseFirestore.getInstance()
 	val TAG = javaClass.simpleName
 	var mAdapter: EventImageAdapter? = null
 	lateinit var mLayoutManager: CardSliderLayoutManager
 	lateinit var mMainActivity: MainActivity
-	var isInitTextSet: Boolean = false
 	lateinit var mViewModel: UserEventViewModel
 	var mUserEventList: List<Event>? = null
 
@@ -235,9 +232,6 @@ class EventsFragment : Fragment() {
 	}
 
 	private fun initRV(events: List<Event>) {
-		mAdapter = EventImageAdapter(context!!)
-		mAdapter!!.setDataSet(events)
-		rv_event_thumb_nails.setHasFixedSize(true)
 		setRecyclerViewLayoutManager()
 		setRecyclerViewAdapter(events)
 		setRecyclerViewListener()
@@ -246,7 +240,18 @@ class EventsFragment : Fragment() {
 		CardSnapHelper().attachToRecyclerView(rv_event_thumb_nails)
 	}
 
+	private fun setRecyclerViewAdapter(events: List<Event>) {
+		context?.let { ctx ->
+			mAdapter = EventImageAdapter(ctx)
+			mAdapter?.let {
+				it.setDataSet(events)
+				rv_event_thumb_nails.adapter = mAdapter
+			}
+		}
+	}
+
 	private fun setRecyclerViewLayoutManager() {
+		rv_event_thumb_nails.setHasFixedSize(true)
 		mLayoutManager = CardSliderLayoutManager(context!!)
 		rv_event_thumb_nails.layoutManager = mLayoutManager
 	}
@@ -270,10 +275,6 @@ class EventsFragment : Fragment() {
 		return mAdapter!!.getItem(position)!!
 	}
 
-	private fun setRecyclerViewAdapter(events: List<Event>) {
-		rv_event_thumb_nails.adapter = mAdapter
-
-	}
 
 	private fun onCardChanged() {
 		val activeCardPosition = mLayoutManager.activeCardPosition
