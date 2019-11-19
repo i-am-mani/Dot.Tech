@@ -93,6 +93,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/tv_events_count"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:textAppearance="@style/CaptionText"
+            android:paddingEnd="8dp"
+            tools:text="12" />
+
         <View
             android:layout_gravity="top"
             android:layout_width="match_parent"

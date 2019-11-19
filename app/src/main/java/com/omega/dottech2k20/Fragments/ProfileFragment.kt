@@ -55,7 +55,6 @@ class ProfileFragment : Fragment() {
 				}
 			})
 			mViewModel.getUserEvent()?.observe(this, Observer {
-				Log.d("ViewModel", "Event list = ${it?.count() ?: 0}")
 				if (it != null) {
 					updateUserEvents(it)
 				}
@@ -69,6 +68,11 @@ class ProfileFragment : Fragment() {
 		val eventItems = getEventItems(events)
 		mAdapter.update(eventItems)
 		rv_user_events.adapter = mAdapter
+		setEventCount(events.count())
+	}
+
+	private fun setEventCount(count: Int) {
+		tv_events_count.text = count.toString()
 	}
 
 	private fun getEventItems(events: List<Event>): List<UserEventItem> {
