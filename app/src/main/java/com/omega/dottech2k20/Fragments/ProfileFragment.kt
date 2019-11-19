@@ -63,12 +63,20 @@ class ProfileFragment : Fragment() {
 	}
 
 	private fun updateUserEvents(events: List<Event>) {
+		setLayoutManager()
+		setAdapter(events)
+		setEventCount(events.count())
+	}
+
+	private fun setLayoutManager() {
 		rv_user_events.layoutManager =
 			LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+	}
+
+	private fun setAdapter(events: List<Event>) {
 		val eventItems = getEventItems(events)
 		mAdapter.update(eventItems)
 		rv_user_events.adapter = mAdapter
-		setEventCount(events.count())
 	}
 
 	private fun setEventCount(count: Int) {
