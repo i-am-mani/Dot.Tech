@@ -74,18 +74,22 @@ class EventsFragment : Fragment() {
 		mViewModel.getEvents().observe(this, getEventsObserver())
 
 		if (AuthenticationUtils.currentUser != null) {
-			mViewModel.getUserEvent()?.observe(this, Observer {
-				if (it != null) {
-					mUserEventList = it
-					btn_join.isClickable = true
-					val activeCardPosition = mLayoutManager.activeCardPosition
-					if (activeCardPosition != RecyclerView.NO_POSITION) {
-						Log.d(TAG, "position = $activeCardPosition")
-						val event: Event = getEventAtPos(activeCardPosition)
-						updateButtons(event)
-					}
+			mViewModel.getUserEvent()?.observe(this, getUserEventObserver())
+		}
+	}
+
+	private fun getUserEventObserver(): Observer<List<Event>> {
+		return Observer {
+			if (it != null) {
+				mUserEventList = it
+				btn_join.isClickable = true
+				val activeCardPosition = mLayoutManager.activeCardPosition
+				if (activeCardPosition != RecyclerView.NO_POSITION) {
+					Log.d(TAG, "position = $activeCardPosition")
+					val event: Event = getEventAtPos(activeCardPosition)
+					updateButtons(event)
 				}
-			})
+			}
 		}
 	}
 
