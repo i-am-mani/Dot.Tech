@@ -70,8 +70,21 @@ class FragmentEventDetails : Fragment() {
 		savedInstanceState: Bundle?
 	): View? {
 		Log.d(TAG, "Bundle values - ${arguments?.toString()}")
-		mEvent = arguments?.getParcelable("event")!!
+		extractEvent()
 		return inflater.inflate(R.layout.fragment_event_details, container, false)
+	}
+
+	/**
+	 * Will store the event in global mEvent variable, in case it's null, Navigate back to Events
+	 */
+	private fun extractEvent() {
+		val event = arguments?.getParcelable<Event>(EVENT_KEY)
+		if (event != null) {
+			mEvent = event
+		} else {
+			Log.e(TAG, "Null Event Passed", NullPointerException())
+			findNavController().navigate(R.id.eventsFragment)
+		}
 	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
