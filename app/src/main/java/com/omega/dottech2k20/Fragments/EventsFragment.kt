@@ -24,7 +24,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
-import com.omega.dottech2k20.Adapters.EventItem
+import com.omega.dottech2k20.Adapters.EventImageAdapter
 import com.omega.dottech2k20.MainActivity
 import com.omega.dottech2k20.Models.Event
 import com.omega.dottech2k20.Models.UserEventViewModel
@@ -34,8 +34,6 @@ import com.omega.dottech2k20.Utils.BinaryDialog
 import com.omega.dottech2k20.Utils.Utils.getEventSchedule
 import com.ramotion.cardslider.CardSliderLayoutManager
 import com.ramotion.cardslider.CardSnapHelper
-import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import kotlinx.android.synthetic.main.fragment_events.*
 
 
@@ -52,7 +50,7 @@ class EventsFragment : Fragment() {
 	private var mCurrentPosition: Int? = null
 	private val mFirestore = FirebaseFirestore.getInstance()
 	val TAG = javaClass.simpleName
-	var mAdapter: GroupAdapter<GroupieViewHolder>? = null
+	var mAdapter: EventImageAdapter? = null
 	lateinit var mLayoutManager: CardSliderLayoutManager
 	lateinit var mMainActivity: MainActivity
 	var isInitTextSet: Boolean = false
@@ -73,26 +71,9 @@ class EventsFragment : Fragment() {
 		super.onActivityCreated(savedInstanceState)
 		Log.d(TAG, "onActivityCreated prompted, mAdapter = $mAdapter")
 		mViewModel = ViewModelProviders.of(mMainActivity).get(UserEventViewModel::class.java)
-		mViewModel.getEvents().observe(this, Observer { events ->
-			if (events != null) {
-				if (mAdapter == null) {
-					initRV(events)
-				} else {
-					mAdapter?.let {
-						val pos = mLayoutManager.activeCardPosition
-						setParticipantCount(
-							events[pos].participantCount,
-							TextAnimationType.LEFT_TO_RIGHT
-						)
-					}
-				}
-
-				initCallbacks()
-			}
-		})
+		mViewModel.getEvents().observe(this, getEventsObserver())
 
 		if (AuthenticationUtils.currentUser != null) {
-
 			mViewModel.getUserEvent()?.observe(this, Observer {
 				if (it != null) {
 					mUserEventList = it
@@ -105,6 +86,37 @@ class EventsFragment : Fragment() {
 					}
 				}
 			})
+		}
+	}
+
+	private fun getEventsObserver(): Observer<List<Event>> {
+		return Observer { events ->
+			if (events != null) {
+				if (mAdapter == null) {
+					initRV(events)
+				} else {
+					updateAdapterDataset(events)
+				}
+				initCallbacks()
+			}
+		}
+	}
+
+	private fun updateAdapterDataset(events: List<Event>) {
+		mAdapter?.let {
+			val pos = mLayoutManager.activeCardPosition
+
+			// Update the participant Count in case it's updated in new list.
+			if (it.getItem(pos)?.participantCount != events[pos].participantCount) {
+				setParticipantCount(
+					events[pos].participantCount,
+					TextAnimationType.LEFT_TO_RIGHT
+				)
+			}
+
+			// update the data set.
+			// Note:- Changing DataSet wouldn't trigger any change on current visible item.
+			it.setDataSet(events)
 		}
 	}
 
@@ -219,7 +231,8 @@ class EventsFragment : Fragment() {
 	}
 
 	private fun initRV(events: List<Event>) {
-		mAdapter = GroupAdapter()
+		mAdapter = EventImageAdapter(context!!)
+		mAdapter!!.setDataSet(events)
 		rv_event_thumb_nails.setHasFixedSize(true)
 		setRecyclerViewLayoutManager()
 		setRecyclerViewAdapter(events)
@@ -249,28 +262,13 @@ class EventsFragment : Fragment() {
 	}
 
 	private fun getEventAtPos(position: Int): Event {
-		val value: EventItem = mAdapter?.getItem(position) as EventItem
-		return value.event
+
+		return mAdapter!!.getItem(position)!!
 	}
 
 	private fun setRecyclerViewAdapter(events: List<Event>) {
-		events.let {
-			getEventItems(it)?.let { eventItems ->
-				mAdapter?.addAll(eventItems)
-			}
-		}
 		rv_event_thumb_nails.adapter = mAdapter
-	}
 
-	private fun getEventItems(events: List<Event>): List<EventItem>? {
-		val list = arrayListOf<EventItem>()
-		if (events.count() > 0) {
-			for (event in events) {
-				list.add(EventItem(event))
-			}
-			return list
-		}
-		return null
 	}
 
 	private fun onCardChanged() {
