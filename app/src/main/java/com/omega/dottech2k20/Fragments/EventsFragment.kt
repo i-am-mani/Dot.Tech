@@ -3,6 +3,7 @@ package com.omega.dottech2k20.Fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.text.Html
 import android.util.Log
 import android.view.Gravity
@@ -46,6 +47,8 @@ class EventsFragment : Fragment() {
 		TOP_TO_BOTTOM,
 		BOTTOM_TO_TOP
 	}
+
+	private val BACK_OFF_TIME = 10 // minutes
 
 	private var mCurrentPosition: Int? = null
 	val TAG = javaClass.simpleName
@@ -161,19 +164,46 @@ class EventsFragment : Fragment() {
 			if (AuthenticationUtils.currentUser == null) {
 				requestForLoginDialog()
 			} else {
-				context?.let { c ->
-					BinaryDialog(c, R.layout.dialog_event_confirmation).apply {
-						title = "Join This Event ?"
-						rightButtonCallback = {
-							Log.d(TAG, "btn_join triggered")
-							val activeCard: Int = mLayoutManager.activeCardPosition
-							mViewModel.joinEvent(getEventAtPos(activeCard))
-						}
-						leftButtonCallback = { }
-					}.build()
+				if (isValidBackoff()) {
+					showBackOffDialog()
+				} else {
+					context?.let { c ->
+						BinaryDialog(c, R.layout.dialog_event_confirmation).apply {
+							title = "Join This Event ?"
+							rightButtonCallback = {
+								Log.d(TAG, "btn_join triggered")
+								val activeCard: Int = mLayoutManager.activeCardPosition
+								mViewModel.joinEvent(getEventAtPos(activeCard))
+							}
+							leftButtonCallback = { }
+						}.build()
+					}
 				}
 			}
 		}
+	}
+
+	private fun showBackOffDialog() {
+		context?.let { c ->
+			BinaryDialog(c).apply {
+				title = "Try again later \uD83D\uDE35"
+				description =
+					"It looks like you have joined and left the event in last 10 minutes.\n" +
+							"Please wait and try again after ${getBackOffTime()}M"
+				isLeftButtonVisible = false
+				rightButtonName = "Close"
+				leftButtonCallback = {}
+				rightButtonCallback = {}
+			}.build()
+		}
+	}
+
+	private fun getBackOffTime(): Long {
+		val sharedPreference = PreferenceManager.getDefaultSharedPreferences(context)
+		val event = getEventAtPos(mLayoutManager.activeCardPosition)
+		val lastRegisteredTimestamp = sharedPreference.getLong(event.id, 0)
+		val diff = System.currentTimeMillis() - lastRegisteredTimestamp
+		return BACK_OFF_TIME - (diff / (1000 * 60))
 	}
 
 	private fun requestForLoginDialog() {
@@ -201,6 +231,7 @@ class EventsFragment : Fragment() {
 						val activeCard: Int = mLayoutManager.activeCardPosition
 						val event: Event = getEventAtPos(activeCard)
 						mViewModel.unjoinEvents(event)
+						registerTimestampInPreference()
 					}
 					leftButtonCallback = { }
 				}.build()
@@ -208,6 +239,30 @@ class EventsFragment : Fragment() {
 
 
 		}
+	}
+
+	private fun registerTimestampInPreference() {
+		// Whenever user leaves event, mark the event against timestamp
+		// Prevent user from joining for next defined time interval - to prevent spamming
+		val sharedPreference = PreferenceManager.getDefaultSharedPreferences(context)
+		val editor = sharedPreference.edit()
+		val event = getEventAtPos(mLayoutManager.activeCardPosition)
+		editor.putLong(event.id, System.currentTimeMillis())
+		editor.apply()
+		Log.d(TAG, "Registered Leave Event TimeStamp")
+	}
+
+	/**
+	 * Return true if user join same event within defined time interval.
+	 */
+	private fun isValidBackoff(): Boolean {
+		// Check if the user hasn't left the same event since last 10 mins
+		// To avoid Spamming, and overloading db with constant queries
+		val sharedPreference = PreferenceManager.getDefaultSharedPreferences(context)
+		val event = getEventAtPos(mLayoutManager.activeCardPosition)
+		val lastRegisteredTimestamp = sharedPreference.getLong(event.id, 0)
+
+		return (System.currentTimeMillis() - lastRegisteredTimestamp) <= (BACK_OFF_TIME * 60 * 1000)
 	}
 
 	private fun initRV(events: List<Event>) {
