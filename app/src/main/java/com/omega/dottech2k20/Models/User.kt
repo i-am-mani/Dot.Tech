@@ -6,6 +6,6 @@ data class User(
 	val fullName: String? = null,
 	val email: String? = null,
 	val phone: String? = null,
-	val events: List<String>? = null,
-	var notificationIds: List<String>? = null
+	val events: List<String>? = listOf(),
+	var notificationIds: List<String>? = listOf()
 )

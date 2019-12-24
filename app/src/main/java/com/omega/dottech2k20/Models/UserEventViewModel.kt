@@ -65,6 +65,8 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 
 
 	/**
+	 * Listens to Changes in Document
+	 *
 	 * Attaches snapshot listener to document reference, and executes provided callback whenever
 	 * the snapshot listener is triggered (i.e due to change in data)
 	 */
@@ -106,6 +108,8 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 	}
 
 	/**
+	 * Listenes to Changes in Collection
+	 *
 	 * Attaches snapshot listener to document reference, and executes provided callback whenever
 	 * the snapshot listener is triggered ( due to change in data etc..)
 	 *
