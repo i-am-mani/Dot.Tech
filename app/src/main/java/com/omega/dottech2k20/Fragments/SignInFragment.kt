@@ -1,6 +1,5 @@
 package com.omega.dottech2k20.Fragments
 
-import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.text.TextUtils
@@ -9,18 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.Navigation
 import androidx.navigation.findNavController
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.AuthResult
 import com.omega.dottech2k20.MainActivity
 import com.omega.dottech2k20.R
 import com.omega.dottech2k20.R.layout
 import com.omega.dottech2k20.Utils.AuthenticationUtils
 import kotlinx.android.synthetic.main.fragment_sign_in.*
-import java.time.Duration
 
 class SignInFragment : Fragment() {
 	val TAG: String = javaClass.simpleName
@@ -72,6 +66,7 @@ class SignInFragment : Fragment() {
 			Log.d(TAG, "Login Successful")
 			Snackbar.make(root_sign_in,"Login Successful",Snackbar.LENGTH_SHORT)
 			mActivity.setNavigationMenuItems()
+			progressbar_login.findNavController().popBackStack()
 			progressbar_login.findNavController().navigate(R.id.eventsFragment)
 		} else{
 			Log.d(TAG, "Login Unsuccessful")

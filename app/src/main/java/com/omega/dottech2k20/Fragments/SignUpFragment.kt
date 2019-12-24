@@ -15,7 +15,6 @@ import com.omega.dottech2k20.R
 import com.omega.dottech2k20.Utils.AuthenticationUtils
 import com.omega.dottech2k20.Utils.Utils
 import kotlinx.android.synthetic.main.fragment_sign_up.*
-import java.lang.Exception
 
 class SignUpFragment : Fragment() {
 
@@ -90,6 +89,7 @@ class SignUpFragment : Fragment() {
 			true -> {
 				if(progress_bar_sign_up != null){
 					progress_bar_sign_up.visibility = View.INVISIBLE
+					progress_bar_sign_up.findNavController().popBackStack()
 					progress_bar_sign_up.findNavController().navigate(R.id.eventsFragment)
 				}
 				Toast.makeText(
