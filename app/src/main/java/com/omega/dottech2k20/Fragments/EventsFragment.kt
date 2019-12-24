@@ -25,6 +25,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseUser
 import com.omega.dottech2k20.Adapters.EventImageAdapter
 import com.omega.dottech2k20.MainActivity
 import com.omega.dottech2k20.Models.Event
@@ -74,7 +75,9 @@ class EventsFragment : Fragment() {
 		mViewModel = ViewModelProviders.of(mMainActivity).get(UserEventViewModel::class.java)
 		mViewModel.getEvents().observe(this, getEventsObserver())
 
-		if (AuthenticationUtils.currentUser != null) {
+		val currentUser = AuthenticationUtils.currentUser
+		if (currentUser != null) {
+			Log.d(TAG, "Current User is email verified = ${currentUser.isEmailVerified}")
 			btn_join.isEnabled = false // disable join button until UserEventData is fetched.
 			mViewModel.getUserEvent()?.observe(this, getUserEventObserver())
 		}
@@ -160,25 +163,46 @@ class EventsFragment : Fragment() {
 	}
 
 	private fun setJoinEventCallback() {
+		val currentUser = AuthenticationUtils.currentUser
 		btn_join.setOnClickListener {
-			if (AuthenticationUtils.currentUser == null) {
-				requestForLoginDialog()
-			} else {
-				if (isValidBackoff()) {
-					showBackOffDialog()
-				} else {
-					context?.let { c ->
-						BinaryDialog(c, R.layout.dialog_event_confirmation).apply {
-							title = "Join This Event ?"
-							rightButtonCallback = {
-								Log.d(TAG, "btn_join triggered")
-								val activeCard: Int = mLayoutManager.activeCardPosition
-								mViewModel.joinEvent(getEventAtPos(activeCard))
-							}
-							leftButtonCallback = { }
-						}.build()
-					}
+			when {
+				currentUser == null -> requestForLoginDialog()
+				!currentUser.isEmailVerified -> showUnVerifiedEmailDialog(currentUser)
+				else -> joinEventConfirmation()
+			}
+		}
+	}
+
+	private fun showUnVerifiedEmailDialog(currentUser: FirebaseUser) {
+		context?.let { c ->
+			BinaryDialog(c).apply {
+				title = "Unverified Email"
+				description =
+					"Please verify your e-mail address.\n\n" +
+							"Check your Inbox, or re-apply for verification"
+				rightButtonName = "Verify"
+				leftButtonName = "Close"
+				rightButtonCallback = {
+					currentUser.sendEmailVerification()
 				}
+			}.build()
+		}
+	}
+
+	private fun joinEventConfirmation() {
+		if (isValidBackoff()) {
+			showBackOffDialog()
+		} else {
+			context?.let { c ->
+				BinaryDialog(c, R.layout.dialog_event_confirmation).apply {
+					title = "Join This Event ?"
+					rightButtonCallback = {
+						Log.d(TAG, "btn_join triggered")
+						val activeCard: Int = mLayoutManager.activeCardPosition
+						mViewModel.joinEvent(getEventAtPos(activeCard))
+					}
+					leftButtonCallback = { }
+				}.build()
 			}
 		}
 	}
@@ -333,7 +357,6 @@ class EventsFragment : Fragment() {
 			}
 		}
 	}
-
 
 
 	private fun onCardChanged() {
