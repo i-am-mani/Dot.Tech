@@ -1,9 +1,9 @@
 package com.omega.dottech2k20
 
-import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -18,6 +18,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
 import com.omega.dottech2k20.Models.UserEventViewModel
@@ -168,6 +169,12 @@ class MainActivity : AppCompatActivity() {
 					// Gone so that, the navi_bar won't consume additional space.
 					navigation_bar.visibility = View.GONE
 				}
+
+				if (destination.id == R.id.signOutFragment) {
+					val intent = Intent(this, SignOutActivity::class.java)
+					startActivity(intent)
+					finish()
+				}
 			}
 		}
 	}
@@ -208,7 +215,7 @@ class MainActivity : AppCompatActivity() {
 		}
 	}
 
-	fun Activity.circularRevealedAtCenter(view: View) {
+	fun circularRevealedAtCenter(view: FloatingActionButton) {
 		val cx = (view.left + view.right) / 2
 		val cy = (view.top + view.bottom) / 2
 		val finalRadius = Math.max(view.width, view.height)
@@ -216,7 +223,8 @@ class MainActivity : AppCompatActivity() {
 		if (view.isAttachedToWindow) {
 			val anim =
 				ViewAnimationUtils.createCircularReveal(view, cx, cy, 0f, finalRadius.toFloat())
-			view.visibility = View.VISIBLE
+//			view.visibility = View.VISIBLE
+			view.show()
 			view.setBackgroundColor(ContextCompat.getColor(this, R.color.IndicatorDotColor))
 			anim.duration = 550
 			anim.start()
