@@ -59,6 +59,7 @@ class AuthenticationUtils {
 						val user = result.user // if user is null, no need to write to firestore
 						if(user!= null){
 							createNewUser(user,user.uid,fullName,email,phone,password,callback)
+							user.sendEmailVerification()
 						}
 					}
 				} else{
