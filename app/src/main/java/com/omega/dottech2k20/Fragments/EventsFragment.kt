@@ -75,11 +75,13 @@ class EventsFragment : Fragment() {
 		mViewModel = ViewModelProviders.of(mMainActivity).get(UserEventViewModel::class.java)
 		mViewModel.getEvents().observe(this, getEventsObserver())
 
-		val currentUser = AuthenticationUtils.currentUser
-		if (currentUser != null) {
-			Log.d(TAG, "Current User is email verified = ${currentUser.isEmailVerified}")
-			btn_join.isEnabled = false // disable join button until UserEventData is fetched.
-			mViewModel.getUserEvent()?.observe(this, getUserEventObserver())
+		AuthenticationUtils.currentUser?.reload()?.addOnCompleteListener {
+			if (it.isSuccessful) {
+				val currentUser = AuthenticationUtils.currentUser
+				Log.d(TAG, "Current User is email verified = ${currentUser?.isEmailVerified}")
+				btn_join.isEnabled = false // disable join button until UserEventData is fetched.
+				mViewModel.getUserEvent()?.observe(this, getUserEventObserver())
+			}
 		}
 	}
 
