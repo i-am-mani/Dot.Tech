@@ -8,25 +8,12 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.UserProfileChangeRequest.Builder
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
-import java.lang.Exception
-import java.util.*
+import com.omega.dottech2k20.Models.User
 
 class AuthenticationUtils {
 
 	private val TAG = javaClass.simpleName
-
-	fun verifyCurrentUserEmail(context: Context, listener: OnCompleteListener<Void>) {
-		val currentUser = currentUser
-		if(currentUser == null){
-			Log.d(TAG, "Current user is Null")
-			return
-		}
-
-		currentUser.sendEmailVerification().addOnCompleteListener(context as Activity, listener)
-	}
 
 	companion object {
 
@@ -47,15 +34,9 @@ class AuthenticationUtils {
 		 */
 		fun createNewUser(user: FirebaseUser,id:String,fullName: String,email: String,phone: String,password: String,callback: (Boolean,Exception?)-> Unit) {
 			val firestore = FirebaseFirestore.getInstance()
-			val dataMap: MutableMap<String, String> = HashMap()
-
-			dataMap["id"] = id
-			dataMap["fullName"] = fullName
-			dataMap["email"] = email
-			dataMap["phone"] = phone
-
+			val userObject = User(id, fullName, email, phone)
 			val users: Task<Void> =
-				firestore.collection("Users").document(id).set(dataMap)
+				firestore.collection("Users").document(id).set(userObject)
 
 			users.addOnCompleteListener{
 				if(it.isSuccessful){
@@ -114,6 +95,16 @@ class AuthenticationUtils {
 					}
 				}
 			}
+		}
+
+		fun verifyCurrentUserEmail(context: Context, listener: OnCompleteListener<Void>) {
+			val currentUser = currentUser
+			if (currentUser == null) {
+				Log.d(TAG, "Current user is Null")
+				return
+			}
+
+			currentUser.sendEmailVerification().addOnCompleteListener(context as Activity, listener)
 		}
 
 		val currentUser: FirebaseUser?
