@@ -72,6 +72,7 @@ class EventsFragment : Fragment() {
 		mViewModel.getEvents().observe(this, getEventsObserver())
 
 		if (AuthenticationUtils.currentUser != null) {
+			btn_join.isEnabled = false // disable join button until UserEventData is fetched.
 			mViewModel.getUserEvent()?.observe(this, getUserEventObserver())
 		}
 	}
@@ -80,7 +81,8 @@ class EventsFragment : Fragment() {
 		return Observer {
 			if (it != null) {
 				mUserEventList = it
-				btn_join.isClickable = true
+				btn_join.isEnabled =
+					true // enable join button since, we know Event's user is part of.
 				val activeCardPosition = mLayoutManager.activeCardPosition
 				if (activeCardPosition != RecyclerView.NO_POSITION) {
 					Log.d(TAG, "position = $activeCardPosition")
