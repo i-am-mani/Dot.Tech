@@ -37,27 +37,17 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 	}
 
 	/**
-	 * 	Update User data in Users Collection and All the User instances in Participant collection
-	 * 	for the events which user is part of (joined).
+	 * 	Update User data in Users Collection.
 	 *
 	 * 	Note :- the data is being replaced!
 	 */
 
 	fun updateUserProfile(user: User) {
-		mFirestore.runBatch { batch ->
-			user.id?.let { userId ->
-				// re-set User (Update user)
-				val userDoc = mFirestore.collection("Users").document(userId)
-				batch.set(userDoc, user)
 
-				val userEventIds = user.events
-				if (userEventIds != null) {
-					for (eventIds in userEventIds) {
-						// Events -> Participant -> user_doc (Update user_doc)
-						val eventParticipantDoc = mFirestore.collection("Events")
-							.document(eventIds).collection("Participants").document(userId)
-						batch.set(eventParticipantDoc, user)
-					}
+		user.id?.let { id ->
+			mFirestore.collection("Users").document(id).set(user).addOnCompleteListener {
+				if (it.isSuccessful) {
+					Log.d(TAG, "Updating user Successful!")
 				}
 			}
 		}
