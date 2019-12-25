@@ -75,14 +75,14 @@ class EventsFragment : Fragment() {
 		mViewModel = ViewModelProviders.of(mMainActivity).get(UserEventViewModel::class.java)
 		mViewModel.getEvents().observe(this, getEventsObserver())
 
-		AuthenticationUtils.currentUser?.reload()?.addOnCompleteListener {
-			if (it.isSuccessful) {
+//		AuthenticationUtils.currentUser?.reload()?.addOnCompleteListener {
+//			if (it.isSuccessful) {
 				val currentUser = AuthenticationUtils.currentUser
 				Log.d(TAG, "Current User is email verified = ${currentUser?.isEmailVerified}")
-				btn_join.isEnabled = false // disable join button until UserEventData is fetched.
+		btn_join?.isEnabled = false // disable join button until UserEventData is fetched.
 				mViewModel.getUserEvent()?.observe(this, getUserEventObserver())
-			}
-		}
+//			}
+//		}
 	}
 
 	private fun getUserEventObserver(): Observer<List<Event>> {
@@ -142,7 +142,7 @@ class EventsFragment : Fragment() {
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		ts_title.setFactory(TextViewFactory(R.style.TitleText))
+		ts_title.setFactory(TextViewFactory(R.style.TitleTextEczar))
 		ts_date.setFactory(TextViewFactory(R.style.DateTimeAppearance))
 		ts_participants_count.setFactory(TextViewFactory((R.style.TextAppearance_MaterialComponents_Body1)))
 	}
