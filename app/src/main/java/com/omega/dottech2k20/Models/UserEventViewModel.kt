@@ -53,6 +53,36 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 		}
 	}
 
+	/**
+	 *  Updates given user's information across all it's instances e.g Event's Participant's
+	 *  sub collection.
+	 *
+	 *  Note: The Data would be replaced and not merged.
+	 */
+	fun updateUserInformation(user: User, onSuccessCallback: () -> Unit) {
+		mFirestore.runBatch { batch ->
+			user.id?.let { userId ->
+				// re-set User (Update user)
+				val userDoc = mFirestore.collection("Users").document(userId)
+				batch.set(userDoc, user)
+
+				val userEventIds = user.events
+				if (userEventIds != null) {
+					for (eventIds in userEventIds) {
+						// Events -> Participant -> user_doc (Update user_doc)
+						val eventParticipantDoc = mFirestore.collection("Events")
+							.document(eventIds).collection("Participants").document(userId)
+						batch.set(eventParticipantDoc, user)
+					}
+				}
+			}
+		}.addOnCompleteListener {
+			if (it.isSuccessful) {
+				onSuccessCallback()
+			}
+		}
+	}
+
 
 	/**
 	 * Listens to Changes in Document

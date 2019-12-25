@@ -1,6 +1,7 @@
 package com.omega.dottech2k20.Fragments
 
 
+import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.transition.ChangeBounds
@@ -9,6 +10,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -51,7 +56,7 @@ class ProfileFragment : Fragment() {
 
 			profile?.observe(this, Observer {
 				if (it != null) {
-					updateProfileDetails(it)
+					setProfileDetails(it)
 				}
 			})
 			mViewModel.getUserEvent()?.observe(this, Observer {
@@ -111,10 +116,13 @@ class ProfileFragment : Fragment() {
 		)
 	}
 
-	private fun updateProfileDetails(user: User) {
+	private fun setProfileDetails(user: User) {
 		tv_full_name.text = user.fullName
 		tv_email.text = user.email
 		tv_phone.text = user.phone
+		btn_edit_profile?.setOnClickListener {
+			showEditDialog(user)
+		}
 	}
 
 	override fun onCreateView(
@@ -167,6 +175,47 @@ class ProfileFragment : Fragment() {
 				return false
 			}
 		})
+	}
+
+
+	fun showEditDialog(user: User) {
+		val dialog = Dialog(context)
+		dialog.setCanceledOnTouchOutside(true)
+
+		dialog.requestWindowFeature(Window.FEATURE_SWIPE_TO_DISMISS)
+		dialog.setContentView(R.layout.edit_profile_dialog)
+		dialog.window.setLayout(
+			ViewGroup.LayoutParams.MATCH_PARENT,
+			ViewGroup.LayoutParams.WRAP_CONTENT
+		)
+		dialog.window.setBackgroundDrawableResource(android.R.color.transparent)
+
+		val nameField = dialog.findViewById<EditText>(R.id.et_edit_fullname)
+		val phoneField = dialog.findViewById<EditText>(R.id.et_edit_phone)
+		val confirmBtn = dialog.findViewById<Button>(R.id.btn_confirm)
+
+		confirmBtn.setOnClickListener {
+			val name = nameField.text.toString()
+			val phone = phoneField.text.toString()
+			if (Utils.isFullNameValid(name) && Utils.isPhoneNumberValid(phone)) {
+				val updatedUser =
+					User(user.id, name, user.email, phone, user.events, user.notificationIds)
+				mViewModel.updateUserInformation(updatedUser) {
+					Toast.makeText(
+						mActivity,
+						"Updating User Details Successfull!",
+						Toast.LENGTH_SHORT
+					).show()
+				}
+				dialog.dismiss()
+			} else {
+				Toast.makeText(mActivity, "Invalid Data Provided", Toast.LENGTH_SHORT).show()
+			}
+		}
+
+
+
+		dialog.show()
 	}
 
 
