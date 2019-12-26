@@ -17,6 +17,7 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 	private lateinit var mGlobalNotificationsLiveData: MutableLiveData<List<Notification>>
 	private lateinit var mUserNotificationsLiveData: MutableLiveData<List<Notification>>
 	private lateinit var mNotificationsLiveData: MediatorLiveData<List<Notification>>
+	private lateinit var mNoticeLiveData: MutableLiveData<List<Notice>>
 	private val mFirestore = FirebaseFirestore.getInstance()
 	private val mFireAuth = FirebaseAuth.getInstance()
 	private val TAG: String = javaClass.simpleName
@@ -41,7 +42,6 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 	 *
 	 * 	Note :- the data is being replaced!
 	 */
-
 	fun updateUserProfile(user: User) {
 
 		user.id?.let { id ->
@@ -414,6 +414,22 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 		return notificationsList
 	}
 
-
+	private fun getNotices(): LiveData<List<Notice>> {
+		if (!::mNoticeLiveData.isInitialized) {
+			mNoticeLiveData = MutableLiveData()
+			val query = mFirestore.collection("Notices")
+			query.get().addOnCompleteListener {
+				if (it.isSuccessful) {
+					val result = it.result
+					if (result != null) {
+						mNoticeLiveData.value = result.toObjects(Notice::class.java)
+					} else {
+						Log.e(TAG, "Failed to fetch notices: ", it.exception)
+					}
+				}
+			}
+		}
+		return mNoticeLiveData
+	}
 }
 

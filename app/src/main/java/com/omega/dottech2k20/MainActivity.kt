@@ -1,5 +1,6 @@
 package com.omega.dottech2k20
 
+import android.app.Dialog
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -9,6 +10,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.ViewAnimationUtils
+import android.view.ViewGroup
+import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
@@ -17,15 +20,23 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
+import com.omega.dottech2k20.Adapters.NoticeItem
+import com.omega.dottech2k20.Models.Notice
 import com.omega.dottech2k20.Models.UserEventViewModel
 import com.omega.dottech2k20.Utils.AuthenticationUtils
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.GroupieViewHolder
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import kotlin.math.abs
 
 
 class MainActivity : AppCompatActivity() {
@@ -36,6 +47,7 @@ class MainActivity : AppCompatActivity() {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
+
 		setContentView(R.layout.activity_main)
 		setNavigationBar()
 		setNavigationController()
@@ -44,7 +56,64 @@ class MainActivity : AppCompatActivity() {
 		createNotificationChannel()
 		subscribeToTopicAll()
 		registerTokenToUserData()
+		showStartUpDialog(savedInstanceState)
+	}
 
+	private fun showStartUpDialog(savedInstanceState: Bundle?) {
+		val notices = intent.extras.getParcelableArrayList<Notice>("notices")
+
+		if (notices != null && notices.count() > 0) {
+			val noticesItems = mutableListOf<NoticeItem>()
+			for (notice in notices) {
+				noticesItems.add(NoticeItem(notice))
+			}
+
+			initStartDialog(noticesItems)
+		}
+
+
+	}
+
+	private fun initStartDialog(items: MutableList<NoticeItem>) {
+		val dialog = Dialog(this).apply {
+			setCanceledOnTouchOutside(true)
+
+			setContentView(R.layout.start_up_dialog)
+			window.setLayout(
+				ViewGroup.LayoutParams.MATCH_PARENT,
+				ViewGroup.LayoutParams.WRAP_CONTENT
+			)
+			window.setBackgroundDrawableResource(android.R.color.transparent)
+
+			val rv_notices = findViewById<RecyclerView>(R.id.rv_notices)
+			var adapter: GroupAdapter<GroupieViewHolder>? = GroupAdapter()
+			adapter?.addAll(items)
+			val layoutManager =
+				LinearLayoutManager(this@MainActivity, LinearLayoutManager.HORIZONTAL, false)
+			rv_notices.layoutManager =
+				layoutManager
+			LinearSnapHelper().attachToRecyclerView(rv_notices)
+			rv_notices.adapter = adapter
+
+			val next = findViewById<ImageButton>(R.id.imbtn_next)
+			val prev = findViewById<ImageButton>(R.id.imbtn_previous)
+
+			next.setOnClickListener {
+				val pos = layoutManager.findFirstCompletelyVisibleItemPosition()
+				adapter?.let {
+					layoutManager.scrollToPosition((pos + 1) % adapter.itemCount)
+				}
+			}
+			prev.setOnClickListener {
+				val pos = layoutManager.findFirstCompletelyVisibleItemPosition()
+				adapter?.let {
+					layoutManager.scrollToPosition(abs(pos - 1) % adapter.itemCount)
+				}
+			}
+
+
+		}
+		dialog.show()
 	}
 
 	/**
