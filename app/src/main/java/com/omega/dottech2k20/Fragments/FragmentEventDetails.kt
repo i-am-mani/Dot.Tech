@@ -89,6 +89,8 @@ class FragmentEventDetails : Fragment() {
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
+		btn_join.isEnabled = mEvent.isParticipationOpen
+		btn_leave.isEnabled = mEvent.isParticipationOpen
 		hideButtons()
 		initRV()
 		initEventDetails()
