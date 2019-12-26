@@ -343,7 +343,7 @@ class EventsFragment : Fragment() {
 			it.id == event.id
 		}
 		btn_join.isEnabled =
-			event.isParticipationOpen // Disable the button if registration is closed
+			event.registrationOpen // Disable the button if registration is closed
 		if (matchingEvent == null) {
 			Log.d(TAG, "Changing Visibility")
 			btn_join.animate().alpha(1f).withEndAction {

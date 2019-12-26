@@ -15,7 +15,8 @@ data class Event(
 	val images: List<String>? = null,
 	@ServerTimestamp val startTime: Timestamp? = null,
 	@ServerTimestamp val endTime: Timestamp? = null,
-	@field:JvmField val isParticipationOpen: Boolean = true
+	var registrationOpen: Boolean = true,
+	val orderPreference: Int? = null
 ) : Parcelable {
 	constructor(source: Parcel) : this(
 		source.readString(),
@@ -27,7 +28,8 @@ data class Event(
 		source.createStringArrayList(),
 		source.readParcelable<Timestamp>(Timestamp::class.java.classLoader),
 		source.readParcelable<Timestamp>(Timestamp::class.java.classLoader),
-		1 == source.readInt()
+		1 == source.readInt(),
+		source.readValue(Int::class.java.classLoader) as Int?
 	)
 
 	override fun describeContents() = 0
@@ -42,7 +44,8 @@ data class Event(
 		writeStringList(images)
 		writeParcelable(startTime, 0)
 		writeParcelable(endTime, 0)
-		writeInt((if (isParticipationOpen) 1 else 0))
+		writeInt((if (registrationOpen) 1 else 0))
+		writeValue(orderPreference)
 	}
 
 	companion object {
