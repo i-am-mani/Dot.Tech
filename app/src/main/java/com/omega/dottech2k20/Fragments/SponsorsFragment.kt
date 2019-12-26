@@ -1,6 +1,7 @@
 package com.omega.dottech2k20.Fragments
 
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.omega.dottech2k20.Adapters.SponsorItem
+import com.omega.dottech2k20.MainActivity
 import com.omega.dottech2k20.Models.Sponsor
 import com.omega.dottech2k20.Models.SponsorsViewModel
 import com.omega.dottech2k20.R
@@ -20,6 +22,7 @@ import com.rd.animation.type.AnimationType
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import kotlinx.android.synthetic.main.fragment_sponsors.*
+import java.lang.Math.abs
 
 class SponsorsFragment : Fragment() {
 
@@ -29,11 +32,18 @@ class SponsorsFragment : Fragment() {
 	val linearLayoutManager =
 		LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
+	lateinit var mActivity: MainActivity
+
+	override fun onAttach(context: Context) {
+		super.onAttach(context)
+		mActivity = context as MainActivity
+	}
+
 	override fun onCreateView(
 		inflater: LayoutInflater, container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View? {
-		mViewModel = ViewModelProviders.of(this).get(SponsorsViewModel::class.java)
+		mViewModel = ViewModelProviders.of(mActivity).get(SponsorsViewModel::class.java)
 		mViewModel.getSponsorsData().observe(this, Observer { sponsors ->
 			if (sponsors != null) {
 				val sponsorItems = getSponsorItems(sponsors)
@@ -68,10 +78,10 @@ class SponsorsFragment : Fragment() {
 		pageIndicatorView.count = 1
 		pageIndicatorView.selection = 0
 		pageIndicatorView.setAnimationType(AnimationType.DROP)
-		pageIndicatorView.radius = 12
+		pageIndicatorView.radius = 10
 
+		var position = 0
 		rv_sponsors.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-			var position = 0
 
 			override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
 				super.onScrollStateChanged(recyclerView, newState)
@@ -85,5 +95,19 @@ class SponsorsFragment : Fragment() {
 				}
 			}
 		})
+
+		imbtn_next.setOnClickListener {
+			var curPosition = linearLayoutManager.findFirstCompletelyVisibleItemPosition()
+			position = abs(curPosition + 1) % mAdapter.itemCount
+			linearLayoutManager.scrollToPosition(position)
+			pageIndicatorView.selection = position
+		}
+
+		imbtn_previous.setOnClickListener {
+			var curPosition = linearLayoutManager.findFirstCompletelyVisibleItemPosition()
+			position = abs(curPosition - 1) % mAdapter.itemCount
+			linearLayoutManager.scrollToPosition(position)
+			pageIndicatorView.selection = position
+		}
 	}
 }
