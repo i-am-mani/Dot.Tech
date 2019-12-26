@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardElevation="5dp"
+    app:cardCornerRadius="10dp"
+    app:cardUseCompatPadding="true"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_sponsor_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TitleTextEczar"
+            android:background="@drawable/shape_end_cut_rectangle"
+            tools:text="Google Play" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="#3949AB"
+            app:cardCornerRadius="30dp"
+            app:cardElevation="10dp"
+            android:layout_marginTop="-8dp"
+            app:cardUseCompatPadding="true">
+
+            <ImageView
+                android:id="@+id/im_sponsor"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/ic_launcher_background" />
+
+        </androidx.cardview.widget.CardView>
+
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/small_shadow"
+                android:layout_gravity="top"
+                android:background="@drawable/fading_white_gradient"
+                android:elevation="4dp" />
+
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/sv_desc"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_gravity="center">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp" />
+
+                    <TextView
+                        android:id="@+id/tv_sponsor_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:textAppearance="@style/NormalText"
+                        tools:text="@tools:sample/lorem[20]" />
+
+                </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/small_shadow"
+                android:layout_gravity="bottom"
+                android:background="@drawable/fading_white_gradient"
+                android:rotation="180" />
+        </FrameLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_sponsor_checkout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Checkout!"
+            android:layout_marginTop="8dp"
+            android:layout_gravity="end"
+            android:backgroundTint="@color/MaterialGreen" />
+
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>
+
