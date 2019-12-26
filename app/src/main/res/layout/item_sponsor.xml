@@ -12,7 +12,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:orientation="vertical">
 
@@ -20,8 +19,11 @@
             android:id="@+id/tv_sponsor_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:layout_marginEnd="16dp"
             android:textAppearance="@style/TitleTextEczar"
-            android:background="@drawable/shape_end_cut_rectangle"
+            android:alpha="0.8"
+            android:gravity="center"
             tools:text="Google Play" />
 
         <androidx.cardview.widget.CardView
@@ -57,7 +59,7 @@
             <androidx.core.widget.NestedScrollView
                 android:id="@+id/sv_desc"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="150dp"
                 android:layout_gravity="center">
 
                 <LinearLayout
@@ -72,7 +74,7 @@
                     <TextView
                         android:id="@+id/tv_sponsor_content"
                         android:layout_width="match_parent"
-                        android:layout_height="200dp"
+                        android:layout_height="wrap_content"
                         android:paddingStart="8dp"
                         android:paddingEnd="8dp"
                         android:textAppearance="@style/NormalText"

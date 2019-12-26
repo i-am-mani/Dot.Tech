@@ -51,6 +51,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
     //ViewModel and LiveData
     implementation "androidx.lifecycle:lifecycle-extensions:2.1.0"
 
@@ -102,6 +103,9 @@ dependencies {
 
     // CardSlider
     implementation 'com.ramotion.cardslider:card-slider:0.3.1'
+
+    // Page indicator
+    implementation 'com.romandanylyk:pageindicatorview:1.0.3'
 
 }
 
