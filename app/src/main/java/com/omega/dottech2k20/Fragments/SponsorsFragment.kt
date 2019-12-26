@@ -45,13 +45,15 @@ class SponsorsFragment : Fragment() {
 	): View? {
 		mViewModel = ViewModelProviders.of(mActivity).get(SponsorsViewModel::class.java)
 		mViewModel.getSponsorsData().observe(this, Observer { sponsors ->
-			if (sponsors != null) {
+			if (sponsors != null && sponsors.count() > 0) {
 				val sponsorItems = getSponsorItems(sponsors)
 				if (mAdapter.itemCount > 0) {
 					mAdapter.update(sponsorItems)
 				} else {
 					mAdapter.addAll(sponsorItems)
 				}
+				sponsor_layout_group.visibility = View.VISIBLE
+				pb_sponsors.visibility = View.GONE
 				pageIndicatorView.count = mAdapter.itemCount // specify total count of indicators
 			}
 		})
