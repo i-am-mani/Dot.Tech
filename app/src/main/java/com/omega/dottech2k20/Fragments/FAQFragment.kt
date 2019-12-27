@@ -47,7 +47,9 @@ class FAQFragment : Fragment() {
 				} else {
 					mAdapter.addAll(getFAQItems(it))
 					rv_faq.visibility = View.VISIBLE
+					background_image.visibility = View.VISIBLE
 					fab_request_new_faq.show()
+
 					pb_faq.visibility = View.GONE
 				}
 			}
