@@ -176,7 +176,7 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 	 *
 	 * @param event : Event which user will join
 	 */
-	fun joinEvent(event: Event) {
+	fun joinEvent(event: Event, isAnonymous: Boolean) {
 		var user: User? = mUserProfileLiveData.value
 		if (user == null) {
 			val uid = mFireAuth.currentUser?.uid ?: return
@@ -187,7 +187,7 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 					// Check of nullability
 					task.result?.let { documentSnapshot ->
 						documentSnapshot.toObject(User::class.java)?.let {
-							addUserInEvent(event, it)
+							addUserInEvent(event, it, isAnonymous)
 						}
 					}
 
@@ -196,14 +196,14 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 				}
 			}
 		} else {
-			addUserInEvent(event, user)
+			addUserInEvent(event, user, isAnonymous)
 		}
 	}
 
 	private fun addUserInEvent(
 		event: Event,
 		user: User,
-		isVisibleForListing: Boolean = true //for testing
+		isAnonymous: Boolean = false // By Default allow listing
 	) {
 		// Inside Sub-collection ( Participants ), set the id of participant document as UID
 		// done to easily retrieve the document
@@ -220,7 +220,7 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 			// those who do not wish their names to be made public, will be shown as anonymous users
 			// i.e the difference between visibleParticipants count and participants could
 			val visibleParticipants = event.visibleParticipants
-			if (isVisibleForListing) {
+			if (!isAnonymous) {
 				visibleParticipants[userId] = user.fullName
 			}
 
