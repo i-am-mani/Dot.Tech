@@ -22,6 +22,10 @@
         android:icon="@drawable/ic_notification_bell"
         android:title="Notifications"/>
 
+    <item
+        android:id="@+id/sponsorsFragment"
+        android:icon="@drawable/ic_sponsor"
+        android:title="Sponsors" />
 
 
 </menu>
