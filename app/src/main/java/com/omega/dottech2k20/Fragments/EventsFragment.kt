@@ -1,6 +1,7 @@
 package com.omega.dottech2k20.Fragments
 
 
+import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.preference.PreferenceManager
@@ -12,9 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-import android.widget.FrameLayout
-import android.widget.TextSwitcher
-import android.widget.TextView
+import android.widget.*
 import android.widget.ViewSwitcher.ViewFactory
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
@@ -151,6 +150,18 @@ class EventsFragment : Fragment() {
 		setJoinEventCallback()
 		setLeaveEventCallback()
 		setViewDetailsListener()
+		setViewParticipantsCallback()
+	}
+
+	private fun setViewParticipantsCallback() {
+		imbtn_view_participants.setOnClickListener {
+			val activeCard: Int = mLayoutManager.activeCardPosition
+			val event: Event = getEventAtPos(activeCard)
+			findNavController().navigate(
+				R.id.eventParticipantsFragment,
+				bundleOf("event" to event)
+			)
+		}
 	}
 
 	private fun setViewDetailsListener() {
@@ -195,17 +206,36 @@ class EventsFragment : Fragment() {
 		if (isValidBackoff()) {
 			showBackOffDialog()
 		} else {
-			context?.let { c ->
-				BinaryDialog(c, R.layout.dialog_event_confirmation).apply {
-					title = "Join This Event ?"
-					rightButtonCallback = {
-						Log.d(TAG, "btn_join triggered")
-						val activeCard: Int = mLayoutManager.activeCardPosition
-						mViewModel.joinEvent(getEventAtPos(activeCard))
-					}
-					leftButtonCallback = { }
-				}.build()
-			}
+			showJoinEventConfirmationDialog()
+		}
+	}
+
+	private fun showJoinEventConfirmationDialog() {
+		context?.let { c ->
+			Dialog(c).apply {
+				setCanceledOnTouchOutside(true)
+
+				setContentView(R.layout.dialog_join_event_confirmation)
+				window.setLayout(
+					MATCH_PARENT,
+					WRAP_CONTENT
+				)
+				window.setBackgroundDrawableResource(android.R.color.transparent)
+
+				val confirmBtn = findViewById<Button>(R.id.btn_right)
+				val cancelBtn = findViewById<Button>(R.id.btn_left)
+				val chbxAnonUser = findViewById<CheckBox>(R.id.chbx_anon_user)
+
+				confirmBtn.setOnClickListener {
+					val activeCard: Int = mLayoutManager.activeCardPosition
+					mViewModel.joinEvent(getEventAtPos(activeCard), chbxAnonUser.isChecked)
+					dismiss()
+				}
+
+				cancelBtn.setOnClickListener {
+					dismiss()
+				}
+			}.show()
 		}
 	}
 
@@ -288,7 +318,8 @@ class EventsFragment : Fragment() {
 		val event = getEventAtPos(mLayoutManager.activeCardPosition)
 		val lastRegisteredTimestamp = sharedPreference.getLong(event.id, 0)
 
-		return (System.currentTimeMillis() - lastRegisteredTimestamp) <= (BACK_OFF_TIME * 60 * 1000)
+//		return (System.currentTimeMillis() - lastRegisteredTimestamp) <= (BACK_OFF_TIME * 60 * 1000)
+		return false
 	}
 
 	private fun initRV(events: List<Event>) {

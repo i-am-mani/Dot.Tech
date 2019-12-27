@@ -1,6 +1,7 @@
 package com.omega.dottech2k20.Fragments
 
 
+import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.text.Html
@@ -9,6 +10,8 @@ import android.transition.TransitionManager
 import android.util.Log
 import android.view.*
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.widget.Button
+import android.widget.CheckBox
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -115,14 +118,29 @@ class FragmentEventDetails : Fragment() {
 				requestForLoginDialog()
 			} else {
 				context?.let { c ->
-					BinaryDialog(c, R.layout.dialog_event_confirmation).apply {
-						title = "Join This Event ?"
-						rightButtonCallback = {
-							Log.d(TAG, "btn_join triggered")
-							mViewModel.joinEvent(mEvent)
+					Dialog(c).apply {
+						setCanceledOnTouchOutside(true)
+
+						setContentView(R.layout.dialog_join_event_confirmation)
+						window.setLayout(
+							ViewGroup.LayoutParams.MATCH_PARENT,
+							ViewGroup.LayoutParams.WRAP_CONTENT
+						)
+						window.setBackgroundDrawableResource(android.R.color.transparent)
+
+						val confirmBtn = findViewById<Button>(R.id.btn_right)
+						val cancelBtn = findViewById<Button>(R.id.btn_left)
+						val chbxAnonUser = findViewById<CheckBox>(R.id.chbx_anon_user)
+
+						confirmBtn.setOnClickListener {
+							mViewModel.joinEvent(mEvent, chbxAnonUser.isChecked)
+							dismiss()
 						}
-						leftButtonCallback = { }
-					}.build()
+
+						cancelBtn.setOnClickListener {
+							dismiss()
+						}
+					}.show()
 				}
 			}
 		}
