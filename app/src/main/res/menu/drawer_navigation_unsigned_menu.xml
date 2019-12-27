@@ -31,4 +31,10 @@
         android:icon="@drawable/ic_sponsor"
         android:title="Sponsors" />
 
+
+    <item
+        android:id="@+id/FAQFragment"
+        android:icon="@drawable/ic_sponsor"
+        android:title="FAQ" />
+
 </menu>
