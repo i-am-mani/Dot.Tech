@@ -72,6 +72,18 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 						// Events -> Participant -> user_doc (Update user_doc)
 						val eventParticipantDoc = mFirestore.collection("Events")
 							.document(eventIds).collection("Participants").document(userId)
+
+						// Update name in visibleParticipants Map of Event
+						user.fullName?.let { name ->
+							val eventDoc = mFirestore.collection("Events")
+								.document(eventIds)
+							batch.update(
+								eventDoc,
+								FieldPath.of("visibleParticipants"),
+								hashMapOf(userId to name)
+							)
+						}
+
 						batch.set(eventParticipantDoc, user)
 					}
 				}
@@ -116,7 +128,7 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 	 *
 	 */
 	fun getEvents(): LiveData<List<Event>> {
-		val eventTask = mFirestore.collection("Events")
+		val eventTask = mFirestore.collection("Events").orderBy(FieldPath.of("orderPreference"))
 
 		if (mEventsLiveData.value == null) {
 			addQuerySnapShotListener(eventTask) {
@@ -135,7 +147,7 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 	 *
 	 */
 	private fun addQuerySnapShotListener(
-		doc: CollectionReference,
+		doc: Query,
 		callback: (snapshot: QuerySnapshot) -> Unit
 	) {
 		doc.addSnapshotListener { snapshot, e ->
@@ -190,18 +202,27 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 
 	private fun addUserInEvent(
 		event: Event,
-		user: User
+		user: User,
+		isVisibleForListing: Boolean = true //for testing
 	) {
 		// Inside Sub-collection ( Participants ), set the id of participant document as UID
 		// done to easily retrieve the document
 		val eventId = event.id
 		val userId = user.id
-		if (eventId != null && userId != null) {
+		if (eventId != null && userId != null && user.fullName != null) {
 			val eventParticipantsDoc = mFirestore
 				.collection("Events")
 				.document(eventId).collection("Participants").document(userId)
 			val userEvents = mFirestore.collection("Users").document(userId)
 			val events = mFirestore.collection("Events").document(eventId)
+
+			// visibleParticipants - with user permission make the user's name public in listing
+			// those who do not wish their names to be made public, will be shown as anonymous users
+			// i.e the difference between visibleParticipants count and participants could
+			val visibleParticipants = event.visibleParticipants
+			if (isVisibleForListing) {
+				visibleParticipants[userId] = user.fullName
+			}
 
 			mFirestore.runBatch {
 				// add event id to user's events field
@@ -210,6 +231,8 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 				it.set(eventParticipantsDoc, user)
 				// increment participantCount of Event
 				it.update(events, FieldPath.of("participantCount"), FieldValue.increment(1))
+				// update event's visibleParticipants
+				it.update(events, FieldPath.of("visibleParticipants"), visibleParticipants)
 			}.addOnCompleteListener {
 				if (it.isSuccessful) {
 					Log.d(TAG, "Joining Events Successful")
@@ -252,26 +275,36 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 		event: Event,
 		user: User
 	) {
-		val eventParticipantsDoc = mFirestore
-			.collection("Events")
-			.document(event.id!!).collection("Participants").document(user.id!!)
 
-		val userEvents = mFirestore.collection("Users").document(user.id!!)
+		val eventId = event.id
+		val userId = user.id
+		if (eventId != null && userId != null && user.fullName != null) {
+			val eventParticipantsDoc = mFirestore
+				.collection("Events")
+				.document(eventId).collection("Participants").document(userId)
 
-		val events = mFirestore.collection("Events").document(event.id)
+			val userEvents = mFirestore.collection("Users").document(userId)
 
-		mFirestore.runBatch {
-			// Delete User doc inside Participant collection of Event
-			it.delete(eventParticipantsDoc)
-			// Remove event id from events field of User
-			it.update(userEvents, FieldPath.of("events"), FieldValue.arrayRemove(event.id))
-			// decrement participantCount
-			it.update(events, FieldPath.of("participantCount"), FieldValue.increment(-1))
-		}.addOnCompleteListener {
-			if (it.isSuccessful) {
-				Log.d(TAG, "UnJoining Events Successful")
-			} else {
-				Log.d(TAG, "UnJoining Events Failed")
+			val events = mFirestore.collection("Events").document(event.id)
+
+			val visibleParticipants = event.visibleParticipants
+			visibleParticipants.remove(userId)
+
+			mFirestore.runBatch {
+				// Delete User doc inside Participant collection of Event
+				it.delete(eventParticipantsDoc)
+				// Remove event id from events field of User
+				it.update(userEvents, FieldPath.of("events"), FieldValue.arrayRemove(event.id))
+				// decrement participantCount
+				it.update(events, FieldPath.of("participantCount"), FieldValue.increment(-1))
+				// remove participant from visibleParticipant map
+				it.update(events, FieldPath.of("visibleParticipants"), visibleParticipants)
+			}.addOnCompleteListener {
+				if (it.isSuccessful) {
+					Log.d(TAG, "UnJoining Events Successful")
+				} else {
+					Log.d(TAG, "UnJoining Events Failed")
+				}
 			}
 		}
 	}

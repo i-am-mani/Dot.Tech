@@ -10,12 +10,13 @@ data class Event(
 	val title: String? = null,
 	val thumbnail: String? = null,
 	val shortDescription: String? = null,
+	val visibleParticipants: HashMap<String, String> = HashMap(),
 	val participantCount: Int? = null,
 	val longDescription: String? = null,
 	val images: List<String>? = null,
 	@ServerTimestamp val startTime: Timestamp? = null,
 	@ServerTimestamp val endTime: Timestamp? = null,
-	var registrationOpen: Boolean = true,
+	val registrationOpen: Boolean = true,
 	val orderPreference: Int? = null
 ) : Parcelable {
 	constructor(source: Parcel) : this(
@@ -23,6 +24,7 @@ data class Event(
 		source.readString(),
 		source.readString(),
 		source.readString(),
+		source.readSerializable() as HashMap<String, String>,
 		source.readValue(Int::class.java.classLoader) as Int?,
 		source.readString(),
 		source.createStringArrayList(),
@@ -39,6 +41,7 @@ data class Event(
 		writeString(title)
 		writeString(thumbnail)
 		writeString(shortDescription)
+		writeSerializable(visibleParticipants)
 		writeValue(participantCount)
 		writeString(longDescription)
 		writeStringList(images)
