@@ -1,35 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="match_parent">
 
 
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barrier2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="bottom"
-        app:constraint_referenced_ids="textView"
-        tools:layout_editor_absoluteY="37dp" />
-
     <TextView
         android:id="@+id/textView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:fontFamily="monospace"
         android:padding="8dp"
+        android:layout_marginTop="8dp"
         android:text="Sign Up"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textSize="30sp"
-        app:layout_constraintStart_toStartOf="@+id/guideline4"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:gravity="center"
+        android:textAppearance="@style/TitleTextEczar" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/materialCardView"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -73,6 +65,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textPersonName"
+                        android:textAppearance="@style/NormalText"
                         android:textCursorDrawable="@null" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -93,6 +86,7 @@
                         android:id="@+id/et_sign_up_email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textAppearance="@style/NormalText"
                         android:inputType="textWebEmailAddress"
                         android:textCursorDrawable="@null" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -115,6 +109,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="phone"
+                        android:textAppearance="@style/NormalText"
                         android:textCursorDrawable="@null" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -134,6 +129,7 @@
                         android:id="@+id/et_sign_up_password1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textAppearance="@style/NormalText"
                         android:inputType="textPassword"
                         android:textCursorDrawable="@null" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -154,6 +150,7 @@
                         android:id="@+id/et_sign_up_password2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textAppearance="@style/NormalText"
                         android:inputType="textPassword"
                         android:textCursorDrawable="@null" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -164,70 +161,52 @@
     </com.google.android.material.card.MaterialCardView>
 
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_switch_to_sign_in"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="16dp"
-        android:text="Have an account ?"
-        android:textColor="#000"
-        app:cornerRadius="6dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guideline8"
-        app:layout_constraintTop_toBottomOf="@+id/btn_sign_up"
-        app:layout_constraintVertical_bias="0.0" />
+        android:gravity="end"
+        android:layout_marginEnd="16dp"
+        android:orientation="horizontal">
 
-    <ProgressBar
-        android:id="@+id/progress_bar_sign_up"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="43dp"
-        android:layout_height="42dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:indeterminate="true"
-        android:indeterminateTint="#8C9EFF"
-        android:progress="30"
-        android:translationZ="10dp"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toStartOf="@+id/btn_sign_up"
-        app:layout_constraintTop_toBottomOf="@+id/materialCardView" />
+        <ProgressBar
+            android:id="@+id/progress_bar_sign_up"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:indeterminate="true"
+            android:indeterminateTint="#8C9EFF"
+            android:progress="30"
+            android:translationZ="10dp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toStartOf="@+id/btn_sign_up"
+            app:layout_constraintTop_toBottomOf="@+id/materialCardView" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_switch_to_sign_in"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Have an account ?"
+            android:textAppearance="@style/SubTitleTextDosis"
+            android:textColor="#000"
+            app:cornerRadius="6dp" />
+
+    </LinearLayout>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_sign_up"
         style="@style/Widget.MaterialComponents.Button"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:layout_marginTop="8dp"
+        android:layout_gravity="end"
         android:layout_marginEnd="8dp"
         android:backgroundTint="#9CCC65"
         android:elevation="10dp"
         android:text="Sign up"
+        android:textAppearance="@style/SubTitleTextDosis"
         android:textColor="#FFF"
-        app:cornerRadius="6dp"
-        app:layout_constraintEnd_toStartOf="@+id/guideline8"
-        app:layout_constraintTop_toBottomOf="@+id/materialCardView" />
+        app:cornerRadius="6dp" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.12" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.89" />
-
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barrier3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="top" />
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
