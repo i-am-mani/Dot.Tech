@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
@@ -16,6 +17,7 @@ import com.omega.dottech2k20.Models.Notice
 import com.omega.dottech2k20.Utils.Utils
 import com.ramotion.paperonboarding.PaperOnboardingFragment
 import com.ramotion.paperonboarding.PaperOnboardingPage
+import kotlinx.android.synthetic.main.activity_start_up.*
 
 class StartUpActivity : AppCompatActivity() {
 
@@ -35,7 +37,6 @@ class StartUpActivity : AppCompatActivity() {
 			WindowManager.LayoutParams.FLAG_FULLSCREEN,
 			WindowManager.LayoutParams.FLAG_FULLSCREEN
 		)
-
 		fetchNotices()
 		val sharedPref =
 			getSharedPreferences(Utils.sharedPreferenceName, Context.MODE_PRIVATE)!!
@@ -119,11 +120,15 @@ class StartUpActivity : AppCompatActivity() {
 		isAnimationCompleted = true
 	}
 
+	fun displayFetchingLoader() {
+		pb_startup.visibility = View.VISIBLE
+		tv_no_connection.visibility = View.VISIBLE
+	}
+
 	fun goToOnBoardingFragment() {
 		var pages = getOnBoardingPages()
 		val onBoardingFragment = PaperOnboardingFragment.newInstance(pages)
 		onBoardingFragment.setOnRightOutListener {
-			markAnimationCompleted()
 			goToMainActivity()
 		}
 		val fragmentTransaction: FragmentTransaction = supportFragmentManager.beginTransaction()

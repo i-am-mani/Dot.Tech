@@ -67,6 +67,8 @@ class SplashScreenFragment : Fragment() {
 
 			// Go to Main Activity
 			changeBounds.addListener(onEnd = {
+				mainActivity.markAnimationCompleted()
+				mainActivity.displayFetchingLoader()
 				mainActivity.goToMainActivity()
 			})
 

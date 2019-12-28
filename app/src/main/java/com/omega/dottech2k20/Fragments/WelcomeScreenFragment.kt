@@ -25,9 +25,9 @@ import kotlinx.android.synthetic.main.fragment_welcome_screen.*
 
 
 class WelcomeScreenFragment : Fragment() {
-	val DURATION: Long = 500
 	val TAG = javaClass.simpleName
 	lateinit var mActivity: StartUpActivity
+	val DURATION = 800L
 	override fun onCreateView(
 		inflater: LayoutInflater, container: ViewGroup?,
 		savedInstanceState: Bundle?
@@ -50,6 +50,7 @@ class WelcomeScreenFragment : Fragment() {
 			tempTV.apply {
 				gravity = Gravity.CENTER
 				text = i
+				setTextAppearance(R.style.TitleTextMarcellus)
 				setTextSize(TypedValue.COMPLEX_UNIT_SP, 32f)
 				alpha = 0f
 			}
@@ -61,9 +62,7 @@ class WelcomeScreenFragment : Fragment() {
 		context?.let {
 			val params = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 
-			val px = Utils.convertDPtoPX(it, 48)
-
-
+			val px = Utils.convertDPtoPX(it, 28)
 			params.setMargins(0, px, 0, 0)
 
 			val button = MaterialButton(context)
@@ -73,7 +72,7 @@ class WelcomeScreenFragment : Fragment() {
 					getColor(context, R.color.MaterialGreen),
 					PorterDuff.Mode.SRC_ATOP
 				)
-				setTextSize(TypedValue.COMPLEX_UNIT_SP, 24f)
+				setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f)
 				text = "Go"
 				alpha = 0f
 			}
@@ -95,9 +94,7 @@ class WelcomeScreenFragment : Fragment() {
 
 		// Introduce a slight delay
 		Handler().postDelayed(Runnable {
-			val calculateDelay = { i: Int -> i * SplashScreenFragment.DURATION + i * 100 }
-
-
+			val calculateDelay = { i: Int -> i * DURATION + i * 100 }
 			val children = root_welcome_text.children
 			var i = 0
 
