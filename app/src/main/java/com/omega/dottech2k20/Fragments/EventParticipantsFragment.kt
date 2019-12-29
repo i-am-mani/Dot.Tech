@@ -62,7 +62,7 @@ class EventParticipantsFragment : Fragment() {
 	}
 
 	private fun extractEvent(): Event? {
-		val event = arguments?.getParcelable<Event>("event")
+		val event = arguments?.getParcelable<Event>(BUNDLE_KEY)
 		if (event != null) {
 			return event
 		} else {
@@ -70,6 +70,10 @@ class EventParticipantsFragment : Fragment() {
 			findNavController().navigate(R.id.eventsFragment)
 		}
 		return null
+	}
+
+	companion object {
+		val BUNDLE_KEY = "participants"
 	}
 
 
