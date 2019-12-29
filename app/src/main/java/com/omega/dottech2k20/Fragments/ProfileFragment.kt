@@ -183,7 +183,7 @@ class ProfileFragment : Fragment() {
 		dialog.setCanceledOnTouchOutside(true)
 
 		dialog.requestWindowFeature(Window.FEATURE_SWIPE_TO_DISMISS)
-		dialog.setContentView(R.layout.edit_profile_dialog)
+		dialog.setContentView(R.layout.dialog_edit_profile)
 		dialog.window.setLayout(
 			ViewGroup.LayoutParams.MATCH_PARENT,
 			ViewGroup.LayoutParams.WRAP_CONTENT
