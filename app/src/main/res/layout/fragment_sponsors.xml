@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:layout_marginStart="8dp"
-            android:backgroundTint="#BBDEFB"
+            app:cardBackgroundColor="#BBDEFB"
             app:cardCornerRadius="100dp"
             app:cardElevation="5dp"
             app:layout_constraintEnd_toStartOf="@+id/guideline7"
@@ -64,10 +64,9 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.rd.PageIndicatorView
-            android:id="@+id/pageIndicatorView"
+            android:id="@+id/indicator_sponsors"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:layout_centerInParent="true"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="4dp"
@@ -112,14 +111,14 @@
         android:id="@+id/sponsor_layout_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="visible"
+        android:visibility="gone"
         app:constraint_referenced_ids="rv_sponsors,frameLayout" />
 
     <ProgressBar
         android:id="@+id/pb_sponsors"
         style="?android:attr/progressBarStyle"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/medium_progress_bar"
         android:indeterminate="true"
         android:indeterminateTint="@color/Blue400"
         app:layout_constraintBottom_toBottomOf="parent"

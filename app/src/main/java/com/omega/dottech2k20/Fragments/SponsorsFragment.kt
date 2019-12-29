@@ -54,7 +54,7 @@ class SponsorsFragment : Fragment() {
 				}
 				sponsor_layout_group.visibility = View.VISIBLE
 				pb_sponsors.visibility = View.GONE
-				pageIndicatorView.count = mAdapter.itemCount // specify total count of indicators
+				indicator_sponsors.count = mAdapter.itemCount // specify total count of indicators
 			}
 		})
 		return inflater.inflate(R.layout.fragment_sponsors, container, false)
@@ -77,10 +77,10 @@ class SponsorsFragment : Fragment() {
 		rv_sponsors.isNestedScrollingEnabled = false
 		LinearSnapHelper().attachToRecyclerView(rv_sponsors)
 
-		pageIndicatorView.count = 1
-		pageIndicatorView.selection = 0
-		pageIndicatorView.setAnimationType(AnimationType.DROP)
-		pageIndicatorView.radius = 10
+		indicator_sponsors.count = 1
+		indicator_sponsors.selection = 0
+		indicator_sponsors.setAnimationType(AnimationType.DROP)
+		indicator_sponsors.radius = 10
 
 		var position = 0
 		rv_sponsors.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -91,7 +91,7 @@ class SponsorsFragment : Fragment() {
 					var curPosition = linearLayoutManager.findFirstCompletelyVisibleItemPosition()
 					Log.d(TAG, "curPosition = $curPosition")
 					if (curPosition != position) {
-						pageIndicatorView.selection = curPosition
+						indicator_sponsors.selection = curPosition
 						position = curPosition
 					}
 				}
@@ -102,14 +102,14 @@ class SponsorsFragment : Fragment() {
 			var curPosition = linearLayoutManager.findFirstCompletelyVisibleItemPosition()
 			position = abs(curPosition + 1) % mAdapter.itemCount
 			linearLayoutManager.scrollToPosition(position)
-			pageIndicatorView.selection = position
+			indicator_sponsors.selection = position
 		}
 
 		imbtn_previous.setOnClickListener {
 			var curPosition = linearLayoutManager.findFirstCompletelyVisibleItemPosition()
 			position = abs(curPosition - 1) % mAdapter.itemCount
 			linearLayoutManager.scrollToPosition(position)
-			pageIndicatorView.selection = position
+			indicator_sponsors.selection = position
 		}
 	}
 }
