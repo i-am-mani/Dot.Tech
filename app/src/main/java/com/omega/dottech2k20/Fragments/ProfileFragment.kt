@@ -144,17 +144,7 @@ class ProfileFragment : Fragment() {
 		savedInstanceState: Bundle?
 	): View? {
 		if (AuthenticationUtils.currentUser == null) {
-			context?.let {
-				BinaryDialog(it).apply {
-					title = "Unsigned user"
-					description = "Please Sign in or Sign Up to Continue"
-					leftButtonName = "Sign In"
-					rightButtonName = "Sign Up"
-					leftButtonCallback = { findNavController().navigate(R.id.signInFragment) }
-					rightButtonCallback = { findNavController().navigate(R.id.signUpFragment) }
-				}.build()
-			}
-			return inflater.inflate(R.layout.unsigned_user_layout, container, false)
+			return showUnsignedUserDialog(inflater, container)
 		}
 		return inflater.inflate(R.layout.fragment_profile, container, false)
 	}
@@ -194,6 +184,66 @@ class ProfileFragment : Fragment() {
 
 	fun showEditDialog(user: User) {
 		val dialog = Dialog(context)
+		setDialogProperties(dialog)
+
+		val nameField = dialog.findViewById<EditText>(R.id.et_edit_fullname)
+		val phoneField = dialog.findViewById<EditText>(R.id.et_edit_phone)
+		val confirmBtn = dialog.findViewById<Button>(R.id.btn_confirm)
+
+		confirmBtn.setOnClickListener {
+			val name = nameField.text.toString()
+			val phone = phoneField.text.toString()
+
+			val isFullNameValid = Utils.isFullNameValid(name)
+			val isPhoneNumberValid = Utils.isPhoneNumberValid(phone)
+
+			when {
+				// First provide meaningful error message i.e check if they're not empty and not valid.
+				name.isNotEmpty() && !isFullNameValid -> showToast("Please check the name you have provided")
+
+				phone.isNotEmpty() && !isPhoneNumberValid -> showToast("Invalid phone number format!")
+
+				// whatever remains is valid, hence depending on field which is empty or not update user
+
+				name.isNotEmpty() && phone.isNotEmpty() -> { // Update both name and phone number
+					updateUser(user, name, phone)
+				}
+
+				name.isEmpty() && phone.isNotEmpty() -> { // Update phone number only
+					user.fullName?.let { updateUser(user, it, phone) }
+				}
+
+				phone.isEmpty() && name.isNotEmpty() -> { // Update full name only
+					user.phone?.let { updateUser(user, name, it) }
+				}
+
+				else -> showToast("Invalid Data Provided")
+			}
+			dialog.dismiss()
+		}
+
+
+
+		dialog.show()
+	}
+
+	private fun updateUser(
+		user: User,
+		name: String,
+		phone: String
+	) {
+		val updatedUser =
+			User(user.id, name, user.email, phone, user.events, user.notificationIds)
+		mViewModel.updateUserInformation(updatedUser) {
+			Toast.makeText(
+				mActivity,
+				"Updating User Details Successfull!",
+				Toast.LENGTH_SHORT
+			).show()
+		}
+	}
+
+	private fun setDialogProperties(dialog: Dialog) {
 		dialog.setCanceledOnTouchOutside(true)
 
 		dialog.requestWindowFeature(Window.FEATURE_SWIPE_TO_DISMISS)
@@ -203,33 +253,24 @@ class ProfileFragment : Fragment() {
 			ViewGroup.LayoutParams.WRAP_CONTENT
 		)
 		dialog.window.setBackgroundDrawableResource(android.R.color.transparent)
+	}
 
-		val nameField = dialog.findViewById<EditText>(R.id.et_edit_fullname)
-		val phoneField = dialog.findViewById<EditText>(R.id.et_edit_phone)
-		val confirmBtn = dialog.findViewById<Button>(R.id.btn_confirm)
 
-		confirmBtn.setOnClickListener {
-			val name = nameField.text.toString()
-			val phone = phoneField.text.toString()
-			if (Utils.isFullNameValid(name) && Utils.isPhoneNumberValid(phone)) {
-				val updatedUser =
-					User(user.id, name, user.email, phone, user.events, user.notificationIds)
-				mViewModel.updateUserInformation(updatedUser) {
-					Toast.makeText(
-						mActivity,
-						"Updating User Details Successfull!",
-						Toast.LENGTH_SHORT
-					).show()
-				}
-				dialog.dismiss()
-			} else {
-				Toast.makeText(mActivity, "Invalid Data Provided", Toast.LENGTH_SHORT).show()
-			}
+	private fun showUnsignedUserDialog(
+		inflater: LayoutInflater,
+		container: ViewGroup?
+	): View? {
+		context?.let {
+			BinaryDialog(it).apply {
+				title = "Unsigned user"
+				description = "Please Sign in or Sign Up to Continue"
+				leftButtonName = "Sign In"
+				rightButtonName = "Sign Up"
+				leftButtonCallback = { findNavController().navigate(R.id.signInFragment) }
+				rightButtonCallback = { findNavController().navigate(R.id.signUpFragment) }
+			}.build()
 		}
-
-
-
-		dialog.show()
+		return inflater.inflate(R.layout.unsigned_user_layout, container, false)
 	}
 
 	inner class EventSummaryItem(val count: Int) : Item() {
@@ -243,6 +284,10 @@ class ProfileFragment : Fragment() {
 			return R.layout.item_profile_events_summary
 		}
 
+	}
+
+	fun showToast(message: String) {
+		Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 	}
 
 
