@@ -3,4 +3,5 @@
     <item name="event_card_width" type="dimen">140dp</item>
     <dimen name="startup_dialog_icon_card">100dp</dimen>
     <dimen name="startup_dialog_icon_card_corner_radius">50dp</dimen>
+    <dimen name="medium_progress_bar">130dp</dimen>
 </resources>
