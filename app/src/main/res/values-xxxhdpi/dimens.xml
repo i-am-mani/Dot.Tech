@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?><!-- 5.5" 1440x2560 -->
+<resources>
+    <item name="event_card_width" type="dimen">180dp</item>
+    <dimen name="startup_dialog_icon_card">110dp</dimen>
+    <dimen name="startup_dialog_icon_card_corner_radius">55dp</dimen>
+</resources>

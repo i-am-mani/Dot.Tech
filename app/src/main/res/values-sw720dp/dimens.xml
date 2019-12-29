@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?><!--10.1" tablet 1280x800-->
+<resources>
+    <item name="event_card_width" type="dimen">275dp</item>
+    <dimen name="startup_dialog_icon_card">130dp</dimen>
+    <dimen name="startup_dialog_icon_card_corner_radius">65dp</dimen>
+</resources>
