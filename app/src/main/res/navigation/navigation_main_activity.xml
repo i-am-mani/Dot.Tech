@@ -8,8 +8,8 @@
     <fragment
         android:id="@+id/eventsFragment"
         android:name="com.omega.dottech2k20.Fragments.EventsFragment"
-        android:label="fragment_events"
-        tools:layout="@layout/fragment_events" >
+        android:label="Events"
+        tools:layout="@layout/fragment_events">
         <action
             android:id="@+id/action_eventsFragment_to_signUpFragment"
             app:destination="@id/signUpFragment" />
@@ -25,11 +25,17 @@
         <action
             android:id="@+id/action_eventsFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_eventsFragment_to_sponsersFragment"
+            app:destination="@id/sponsorsFragment" />
+        <action
+            android:id="@+id/action_eventsFragment_to_eventParticipantsFragment"
+            app:destination="@id/eventParticipantsFragment" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
         android:name="com.omega.dottech2k20.Fragments.SignUpFragment"
-        android:label="fragment_sign_up">
+        android:label="Sign Up">
         <action
             android:id="@+id/action_signUpFragment_to_signInFragment"
             app:destination="@id/signInFragment" />
@@ -37,7 +43,7 @@
     <fragment
         android:id="@+id/signInFragment"
         android:name="com.omega.dottech2k20.Fragments.SignInFragment"
-        android:label="fragment_sign_in">
+        android:label="Sign In">
         <action
             android:id="@+id/action_signInFragment_to_signUpFragment"
             app:destination="@id/signUpFragment" />
@@ -50,12 +56,12 @@
     <fragment
         android:id="@+id/notificationsFragment"
         android:name="com.omega.dottech2k20.Fragments.NotificationsFragment"
-        android:label="fragment_notifications"
+        android:label="Notifications"
         tools:layout="@layout/fragment_notifications" />
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.omega.dottech2k20.Fragments.ProfileFragment"
-        android:label="fragment_profile"
+        android:label="Profile"
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/event_details"
@@ -70,5 +76,31 @@
         <action
             android:id="@+id/action_fragment_event_details_to_profileFragment"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_event_details_to_eventParticipantsFragment"
+            app:destination="@id/eventParticipantsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/sponsorsFragment"
+        android:name="com.omega.dottech2k20.Fragments.SponsorsFragment"
+        android:label="Sponsors"
+        tools:layout="@layout/fragment_sponsors" />
+    <fragment
+        android:id="@+id/eventParticipantsFragment"
+        android:name="com.omega.dottech2k20.Fragments.EventParticipantsFragment"
+        android:label="Participants"
+        tools:layout="@layout/fragment_event_participants">
+        <argument
+            android:name="event"
+            app:argType="com.omega.dottech2k20.Models.Event" />
+    </fragment>
+    <fragment
+        android:id="@+id/FAQFragment"
+        android:name="com.omega.dottech2k20.Fragments.FAQFragment"
+        android:label="FAQs"
+        tools:layout="@layout/fragment_faq">
+        <action
+            android:id="@+id/action_FAQFragment_to_eventsFragment"
+            app:destination="@id/eventsFragment" />
     </fragment>
 </navigation>
