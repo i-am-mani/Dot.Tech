@@ -7,22 +7,25 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/materialCardView3"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="@dimen/startup_dialog_icon_card"
+        android:layout_height="@dimen/startup_dialog_icon_card"
         android:layout_gravity="center"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         app:cardCornerRadius="50dp"
-        app:cardElevation="10dp"
+        app:cardElevation="4dp"
+        app:cardUseCompatPadding="false"
         app:layout_constraintBottom_toTopOf="@+id/guideline6"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.52"
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="@dimen/icon_small"
+            android:layout_height="@dimen/icon_small"
             android:layout_gravity="center"
-            android:background="@drawable/ic_note" />
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/ic_note" />
     </com.google.android.material.card.MaterialCardView>
 
 
@@ -78,18 +81,35 @@
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
         app:cardCornerRadius="10dp"
         app:cardUseCompatPadding="true"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/guideline17"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_notices"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_notices"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="9" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_close"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="Close" />
+        </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
 
@@ -98,14 +118,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.13816689" />
+        app:layout_constraintGuide_percent="0.1" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.18" />
+        app:layout_constraintGuide_percent="0.16" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline7"
@@ -126,7 +146,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.6" />
+        app:layout_constraintGuide_percent="0.4" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline17"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.91" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

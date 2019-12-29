@@ -32,6 +32,7 @@ import com.omega.dottech2k20.Models.UserEventViewModel
 import com.omega.dottech2k20.R
 import com.omega.dottech2k20.Utils.AuthenticationUtils
 import com.omega.dottech2k20.Utils.BinaryDialog
+import com.omega.dottech2k20.Utils.Utils
 import com.omega.dottech2k20.Utils.Utils.getEventSchedule
 import com.ramotion.cardslider.CardSliderLayoutManager
 import com.ramotion.cardslider.CardSnapHelper
@@ -343,7 +344,11 @@ class EventsFragment : Fragment() {
 
 	private fun setRecyclerViewLayoutManager() {
 		rv_event_thumb_nails.setHasFixedSize(true)
-		mLayoutManager = CardSliderLayoutManager(context!!)
+		mLayoutManager = CardSliderLayoutManager(
+			Utils.convertDPtoPX(context!!, 75),
+			resources.getDimensionPixelSize(R.dimen.event_card_width),
+			Utils.convertDPtoPX(context!!, 15).toFloat()
+		)
 		rv_event_thumb_nails.layoutManager = mLayoutManager
 	}
 

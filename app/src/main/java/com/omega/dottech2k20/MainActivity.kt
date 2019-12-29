@@ -8,9 +8,11 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -78,11 +80,12 @@ class MainActivity : AppCompatActivity() {
 		val dialog = Dialog(this).apply {
 			setCanceledOnTouchOutside(true)
 
-			setContentView(R.layout.start_up_dialog)
+			setContentView(R.layout.dialog_start_up)
 			window.setLayout(
 				ViewGroup.LayoutParams.MATCH_PARENT,
-				ViewGroup.LayoutParams.WRAP_CONTENT
+				ViewGroup.LayoutParams.MATCH_PARENT
 			)
+			window.setGravity(Gravity.TOP)
 			window.setBackgroundDrawableResource(android.R.color.transparent)
 
 			val rv_notices = findViewById<RecyclerView>(R.id.rv_notices)
@@ -97,7 +100,7 @@ class MainActivity : AppCompatActivity() {
 
 			val next = findViewById<ImageButton>(R.id.imbtn_next)
 			val prev = findViewById<ImageButton>(R.id.imbtn_previous)
-
+			val close = findViewById<Button>(R.id.btn_close)
 			next.setOnClickListener {
 				val pos = layoutManager.findFirstCompletelyVisibleItemPosition()
 				adapter?.let {
@@ -110,7 +113,9 @@ class MainActivity : AppCompatActivity() {
 					layoutManager.scrollToPosition(abs(pos - 1) % adapter.itemCount)
 				}
 			}
-
+			close.setOnClickListener {
+				this.dismiss()
+			}
 
 		}
 		dialog.show()
@@ -234,8 +239,10 @@ class MainActivity : AppCompatActivity() {
 				if (destination.id == R.id.eventsFragment || destination.id == R.id.profileFragment || destination.id == R.id.notificationsFragment) {
 					navigation_bar.show(destination.id, true)
 					navigation_bar.visibility = View.VISIBLE
+					Log.d(TAG, "Showing Nav bar")
 				} else {
 					// Gone so that, the navi_bar won't consume additional space.
+					Log.d(TAG, "Hiding nav bar")
 					navigation_bar.visibility = View.GONE
 				}
 

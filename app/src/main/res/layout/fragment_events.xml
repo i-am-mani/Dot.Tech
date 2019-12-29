@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".Fragments.EventsFragment">
 
+
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/barrier"
         android:layout_width="wrap_content"
@@ -35,8 +36,6 @@
         android:layout_height="0dp"
         android:clipChildren="false"
         android:overScrollMode="never"
-        app:cardWidth="250dp"
-        app:cardsGap="100dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -80,6 +79,22 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp" />
 
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            app:cardCornerRadius="10dp"
+            app:cardUseCompatPadding="true">
+
+            <ImageButton
+                android:id="@+id/imbtn_view_participants"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_group" />
+        </com.google.android.material.card.MaterialCardView>
+
     </LinearLayout>
 
     <androidx.constraintlayout.widget.Guideline
@@ -122,10 +137,10 @@
                 <TextView
                     android:id="@+id/tv_description"
                     android:layout_width="match_parent"
-                    android:textAppearance="@style/NormalText"
+                    android:layout_height="match_parent"
                     android:paddingStart="8dp"
                     android:paddingEnd="8dp"
-                    android:layout_height="match_parent" />
+                    android:textAppearance="@style/NormalText" />
 
             </LinearLayout>
         </ScrollView>
@@ -162,7 +177,7 @@
             android:backgroundTint="#DCEDC8"
             android:elevation="4dp"
             app:cardBackgroundColor="#000"
-            app:cardCornerRadius="30dp"
+            app:cardCornerRadius="5dp"
             app:cardElevation="5dp">
 
             <TextSwitcher
@@ -174,8 +189,7 @@
                 android:layout_marginEnd="4dp"
                 android:layout_marginBottom="2dp"
                 android:gravity="center"
-                android:measureAllChildren="false"
-                android:text="34" />
+                android:measureAllChildren="false" />
 
         </com.google.android.material.card.MaterialCardView>
 
@@ -197,7 +211,7 @@
             android:backgroundTint="@color/MaterialRed"
             android:text="@string/leave_event_btn_name"
             android:textSize="14sp"
-            android:visibility="invisible" />
+            android:visibility="gone" />
     </FrameLayout>
 
 
