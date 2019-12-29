@@ -31,14 +31,18 @@ import com.omega.dottech2k20.Utils.AuthenticationUtils
 import com.omega.dottech2k20.Utils.BinaryDialog
 import com.omega.dottech2k20.Utils.Utils
 import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.Section
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
+import com.xwray.groupie.kotlinandroidextensions.Item
 import kotlinx.android.synthetic.main.fragment_profile.*
+import kotlinx.android.synthetic.main.item_profile_events_summary.*
 
 class ProfileFragment : Fragment() {
 	val TAG = javaClass.simpleName
 	lateinit var mViewModel: UserEventViewModel
 	var mAdapter = GroupAdapter<GroupieViewHolder>()
 	lateinit var mActivity: MainActivity
+	lateinit var eventsGroupieSection: Section
 
 	override fun onAttach(context: Context) {
 		super.onAttach(context)
@@ -70,7 +74,6 @@ class ProfileFragment : Fragment() {
 	private fun updateUserEvents(events: List<Event>) {
 		setLayoutManager()
 		setAdapter(events)
-		setEventCount(events.count())
 	}
 
 	private fun setLayoutManager() {
@@ -80,13 +83,24 @@ class ProfileFragment : Fragment() {
 
 	private fun setAdapter(events: List<Event>) {
 		val eventItems = getEventItems(events)
-		mAdapter.update(eventItems)
+
+		if (!::eventsGroupieSection.isInitialized) {
+			eventsGroupieSection = Section()
+			eventsGroupieSection.setHeader(EventSummaryItem(eventItems.count()))
+			eventsGroupieSection.addAll(eventItems)
+			// Attach the section with Groupie adapter
+			mAdapter.add(eventsGroupieSection)
+		} else {
+			// In case the event count has changed
+			eventsGroupieSection.removeHeader()
+			eventsGroupieSection.setHeader(EventSummaryItem(eventItems.count()))
+			eventsGroupieSection.update(eventItems)
+		}
+
+
 		rv_user_events.adapter = mAdapter
 	}
 
-	private fun setEventCount(count: Int) {
-		tv_events_count.text = count.toString()
-	}
 
 	private fun getEventItems(events: List<Event>): List<UserEventItem> {
 		val list = arrayListOf<UserEventItem>()
@@ -216,6 +230,19 @@ class ProfileFragment : Fragment() {
 
 
 		dialog.show()
+	}
+
+	inner class EventSummaryItem(val count: Int) : Item() {
+		override fun bind(viewHolder: GroupieViewHolder, position: Int) {
+			viewHolder.apply {
+				tv_profile_events_count.text = count.toString()
+			}
+		}
+
+		override fun getLayout(): Int {
+			return R.layout.item_profile_events_summary
+		}
+
 	}
 
 
