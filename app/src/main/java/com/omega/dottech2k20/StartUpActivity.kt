@@ -31,13 +31,13 @@ class StartUpActivity : AppCompatActivity() {
 	 */
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
+		fetchNotices()
 		setContentView(R.layout.activity_start_up)
 		supportActionBar?.hide()
 		window.setFlags(
 			WindowManager.LayoutParams.FLAG_FULLSCREEN,
 			WindowManager.LayoutParams.FLAG_FULLSCREEN
 		)
-		fetchNotices()
 		val sharedPref =
 			getSharedPreferences(Utils.sharedPreferenceName, Context.MODE_PRIVATE)!!
 		val isFirstTime = sharedPref.getBoolean("first-time", true)
@@ -105,6 +105,7 @@ class StartUpActivity : AppCompatActivity() {
 	 *	This method is bound to work.
 	 */
 	fun goToMainActivity() {
+		displayFetchingLoader()
 		if (isAnimationCompleted && notices != null) {
 			val intent = Intent(this, MainActivity::class.java)
 
