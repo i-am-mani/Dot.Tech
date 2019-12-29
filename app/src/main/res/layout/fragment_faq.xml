@@ -10,10 +10,10 @@
         android:id="@+id/background_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/background_water_flower"
+        android:alpha="0.1"
         android:scaleType="centerCrop"
-        android:visibility="gone"
-        android:alpha="0.3" />
+        android:src="@drawable/background_water_flower"
+        android:visibility="gone" />
 
     <include layout="@layout/include_horizontal_shaders" />
 

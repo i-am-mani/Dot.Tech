@@ -21,7 +21,7 @@
             android:id="@+id/tv_event_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/SubTitleText"
+            android:textAppearance="@style/SubTitleTextEczar"
             android:lineSpacingExtra="0dp"
             android:includeFontPadding="false"
             android:layout_marginStart="@dimen/medium_margin"

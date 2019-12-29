@@ -3,14 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EventParticipantsFragment">
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/background_abstract"
-        android:scaleType="centerCrop"
-        android:alpha="0.3" />
+    tools:context=".Fragments.EventParticipantsFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_participants"
