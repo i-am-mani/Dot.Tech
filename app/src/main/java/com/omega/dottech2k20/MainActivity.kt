@@ -7,6 +7,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.transition.ChangeBounds
+import android.transition.TransitionManager
 import android.util.Log
 import android.view.Gravity
 import android.view.View
@@ -241,9 +243,8 @@ class MainActivity : AppCompatActivity() {
 					navigation_bar.visibility = View.VISIBLE
 					Log.d(TAG, "Showing Nav bar")
 				} else {
-					// Gone so that, the navi_bar won't consume additional space.
-					Log.d(TAG, "Hiding nav bar")
 					navigation_bar.visibility = View.GONE
+					TransitionManager.beginDelayedTransition(root_main, ChangeBounds())
 				}
 
 				if (destination.id == R.id.signOutFragment) {
