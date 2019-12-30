@@ -36,6 +36,7 @@ class UserQueryDialog(val context: Context) {
 			et_query.hint = hint
 			btn_submit.setOnClickListener {
 				onSubmit(et_query.text.toString())
+				dismiss()
 			}
 		}
 		dialog.show()
