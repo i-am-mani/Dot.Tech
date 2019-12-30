@@ -84,8 +84,8 @@ class FAQFragment : Fragment() {
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		initRecyclerView()
-		currentUser?.let { user ->
-			fab_request_new_faq.setOnClickListener {
+		fab_request_new_faq.setOnClickListener {
+			currentUser?.let { user ->
 				context?.let { ctx ->
 					UserQueryDialog(ctx).apply {
 						title = "Query Request"
@@ -93,9 +93,11 @@ class FAQFragment : Fragment() {
 						onSubmit = { query ->
 							mViewModel.requestQuery(user.uid, query)
 						}
+						build()
 					}
 				}
 			}
+
 		}
 	}
 
