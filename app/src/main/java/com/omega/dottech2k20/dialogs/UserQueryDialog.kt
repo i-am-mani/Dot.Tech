@@ -17,6 +17,7 @@ class UserQueryDialog(val context: Context) {
 	var name = ""
 	var hint = ""
 	var onSubmit: (query: String) -> Unit = { Log.d(TAG, "Submit button clicked") }
+	var headerIconId = R.drawable.ic_info_outline_white_24dp
 
 	fun build() {
 		val dialog = Dialog(context)
@@ -34,6 +35,7 @@ class UserQueryDialog(val context: Context) {
 			tv_dialog_title.text = title
 			et_user_name.setText(name)
 			et_query.hint = hint
+			im_dialog_header.setImageResource(headerIconId)
 			btn_submit.setOnClickListener {
 				onSubmit(et_query.text.toString())
 				dismiss()

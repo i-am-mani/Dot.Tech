@@ -1,60 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="16dp"
-    android:layout_marginEnd="16dp"
-    app:cardCornerRadius="@dimen/card_corner_radius"
-    app:cardUseCompatPadding="true">
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
+        android:layout_width="@dimen/icon_card_medium"
+        android:layout_height="@dimen/icon_card_medium"
+        android:layout_gravity="center"
+        android:layout_marginBottom="-36dp"
+        app:cardCornerRadius="50dp"
+        app:cardElevation="5dp">
+
+        <ImageView
+            android:id="@+id/im_dialog_header"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_margin="20dp"
+            android:tint="@color/Blue800"
+            android:scaleType="fitCenter">
+
+        </ImageView>
+    </androidx.cardview.widget.CardView>
+
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:cardCornerRadius="@dimen/card_corner_radius"
+        app:cardUseCompatPadding="true">
 
-        <TextView
-            android:id="@+id/tv_dialog_title"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textAppearance="@style/TitleTextEczar"
-            tools:text="Query Request" />
-
-        <EditText
-            android:id="@+id/et_user_name"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:text="Username"
-            android:textAppearance="@style/NormalText" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter Your Query">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_query"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:minLines="3"
-                android:textAppearance="@style/NormalText" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_submit"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
+            android:layout_height="match_parent"
             android:layout_marginTop="8dp"
-            android:text="Submit" />
+            android:orientation="vertical"
+            android:padding="16dp">
 
-    </LinearLayout>
 
-</com.google.android.material.card.MaterialCardView>
+            <TextView
+                android:id="@+id/tv_dialog_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textAppearance="@style/TitleTextEczar"
+                tools:text="Query Request" />
+
+
+            <EditText
+                android:id="@+id/et_user_name"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:text="Username"
+                android:textAppearance="@style/NormalText" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter Your Query">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_query"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:minLines="3"
+                    android:textAppearance="@style/NormalText" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_submit"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="8dp"
+                android:text="Submit"
+                app:icon="@drawable/ic_place_submit"
+                app:iconSize="20dp"
+                app:iconTint="@color/Blue800" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</LinearLayout>

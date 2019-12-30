@@ -90,6 +90,7 @@ class FAQFragment : Fragment() {
 					UserQueryDialog(ctx).apply {
 						title = "Query Request"
 						name = user.email ?: ""
+						headerIconId = R.drawable.ic_faq
 						onSubmit = { query ->
 							mViewModel.requestQuery(user.uid, query)
 						}
