@@ -2,12 +2,14 @@ package com.omega.dottech2k20.Models
 
 import android.app.Application
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import es.dmoral.toasty.Toasty
 
 class MetaDataViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -28,7 +30,6 @@ class MetaDataViewModel(application: Application) : AndroidViewModel(application
 					result?.let { res ->
 						val data = res.data
 						if (data != null) {
-
 							val faqs = data["faqs"] as List<HashMap<String, String>>
 							val listOfFaqs = mutableListOf<FAQ>()
 							for (faq in faqs) {
@@ -55,8 +56,17 @@ class MetaDataViewModel(application: Application) : AndroidViewModel(application
 		firestoreQuery.update(FieldPath.of("pendingFaqs"), FieldValue.arrayUnion(queryMap))
 			.addOnCompleteListener {
 				if (it.isSuccessful) {
+					displayFeedback("Request Placed Successfully")
 					Log.i(TAG, "FAQ request successfully placed : $queryMap")
 				}
 			}
+	}
+
+	private fun displayFeedback(message: String) {
+		try {
+			Toasty.success(getApplication(), message, Toast.LENGTH_SHORT).show()
+		} catch (e: Exception) {
+			Log.e(TAG, "Error Occured while processing Toasty Request: ", e)
+		}
 	}
 }
