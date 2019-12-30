@@ -1,4 +1,4 @@
-package com.omega.dottech2k20.Utils
+package com.omega.dottech2k20.dialogs
 
 import android.app.Dialog
 import android.content.Context
@@ -26,6 +26,10 @@ class BinaryDialog(
 	var rightButtonName: String = ""
 	var leftButtonName: String = ""
 
+	var isRightButtonVisible = true
+	var isLeftButtonVisible = true
+
+
 	var rightButtonCallback: () -> Unit = { Log.d(TAG, "Right Button Clicked") }
 	var leftButtonCallback: () -> Unit = { Log.d(TAG, "Right Button Clicked") }
 
@@ -49,12 +53,21 @@ class BinaryDialog(
 
 		setTitleAndDescription(tvTitle, tvSubTitle)
 
-
+		setButtonVisibility(rightBtn, leftBtn)
 		setButtonNames(rightBtn, leftBtn)
 
 		setButtonCallbacks(rightBtn, dialog, leftBtn)
 
 		dialog.show()
+	}
+
+	private fun setButtonVisibility(rightBtn: Button, leftBtn: Button) {
+		if (!isRightButtonVisible) {
+			rightBtn.visibility = View.GONE
+		}
+		if (!isLeftButtonVisible) {
+			leftBtn.visibility = View.GONE
+		}
 	}
 
 	private fun setButtonCallbacks(
