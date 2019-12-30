@@ -15,6 +15,7 @@ class MetaDataViewModel(application: Application) : AndroidViewModel(application
 
 
 	lateinit var mFaqLiveData: MutableLiveData<List<FAQ>>
+	lateinit var mAboutDescription: MutableLiveData<String>
 	val TAG = this.javaClass.simpleName
 	val mFirestore = FirebaseFirestore.getInstance()
 	val FAQ_DOC_NAME = "FAQ"
@@ -61,6 +62,25 @@ class MetaDataViewModel(application: Application) : AndroidViewModel(application
 				}
 			}
 	}
+
+
+	fun getAboutDescription(): LiveData<String> {
+		if (!::mAboutDescription.isInitialized) {
+			mAboutDescription = MutableLiveData()
+
+			val query = mFirestore.collection(META_DATA_COLLECTION_NAME).document("about")
+			query.get().addOnCompleteListener {
+				if (it.isSuccessful) {
+					it.result?.let { res ->
+						mAboutDescription.value = res["about"] as String
+					}
+				}
+			}
+		}
+
+		return mAboutDescription
+	}
+
 
 	private fun displayFeedback(message: String) {
 		try {
