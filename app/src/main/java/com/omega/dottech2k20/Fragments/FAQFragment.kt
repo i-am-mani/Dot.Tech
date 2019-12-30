@@ -11,11 +11,14 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseUser
 import com.omega.dottech2k20.Adapters.FAQItem
 import com.omega.dottech2k20.MainActivity
 import com.omega.dottech2k20.Models.FAQ
 import com.omega.dottech2k20.Models.MetaDataViewModel
 import com.omega.dottech2k20.R
+import com.omega.dottech2k20.Utils.AuthenticationUtils
+import com.omega.dottech2k20.dialogs.UserQueryDialog
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import kotlinx.android.synthetic.main.fragment_faq.*
@@ -30,6 +33,7 @@ class FAQFragment : Fragment() {
 	lateinit var mViewModel: MetaDataViewModel
 	val mAdapter: GroupAdapter<GroupieViewHolder> = GroupAdapter()
 	val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+	var currentUser: FirebaseUser? = null
 
 
 	override fun onAttach(context: Context) {
@@ -48,12 +52,15 @@ class FAQFragment : Fragment() {
 					mAdapter.addAll(getFAQItems(it))
 					rv_faq.visibility = View.VISIBLE
 					background_image.visibility = View.VISIBLE
-					fab_request_new_faq.show()
 
 					pb_faq.visibility = View.GONE
 				}
 			}
 		})
+
+		if (currentUser != null) {
+			fab_request_new_faq.show()
+		}
 	}
 
 	private fun getFAQItems(faqs: List<FAQ>): List<FAQItem> {
@@ -69,13 +76,30 @@ class FAQFragment : Fragment() {
 		inflater: LayoutInflater, container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View? {
-		// Inflate the layout for this fragment
+		// logged in user
+		currentUser = AuthenticationUtils.currentUser
 		return inflater.inflate(R.layout.fragment_faq, container, false)
 	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
+		initRecyclerView()
+		currentUser?.let { user ->
+			fab_request_new_faq.setOnClickListener {
+				context?.let { ctx ->
+					UserQueryDialog(ctx).apply {
+						title = "Query Request"
+						name = user.email ?: ""
+						onSubmit = { query ->
+							mViewModel.requestQuery(user.uid, query)
+						}
+					}
+				}
+			}
+		}
+	}
 
+	private fun initRecyclerView() {
 		rv_faq.layoutManager = layoutManager
 		rv_faq.adapter = mAdapter
 

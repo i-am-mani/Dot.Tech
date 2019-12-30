@@ -28,13 +28,14 @@
         android:id="@+id/fab_request_new_faq"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_plus"
         android:layout_gravity="bottom|end"
-        app:borderWidth="0dp"
-        android:layout_marginBottom="32dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="32dp"
         android:backgroundTint="@color/Blue100"
-        android:tint="@color/Blue800" />
+        android:src="@drawable/ic_plus"
+        android:tint="@color/Blue800"
+        android:visibility="gone"
+        app:borderWidth="0dp" />
 
     <ProgressBar
         android:id="@+id/pb_faq"
