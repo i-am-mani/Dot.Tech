@@ -29,7 +29,7 @@
 
     <group android:id="@+id/app_meta_data">
         <item
-            android:id="@+id/dummy"
+            android:id="@+id/aboutFragment"
             android:icon="@drawable/ic_code_info"
             android:title="About" />
 
