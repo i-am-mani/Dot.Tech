@@ -2,35 +2,42 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
 
-    <item
-        android:id="@+id/eventsFragment"
-        android:icon="@drawable/ic_events"
-        android:title="Events" />
+    <group android:id="@+id/user_meta_data">
+        <item
+            android:id="@+id/signOutFragment"
+            android:icon="@drawable/ic_sign_out"
+            android:title="Sign Out" />
+    </group>
 
-    <item
-        android:id="@+id/signOutFragment"
-        android:icon="@drawable/ic_sign_out"
-        android:title="Sign Out"/>
+    <group android:id="@+id/event_meta_data">
+        <item
+            android:id="@+id/sponsorsFragment"
+            android:icon="@drawable/ic_sponsor"
+            android:title="Sponsors" />
 
-    <item
-        android:id="@+id/profileFragment"
-        android:icon="@drawable/ic_profile_user"
-        android:title="Profile"/>
+        <item
+            android:id="@+id/FAQFragment"
+            android:icon="@drawable/ic_faq_rounded"
+            android:title="FAQ" />
 
-    <item
-        android:id="@+id/notificationsFragment"
-        android:icon="@drawable/ic_notification_bell"
-        android:title="Notifications"/>
 
-    <item
-        android:id="@+id/sponsorsFragment"
-        android:icon="@drawable/ic_sponsor"
-        android:title="Sponsors" />
+        <item
+            android:id="@+id/dummy2"
+            android:icon="@drawable/ic_contacts"
+            android:title="Contacts" />
+    </group>
 
-    <item
-        android:id="@+id/FAQFragment"
-        android:icon="@drawable/ic_sponsor"
-        android:title="FAQ" />
+    <group android:id="@+id/app_meta_data">
+        <item
+            android:id="@+id/dummy"
+            android:icon="@drawable/ic_code_info"
+            android:title="About" />
+
+        <item
+            android:id="@+id/reportFragment"
+            android:icon="@drawable/ic_bug"
+            android:title="Report" />
+    </group>
 
 
 </menu>
