@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="@dimen/event_details_image_card_height"
     app:cardCornerRadius="@dimen/card_corner_radius"
     app:cardUseCompatPadding="true">
 
@@ -40,37 +40,12 @@
             android:src="@drawable/ic_chevron_right"
             android:tint="@color/Blue800" />
 
-        <!--        <View-->
-        <!--            android:id="@+id/shadow_start"-->
-        <!--            android:layout_width="10dp"-->
-        <!--            android:layout_height="match_parent"-->
-        <!--            android:layout_gravity="start"-->
-        <!--            android:background="@drawable/fading_white_gradient_lr"-->
-        <!--            android:elevation="4dp" />-->
-
-        <!--        <View-->
-        <!--            android:id="@+id/shadow_end"-->
-        <!--            android:layout_width="10dp"-->
-        <!--            android:layout_height="match_parent"-->
-        <!--            android:layout_gravity="end"-->
-        <!--            android:background="@drawable/fading_white_gradient_lr"-->
-        <!--            android:elevation="4dp"-->
-        <!--            android:rotation="180" />-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_event_images"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="true" />
-
-        <!--        <View-->
-        <!--            android:id="@+id/shadow_bottom"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="@dimen/medium_margin"-->
-        <!--            android:layout_gravity="bottom"-->
-        <!--            android:background="@drawable/fading_white_gradient"-->
-        <!--            android:rotation="180" />-->
-
 
         <com.rd.PageIndicatorView
             android:id="@+id/indicator_horizontal_viewer"

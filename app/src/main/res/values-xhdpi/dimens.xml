@@ -4,4 +4,6 @@
     <dimen name="startup_dialog_icon_card">90dp</dimen>
     <dimen name="startup_dialog_icon_card_corner_radius">45dp</dimen>
     <dimen name="medium_progress_bar">120dp</dimen>
+    <dimen name="item_sponsers_image_height">160dp</dimen>
+    <dimen name="event_details_image_card_height">200dp</dimen>
 </resources>
