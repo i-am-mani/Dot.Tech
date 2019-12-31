@@ -10,21 +10,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
+import androidx.cardview.widget.CardView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.omega.dottech2k20.Adapters.EventDetailItem
-import com.omega.dottech2k20.Adapters.EventImageItem
 import com.omega.dottech2k20.Adapters.HorizontalImageViewerItem
 import com.omega.dottech2k20.MainActivity
 import com.omega.dottech2k20.Models.Event
 import com.omega.dottech2k20.Models.UserEventViewModel
 import com.omega.dottech2k20.R
 import com.omega.dottech2k20.Utils.AuthenticationUtils
-import com.omega.dottech2k20.Utils.BinaryDialog
+import com.omega.dottech2k20.dialogs.BinaryDialog
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import kotlinx.android.synthetic.main.fragment_event_details.*
@@ -92,9 +93,26 @@ class FragmentEventDetails : Fragment() {
 		btn_leave.isEnabled = mEvent.registrationOpen
 		hideButtons()
 		initRV()
+		setUpScrollListener()
 		addClickListeners()
 	}
 
+	private fun setUpScrollListener() {
+		rv_event_details.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+			override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+				super.onScrolled(recyclerView, dx, dy)
+				val view = recyclerView.getChildAt(0)
+				if (view != null && recyclerView.getChildAdapterPosition(view) === 0) {
+					val card = view.findViewById<CardView>(R.id.card_image_holder)
+					Log.d(TAG, "view.top = ${view.top}")
+					// Basically we are moving against the scroll, applying same magnitude of scroll on opposite direction
+					card.translationY = -(view.top) / 2f
+					btn_join.translationX = -(view.top) / 3f
+					btn_leave.translationX = -(view.top) / 3f
+				}
+			}
+		})
+	}
 	private fun hideButtons() {
 		btn_leave.hide()
 		btn_join.hide()
@@ -198,19 +216,6 @@ class FragmentEventDetails : Fragment() {
 
 	}
 
-
-	private fun generateItems() {
-		val items = mutableListOf<EventImageItem>()
-
-		mEvent.images?.let { images ->
-			for (image in images) {
-				Log.d(TAG, "Image - $image added")
-				items.add(EventImageItem(image))
-			}
-		}
-
-		mAdapter.addAll(items)
-	}
 
 	companion object {
 		const val EVENT_KEY = "Event"
