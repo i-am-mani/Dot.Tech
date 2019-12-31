@@ -37,7 +37,7 @@ import com.xwray.groupie.Section
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
 import kotlinx.android.synthetic.main.fragment_profile.*
-import kotlinx.android.synthetic.main.item_profile_events_summary.*
+import kotlinx.android.synthetic.main.item_total_count.*
 
 class ProfileFragment : Fragment() {
 	val TAG = javaClass.simpleName
@@ -300,7 +300,7 @@ class ProfileFragment : Fragment() {
 		}
 
 		override fun getLayout(): Int {
-			return R.layout.item_profile_events_summary
+			return R.layout.item_total_count
 		}
 
 	}
