@@ -23,7 +23,6 @@ class FAQItem(val FAQ: FAQ) : Item() {
 					} else {
 						View.GONE
 					}
-//					TransitionManager.beginDelayedTransition(root_item_faq,ChangeBounds().setDuration(700))
 					updateImage(viewHolder)
 				}
 			}
