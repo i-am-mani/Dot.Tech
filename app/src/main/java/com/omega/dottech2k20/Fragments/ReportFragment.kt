@@ -85,6 +85,7 @@ class ReportFragment : Fragment() {
 				isNameFieldEnabled = true
 				nameFieldHint = "Title"
 				hint = "Description"
+				headerIconId = R.drawable.ic_ladybug
 				onSubmit = { name, query ->
 					mViewModel.addBugReport(name, query)
 				}
@@ -101,6 +102,7 @@ class ReportFragment : Fragment() {
 				isNameFieldEnabled = true
 				nameFieldHint = "Title"
 				hint = "Description"
+				headerIconId = R.drawable.ic_features_bulb
 				onSubmit = { name, query ->
 					mViewModel.addFeatureRequest(name, query)
 				}
