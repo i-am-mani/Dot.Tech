@@ -20,7 +20,8 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_margin="20dp"
-            android:tint="@color/Blue800"
+            android:tint="@android:color/transparent"
+            android:tintMode="add"
             android:scaleType="fitCenter">
 
         </ImageView>
@@ -85,7 +86,8 @@
                 android:text="Submit"
                 app:icon="@drawable/ic_place_submit"
                 app:iconSize="20dp"
-                app:iconTint="@color/Blue800" />
+                app:iconTint="@android:color/transparent"
+                app:iconTintMode="add" />
 
         </LinearLayout>
 

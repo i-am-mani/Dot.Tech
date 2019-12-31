@@ -10,10 +10,7 @@ import android.os.Bundle
 import android.transition.ChangeBounds
 import android.transition.TransitionManager
 import android.util.Log
-import android.view.Gravity
-import android.view.View
-import android.view.ViewAnimationUtils
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Button
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
@@ -47,6 +44,7 @@ class MainActivity : AppCompatActivity() {
 
 	lateinit var appBarConfiguration: AppBarConfiguration
 	lateinit var navController: NavController
+	lateinit var notices: ArrayList<Notice>
 	val TAG = javaClass.simpleName
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,13 +58,34 @@ class MainActivity : AppCompatActivity() {
 		createNotificationChannel()
 		subscribeToTopicAll()
 		registerTokenToUserData()
-		showStartUpDialog(savedInstanceState)
+		initStartUpDialog(savedInstanceState)
 	}
 
-	private fun showStartUpDialog(savedInstanceState: Bundle?) {
-		val notices = intent.extras.getParcelableArrayList<Notice>("notices")
+	override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+		super.onCreateOptionsMenu(menu)
+		menuInflater.inflate(R.menu.action_bar_menu, menu)
+		return true
+	}
 
-		if (notices != null && notices.count() > 0) {
+	override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+		super.onOptionsItemSelected(item)
+		when {
+			item?.itemId == R.id.notices -> {
+				showNoticesDialog()
+				return true
+			}
+		}
+		return false
+	}
+
+	private fun initStartUpDialog(savedInstanceState: Bundle?) {
+		notices = intent.extras.getParcelableArrayList<Notice>("notices")
+		showNoticesDialog()
+	}
+
+	private fun showNoticesDialog() {
+		//TODO Use try catch and to avoid initialization problems
+		if (::notices.isInitialized && notices.count() > 0) {
 			val noticesItems = mutableListOf<NoticeItem>()
 			for (notice in notices) {
 				noticesItems.add(NoticeItem(notice))
@@ -74,8 +93,6 @@ class MainActivity : AppCompatActivity() {
 
 			initStartDialog(noticesItems)
 		}
-
-
 	}
 
 	private fun initStartDialog(items: MutableList<NoticeItem>) {
