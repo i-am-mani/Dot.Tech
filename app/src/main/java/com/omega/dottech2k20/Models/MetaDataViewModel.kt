@@ -6,9 +6,8 @@ import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.firestore.FieldPath
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.*
+import com.omega.dottech2k20.Utils.AuthenticationUtils
 import es.dmoral.toasty.Toasty
 
 class MetaDataViewModel(application: Application) : AndroidViewModel(application) {
@@ -17,10 +16,29 @@ class MetaDataViewModel(application: Application) : AndroidViewModel(application
 	lateinit var mFaqLiveData: MutableLiveData<List<FAQ>>
 	lateinit var mAboutDescription: MutableLiveData<String>
 	lateinit var mContactsLiveData: MutableLiveData<List<Contact>>
+	lateinit var mReportsLiveData: MutableLiveData<List<Report>>
 	val TAG = this.javaClass.simpleName
 	val mFirestore = FirebaseFirestore.getInstance()
 	val FAQ_DOC_NAME = "FAQ"
 	val META_DATA_COLLECTION_NAME = "MetaData"
+
+
+	private fun addDocumentSnapShotListener(
+		doc: DocumentReference,
+		callback: (snapshot: DocumentSnapshot) -> Unit
+	) {
+		doc.addSnapshotListener { snapshot, e ->
+			when {
+				e != null -> {
+					Log.w(TAG, "Listen failed.", e)
+					return@addSnapshotListener
+				}
+				snapshot != null && snapshot.exists() -> callback(snapshot)
+				else -> Log.d(TAG, "Current data: null")
+			}
+
+		}
+	}
 
 	fun getFAQs(): LiveData<List<FAQ>> {
 		if (!::mFaqLiveData.isInitialized) {
@@ -82,6 +100,7 @@ class MetaDataViewModel(application: Application) : AndroidViewModel(application
 		return mAboutDescription
 	}
 
+
 	fun getContacts(): LiveData<List<Contact>> {
 
 		if (!::mContactsLiveData.isInitialized) {
@@ -107,6 +126,59 @@ class MetaDataViewModel(application: Application) : AndroidViewModel(application
 
 
 		return mContactsLiveData
+	}
+
+	fun getReports(): MutableLiveData<List<Report>> {
+		if (!::mReportsLiveData.isInitialized) {
+			mReportsLiveData = MutableLiveData()
+
+			val query = mFirestore.collection(META_DATA_COLLECTION_NAME).document("Reports")
+			addDocumentSnapShotListener(query) { res ->
+				val listOfReports = mutableListOf<Report>()
+
+				val listOfBugs = res.get("bugReports") as List<HashMap<String, String>>
+				val listOfFeatureRequests =
+					res.get("featureRequests") as List<HashMap<String, String>>
+
+				for (bug in listOfBugs) {
+					listOfReports.add(Report("bug", bug["title"], bug["description"]))
+				}
+
+				for (feature in listOfFeatureRequests) {
+					listOfReports.add(Report("feature", feature["title"], feature["description"]))
+				}
+
+				mReportsLiveData.value = listOfReports
+				Log.d(TAG, "Reports data set $listOfReports")
+			}
+		}
+		return mReportsLiveData
+	}
+
+	fun addBugReport(title: String, description: String) {
+		val currentUser = AuthenticationUtils.currentUser
+		if (currentUser != null) {
+			val map = hashMapOf("title" to title, "description" to description)
+			val query = mFirestore.collection(META_DATA_COLLECTION_NAME).document("Reports")
+			query.update("bugReports", FieldValue.arrayUnion(map)).addOnCompleteListener {
+				if (it.isSuccessful) {
+					displayFeedback("Thank you, Bug report has been submitted")
+				}
+			}
+		}
+	}
+
+	fun addFeatureRequest(title: String, description: String) {
+		val currentUser = AuthenticationUtils.currentUser
+		if (currentUser != null) {
+			val map = hashMapOf("title" to title, "description" to description)
+			val query = mFirestore.collection(META_DATA_COLLECTION_NAME).document("Reports")
+			query.update("featureRequests", FieldValue.arrayUnion(map)).addOnCompleteListener {
+				if (it.isSuccessful) {
+					displayFeedback("Thank you, Feature request has been submitted")
+				}
+			}
+		}
 	}
 
 	private fun displayFeedback(message: String) {
