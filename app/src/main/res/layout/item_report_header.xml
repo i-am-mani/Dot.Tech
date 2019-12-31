@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_report_header"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        app:cardBackgroundColor="#EF9A9A"
+        app:cardCornerRadius="@dimen/card_corner_radius"
+        app:cardElevation="7dp"
+        app:cardUseCompatPadding="true">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:layout_marginTop="36dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center"
+                android:text="Report a Bug"
+                android:textAppearance="@style/SubTitleTextEczar"
+                android:textColor="#B71C1C" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_report_bug"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="#E53935"
+                android:src="@drawable/ic_plus"
+                android:tint="#B71C1C"
+                app:borderWidth="0dp" />
+
+        </FrameLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        app:cardBackgroundColor="#A5D6A7"
+        app:cardCornerRadius="@dimen/card_corner_radius"
+        app:cardElevation="7dp"
+        app:cardUseCompatPadding="true">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:layout_marginTop="36dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center"
+                android:text="Feature Request"
+                android:textAppearance="@style/SubTitleTextEczar"
+                android:textColor="#1B5E20" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_request"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="#7CB342"
+                android:src="@drawable/ic_plus"
+                android:tint="#1B5E20"
+                app:borderWidth="0dp" />
+
+        </FrameLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>
