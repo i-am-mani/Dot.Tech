@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.omega.dottech2k20.MainActivity
 import com.omega.dottech2k20.Models.MetaDataViewModel
 import com.omega.dottech2k20.R
@@ -73,7 +74,9 @@ class AboutFragment : Fragment() {
 	}
 
 	private fun setViewAttributionCallback() {
-		//TODO Implement Attribute screen
+		btn_view_attribution.setOnClickListener {
+			startActivity(Intent(mActivity, OssLicensesMenuActivity::class.java))
+		}
 	}
 
 

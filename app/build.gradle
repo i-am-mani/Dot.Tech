@@ -110,6 +110,11 @@ dependencies {
     // Toast Library
     implementation 'com.github.GrenderG:Toasty:1.4.2'
 
+    // Attribution and Licensing library
+    implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
+
+
 }
 
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.android.gms.oss-licenses-plugin'
