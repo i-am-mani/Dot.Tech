@@ -16,6 +16,7 @@ class MetaDataViewModel(application: Application) : AndroidViewModel(application
 
 	lateinit var mFaqLiveData: MutableLiveData<List<FAQ>>
 	lateinit var mAboutDescription: MutableLiveData<String>
+	lateinit var mContactsLiveData: MutableLiveData<List<Contact>>
 	val TAG = this.javaClass.simpleName
 	val mFirestore = FirebaseFirestore.getInstance()
 	val FAQ_DOC_NAME = "FAQ"
@@ -81,6 +82,32 @@ class MetaDataViewModel(application: Application) : AndroidViewModel(application
 		return mAboutDescription
 	}
 
+	fun getContacts(): LiveData<List<Contact>> {
+
+		if (!::mContactsLiveData.isInitialized) {
+			mContactsLiveData = MutableLiveData()
+
+			val query = mFirestore.collection(META_DATA_COLLECTION_NAME).document("Contacts")
+
+			query.get().addOnCompleteListener {
+				if (it.isSuccessful) {
+					it.result?.let { res ->
+						val contactsMap = res.get("contacts") as List<HashMap<String, String>>
+						val contacts = mutableListOf<Contact>()
+						for (obj in contactsMap) {
+							val contact = Contact(obj["post"], obj["name"], obj["contactDetail"])
+							contacts.add(contact)
+						}
+
+						mContactsLiveData.value = contacts
+					}
+				}
+			}
+		}
+
+
+		return mContactsLiveData
+	}
 
 	private fun displayFeedback(message: String) {
 		try {

@@ -34,6 +34,9 @@
         <action
             android:id="@+id/action_eventsFragment_to_aboutFragment"
             app:destination="@id/aboutFragment" />
+        <action
+            android:id="@+id/action_eventsFragment_to_contactsFragment"
+            app:destination="@id/contactsFragment" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
@@ -108,7 +111,12 @@
     </fragment>
     <fragment
         android:id="@+id/aboutFragment"
-        android:name="com.omega.dottech2k20.AboutFragment"
+        android:name="com.omega.dottech2k20.Fragments.AboutFragment"
         android:label="fragment_about"
         tools:layout="@layout/fragment_about" />
+    <fragment
+        android:id="@+id/contactsFragment"
+        android:name="com.omega.dottech2k20.Fragments.ContactsFragment"
+        android:label="fragment_contacts"
+        tools:layout="@layout/fragment_contacts" />
 </navigation>

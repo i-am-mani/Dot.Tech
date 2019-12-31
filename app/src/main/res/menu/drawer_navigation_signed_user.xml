@@ -22,7 +22,7 @@
 
 
         <item
-            android:id="@+id/dummy2"
+            android:id="@+id/contactsFragment"
             android:icon="@drawable/ic_contacts"
             android:title="Contacts" />
     </group>
