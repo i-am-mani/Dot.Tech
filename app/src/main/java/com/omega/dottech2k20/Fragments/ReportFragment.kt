@@ -1,4 +1,4 @@
-package com.omega.dottech2k20
+package com.omega.dottech2k20.Fragments
 
 
 import android.content.Context
@@ -12,8 +12,11 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseUser
 import com.omega.dottech2k20.Adapters.FAQItem
+import com.omega.dottech2k20.MainActivity
 import com.omega.dottech2k20.Models.FAQ
 import com.omega.dottech2k20.Models.MetaDataViewModel
+import com.omega.dottech2k20.R
+import com.omega.dottech2k20.dialogs.UserQueryDialog
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Section
@@ -48,7 +51,7 @@ class ReportFragment : Fragment() {
 					listOfReports.add(FAQItem(FAQ(report.title ?: "", report.description ?: "")))
 				}
 
-				if (mAdapterSection.itemCount > 0) {
+				if (mAdapterSection.itemCount == 0) {
 					mAdapterSection.addAll(listOfReports)
 				} else {
 					mAdapterSection.update(listOfReports)
@@ -75,6 +78,38 @@ class ReportFragment : Fragment() {
 		rv_reports.layoutManager = layoutManager
 	}
 
+	fun showReportBugDialog() {
+		context?.let { ctx ->
+			UserQueryDialog(ctx).apply {
+				title = "Report Bug"
+				isNameFieldEnabled = true
+				nameFieldHint = "Title"
+				hint = "Description"
+				onSubmit = { name, query ->
+					mViewModel.addBugReport(name, query)
+				}
+				build()
+			}
+
+		}
+	}
+
+	fun showRequestFeatureDialog() {
+		context?.let { ctx ->
+			UserQueryDialog(ctx).apply {
+				title = "Feature Request"
+				isNameFieldEnabled = true
+				nameFieldHint = "Title"
+				hint = "Description"
+				onSubmit = { name, query ->
+					mViewModel.addFeatureRequest(name, query)
+				}
+				build()
+			}
+
+		}
+	}
+
 	inner class ReportHeaderItem : Item() {
 		override fun bind(
 			viewHolder: com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder,
@@ -82,10 +117,10 @@ class ReportFragment : Fragment() {
 		) {
 			viewHolder.apply {
 				fab_report_bug.setOnClickListener {
-
+					showReportBugDialog()
 				}
 				fab_request.setOnClickListener {
-
+					showRequestFeatureDialog()
 				}
 			}
 		}
