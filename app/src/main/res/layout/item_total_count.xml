@@ -30,7 +30,7 @@
             android:background="#424242" />
 
         <TextView
-            android:id="@+id/tv_profile_events_count"
+            android:id="@+id/tv_total_count"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="4"

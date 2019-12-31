@@ -295,7 +295,7 @@ class ProfileFragment : Fragment() {
 	inner class EventSummaryItem(val count: Int) : Item() {
 		override fun bind(viewHolder: GroupieViewHolder, position: Int) {
 			viewHolder.apply {
-				tv_profile_events_count.text = count.toString()
+				tv_total_count.text = count.toString()
 			}
 		}
 
