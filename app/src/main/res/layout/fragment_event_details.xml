@@ -53,8 +53,6 @@
             android:id="@+id/rv_event_details"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
             android:clipToPadding="false"
             android:paddingTop="16dp"
             android:paddingBottom="32dp" />
