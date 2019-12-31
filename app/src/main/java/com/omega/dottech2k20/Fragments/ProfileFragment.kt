@@ -14,12 +14,14 @@ import android.view.Window
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnFlingListener
 import com.omega.dottech2k20.Adapters.UserEventItem
 import com.omega.dottech2k20.MainActivity
@@ -28,8 +30,8 @@ import com.omega.dottech2k20.Models.User
 import com.omega.dottech2k20.Models.UserEventViewModel
 import com.omega.dottech2k20.R
 import com.omega.dottech2k20.Utils.AuthenticationUtils
-import com.omega.dottech2k20.Utils.BinaryDialog
 import com.omega.dottech2k20.Utils.Utils
+import com.omega.dottech2k20.dialogs.BinaryDialog
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Section
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
@@ -151,6 +153,26 @@ class ProfileFragment : Fragment() {
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
+		setUpFlingListener()
+		setUpScrollListener()
+	}
+
+	private fun setUpScrollListener() {
+		rv_user_events.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+			override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+				super.onScrolled(recyclerView, dx, dy)
+				val view = recyclerView.getChildAt(0)
+				if (view != null && recyclerView.getChildAdapterPosition(view) === 0) {
+					val card = view.findViewById<CardView>(R.id.card_profile_events_summary)
+					Log.d(TAG, "view.top = ${view.top}")
+					// Basically we are moving against the scroll, applying same magnitude of scroll on opposite direction
+					card.translationY = -(view.top) / 2f
+				}
+			}
+		})
+	}
+
+	private fun setUpFlingListener() {
 		rv_user_events?.onFlingListener = (object :
 			OnFlingListener() {
 			private fun updateLayout(height: Int) {
@@ -221,9 +243,6 @@ class ProfileFragment : Fragment() {
 			}
 			dialog.dismiss()
 		}
-
-
-
 		dialog.show()
 	}
 
