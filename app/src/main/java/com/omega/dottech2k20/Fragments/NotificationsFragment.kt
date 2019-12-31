@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.omega.dottech2k20.Adapters.NotificationItem
 import com.omega.dottech2k20.MainActivity
@@ -20,22 +21,24 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import kotlinx.android.synthetic.main.fragment_notifications.*
 
-/**
- * A simple [Fragment] subclass.
- */
 class NotificationsFragment : Fragment() {
 
 	private val TAG = javaClass.simpleName
 	private lateinit var mActivity: MainActivity
-	private var mAdapter: GroupAdapter<GroupieViewHolder>? = null
+	private lateinit var mAdapter: GroupAdapter<GroupieViewHolder>
 	private lateinit var mViewModel: UserEventViewModel
 
 	override fun onCreateView(
 		inflater: LayoutInflater, container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View? {
-		// Inflate the layout for this fragment
+		mAdapter = GroupAdapter()
 		return inflater.inflate(R.layout.fragment_notifications, container, false)
+	}
+
+	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+		super.onViewCreated(view, savedInstanceState)
+		initRV()
 	}
 
 	override fun onAttach(context: Context) {
@@ -49,12 +52,10 @@ class NotificationsFragment : Fragment() {
 		mViewModel = ViewModelProviders.of(mActivity).get(UserEventViewModel::class.java)
 		mViewModel.getNotification().observe(this, Observer {
 			it?.let { notificationList ->
-				if (mAdapter == null) {
-					initRV(notificationList)
+				if (mAdapter.itemCount == 0) {
+					mAdapter.addAll(getNotificationItem(it))
 				} else {
-					mAdapter?.apply {
-						update(getNotificationItem(notificationList))
-					}
+					mAdapter.update(getNotificationItem(notificationList))
 				}
 			}
 		})
@@ -66,28 +67,18 @@ class NotificationsFragment : Fragment() {
 
 		val sortedList = notificationList.sortedByDescending { it.issued_time?.toDate()?.time }
 		for (notification in sortedList) {
-			val notificationItem = NotificationItem(notification)
+			val notificationItem = NotificationItem(findNavController(), notification)
 			Log.d(TAG, "Timestamp = ${notification.issued_time?.toDate()?.time}}")
 			list.add(notificationItem)
 		}
 		return list
 	}
 
-	private fun initRV(notificationList: List<Notification>) {
-		mAdapter = GroupAdapter()
-
+	private fun initRV() {
 		rv_notifications.setHasFixedSize(true)
 		rv_notifications.itemAnimator = null // To avoid Blinking of RV
 		rv_notifications.adapter = mAdapter
 		rv_notifications.layoutManager =
 			LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-		mAdapter?.addAll(getNotificationItem(notificationList))
 	}
-
-	override fun onDestroy() {
-		super.onDestroy()
-		mAdapter = null
-	}
-
-
 }

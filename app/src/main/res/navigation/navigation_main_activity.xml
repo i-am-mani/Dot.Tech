@@ -66,7 +66,11 @@
         android:id="@+id/notificationsFragment"
         android:name="com.omega.dottech2k20.Fragments.NotificationsFragment"
         android:label="Notifications"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_notifications">
+        <action
+            android:id="@+id/action_notificationsFragment_to_notificationDetailFragment"
+            app:destination="@id/notificationDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.omega.dottech2k20.Fragments.ProfileFragment"
@@ -124,7 +128,16 @@
         tools:layout="@layout/fragment_contacts" />
     <fragment
         android:id="@+id/reportFragment"
-        android:name="com.omega.dottech2k20.ReportFragment"
+        android:name="com.omega.dottech2k20.Fragments.ReportFragment"
         android:label="Report - Bug Hunter"
         tools:layout="@layout/fragment_report" />
+    <fragment
+        android:id="@+id/notificationDetailFragment"
+        android:name="com.omega.dottech2k20.Fragments.NotificationDetailFragment"
+        android:label="fragment_notification_detail"
+        tools:layout="@layout/fragment_notification_detail">
+        <argument
+            android:name="Notification"
+            app:argType="com.omega.dottech2k20.Models.Notification" />
+    </fragment>
 </navigation>

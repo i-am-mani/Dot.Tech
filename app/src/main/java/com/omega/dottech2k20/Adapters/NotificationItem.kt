@@ -2,8 +2,11 @@ package com.omega.dottech2k20.Adapters
 
 import android.util.Log
 import android.view.View
+import androidx.core.os.bundleOf
+import androidx.navigation.NavController
 import com.bumptech.glide.Glide
 import com.google.firebase.storage.FirebaseStorage
+import com.omega.dottech2k20.Fragments.NotificationDetailFragment
 import com.omega.dottech2k20.Models.Notification
 import com.omega.dottech2k20.R
 import com.omega.dottech2k20.Utils.Utils
@@ -12,7 +15,10 @@ import com.xwray.groupie.kotlinandroidextensions.Item
 import kotlinx.android.synthetic.main.item_notification.*
 
 
-class NotificationItem(private val notification: Notification) : Item() {
+class NotificationItem(
+	private val navController: NavController,
+	private val notification: Notification
+) : Item() {
 	val TAG = javaClass.simpleName
 	override fun bind(viewHolder: GroupieViewHolder, position: Int) {
 		if (notification.image != null) {
@@ -20,6 +26,18 @@ class NotificationItem(private val notification: Notification) : Item() {
 		}
 		setTitleAndContent(viewHolder)
 		setDateTime(viewHolder)
+		setCallbackListener(viewHolder)
+	}
+
+	private fun setCallbackListener(viewHolder: GroupieViewHolder) {
+		viewHolder.apply {
+			card_notification.setOnClickListener {
+				navController.navigate(
+					R.id.notificationDetailFragment,
+					bundleOf(NotificationDetailFragment.NOTIFICATION_BUNDLE_KEY to notification)
+				)
+			}
+		}
 	}
 
 	private fun setDateTime(viewHolder: GroupieViewHolder) {
