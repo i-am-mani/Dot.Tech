@@ -26,9 +26,6 @@ import com.xwray.groupie.GroupieViewHolder
 import kotlinx.android.synthetic.main.fragment_faq.*
 
 
-/**
- * A simple [Fragment] subclass.
- */
 class FAQFragment : Fragment() {
 
 	lateinit var mActivity: MainActivity
@@ -98,7 +95,7 @@ class FAQFragment : Fragment() {
 						title = "Query Request"
 						name = user.email ?: ""
 						headerIconId = R.drawable.ic_faq
-						onSubmit = { query ->
+						onSubmit = { _, query ->
 							mViewModel.requestQuery(user.uid, query)
 						}
 						build()
