@@ -5,6 +5,8 @@
     android:layout_height="match_parent"
     tools:context=".Fragments.EventParticipantsFragment">
 
+    <include layout="@layout/include_horizontal_shaders" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_participants"
         android:layout_width="match_parent"
