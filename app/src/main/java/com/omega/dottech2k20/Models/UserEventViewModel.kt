@@ -2,6 +2,7 @@ package com.omega.dottech2k20.Models
 
 import android.app.Application
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
@@ -187,9 +188,16 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 					// Check of nullability
 					task.result?.let { documentSnapshot ->
 						documentSnapshot.toObject(User::class.java)?.let {
+							mUserProfileLiveData.value = it
 							addUserInEvent(event, it, isAnonymous)
 						}
 					}
+
+					Toast.makeText(
+						getApplication(),
+						"Joining Event Successfull",
+						Toast.LENGTH_SHORT
+					).show()
 
 				} else {
 					Log.e(TAG, "Failed To get User : ", task.exception)
@@ -261,7 +269,13 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 			val document: DocumentReference = mFirestore.collection("Users").document(uid)
 			document.get().addOnCompleteListener {
 				if (it.isSuccessful) {
-					removeUserFromEvent(event, it.result?.toObject(User::class.java)!!)
+					it.result?.let { res ->
+						val userProfile = res.toObject(User::class.java)
+						if (userProfile != null) {
+							mUserProfileLiveData.value = userProfile
+							removeUserFromEvent(event, userProfile)
+						}
+					}
 				} else {
 					Log.e(TAG, "Failed To get User : ", it.exception)
 				}
