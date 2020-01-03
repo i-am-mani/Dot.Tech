@@ -8,9 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.omega.dottech2k20.MainActivity
+import com.omega.dottech2k20.Models.UserEventViewModel
 import com.omega.dottech2k20.R
 import com.omega.dottech2k20.R.layout
 import com.omega.dottech2k20.Utils.AuthenticationUtils
@@ -19,6 +22,7 @@ import kotlinx.android.synthetic.main.fragment_sign_in.*
 class SignInFragment : Fragment() {
 	val TAG: String = javaClass.simpleName
 	lateinit var mActivity: MainActivity
+	lateinit var mViewModel: UserEventViewModel
 
 	override fun onAttach(context: Context) {
 		super.onAttach(context)
@@ -30,6 +34,7 @@ class SignInFragment : Fragment() {
 		container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View? {
+		mViewModel = ViewModelProviders.of(mActivity).get(UserEventViewModel::class.java)
 		return inflater.inflate(layout.fragment_sign_in, container, false)
 	}
 
@@ -63,11 +68,16 @@ class SignInFragment : Fragment() {
 	private fun onSignInCompletionCallback(state: Boolean,exception: Exception?){
 		progressbar_login.visibility = View.INVISIBLE
 		if(state){
-			Log.d(TAG, "Login Successful")
-			Snackbar.make(root_sign_in,"Login Successful",Snackbar.LENGTH_SHORT)
-			mActivity.setNavigationMenuItems()
-			progressbar_login.findNavController().popBackStack()
-			progressbar_login.findNavController().navigate(R.id.eventsFragment)
+			// Fetch the profile data before proceeding to events fragment.
+			// If the data isn't refreshed, then userProfile/events stays null as no calls are made
+			// after logging in.
+			mViewModel.getUserProfile()?.observe(this, Observer {
+				Log.d(TAG, "Login Successful")
+				Snackbar.make(root_sign_in, "Login Successful", Snackbar.LENGTH_SHORT)
+				mActivity.setNavigationMenuItems()
+				progressbar_login.findNavController().popBackStack()
+				progressbar_login.findNavController().navigate(R.id.eventsFragment)
+			})
 		} else{
 			Log.d(TAG, "Login Unsuccessful")
 		}
