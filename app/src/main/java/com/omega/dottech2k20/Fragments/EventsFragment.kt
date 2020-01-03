@@ -31,9 +31,9 @@ import com.omega.dottech2k20.Models.Event
 import com.omega.dottech2k20.Models.UserEventViewModel
 import com.omega.dottech2k20.R
 import com.omega.dottech2k20.Utils.AuthenticationUtils
-import com.omega.dottech2k20.Utils.BinaryDialog
 import com.omega.dottech2k20.Utils.Utils
 import com.omega.dottech2k20.Utils.Utils.getEventSchedule
+import com.omega.dottech2k20.dialogs.BinaryDialog
 import com.ramotion.cardslider.CardSliderLayoutManager
 import com.ramotion.cardslider.CardSnapHelper
 import kotlinx.android.synthetic.main.fragment_events.*
@@ -75,14 +75,11 @@ class EventsFragment : Fragment() {
 		mViewModel = ViewModelProviders.of(mMainActivity).get(UserEventViewModel::class.java)
 		mViewModel.getEvents().observe(this, getEventsObserver())
 
-//		AuthenticationUtils.currentUser?.reload()?.addOnCompleteListener {
-//			if (it.isSuccessful) {
-				val currentUser = AuthenticationUtils.currentUser
-				Log.d(TAG, "Current User is email verified = ${currentUser?.isEmailVerified}")
+		val currentUser = AuthenticationUtils.currentUser
+		Log.d(TAG, "Current User is email verified = ${currentUser?.isEmailVerified}")
 		btn_join?.isEnabled = false // disable join button until UserEventData is fetched.
-				mViewModel.getUserEvent()?.observe(this, getUserEventObserver())
-//			}
-//		}
+		mViewModel.getUserEvent()?.observe(this, getUserEventObserver())
+
 	}
 
 	private fun getUserEventObserver(): Observer<List<Event>> {
@@ -160,7 +157,7 @@ class EventsFragment : Fragment() {
 			val event: Event = getEventAtPos(activeCard)
 			findNavController().navigate(
 				R.id.eventParticipantsFragment,
-				bundleOf("event" to event)
+				bundleOf(EventParticipantsFragment.BUNDLE_KEY to event)
 			)
 		}
 	}
@@ -367,7 +364,6 @@ class EventsFragment : Fragment() {
 	}
 
 	private fun getEventAtPos(position: Int): Event {
-
 		return mAdapter!!.getItem(position)!!
 	}
 
