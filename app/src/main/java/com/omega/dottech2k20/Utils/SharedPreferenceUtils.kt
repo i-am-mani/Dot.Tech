@@ -43,6 +43,7 @@ object SharedPreferenceUtils {
 		// To avoid Spamming, and overloading db with constant queries
 		val sharedPreference = PreferenceManager.getDefaultSharedPreferences(context)
 		val lastRegisteredTimestamp = sharedPreference.getLong(id, 0)
-		return (System.currentTimeMillis() - lastRegisteredTimestamp) <= (BACK_OFF_TIME * 60 * 1000)
+//		return (System.currentTimeMillis() - lastRegisteredTimestamp) <= (BACK_OFF_TIME * 60 * 1000)
+		return false
 	}
 }
