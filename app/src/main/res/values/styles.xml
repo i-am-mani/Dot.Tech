@@ -38,14 +38,14 @@
         <item name="android:fontFamily">@font/eczar_medium</item>
     </style>
 
-    <style name="TitleTextMarcellus" parent="TextAppearance.AppCompat.Title">
+    <style name="TitleTextRubik" parent="TextAppearance.AppCompat.Title">
         <item name="android:textSize">@dimen/text_title_size</item>
-        <item name="android:fontFamily">@font/marcellus</item>
+        <item name="android:fontFamily">@font/rubik</item>
     </style>
 
-    <style name="SubTitleTextMarcellus" parent="TextAppearance.AppCompat.Title">
+    <style name="SubTitleTextRubik" parent="TextAppearance.AppCompat.Title">
         <item name="android:textSize">@dimen/text_sub_title_size</item>
-        <item name="android:fontFamily">@font/marcellus</item>
+        <item name="android:fontFamily">@font/rubik</item>
     </style>
 
     <style name="SubTitleTextEczar" parent="TextAppearance.AppCompat.Title">
