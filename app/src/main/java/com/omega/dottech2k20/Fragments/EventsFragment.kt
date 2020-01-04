@@ -170,18 +170,16 @@ class EventsFragment : Fragment() {
 	}
 
 	private fun setJoinEventCallback() {
-		val currentUser = AuthenticationUtils.currentUser
-		btn_join.setOnClickListener {
-			when {
-				currentUser == null -> requestForLoginDialog()
-				!currentUser.isEmailVerified -> showUnVerifiedEmailDialog()
-				else -> joinEventConfirmation()
+		context?.let { ctx ->
+			val currentUser = AuthenticationUtils.currentUser
+			btn_join.setOnClickListener {
+				when {
+					currentUser == null -> RequestForLoginDialog.show(ctx, findNavController())
+					!currentUser.isEmailVerified -> UnVerifiedEmailDialog.show(ctx)
+					else -> joinEventConfirmation()
+				}
 			}
 		}
-	}
-
-	private fun showUnVerifiedEmailDialog() {
-		context?.let { UnVerifiedEmailDialog.show(it) }
 	}
 
 	private fun joinEventConfirmation() {
@@ -214,9 +212,6 @@ class EventsFragment : Fragment() {
 		return SharedPreferenceUtils.getBackOffTime(context, id)
 	}
 
-	private fun requestForLoginDialog() {
-		context?.let { RequestForLoginDialog.show(it, findNavController()) }
-	}
 
 	private fun setLeaveEventCallback() {
 		val activeCard: Int = mLayoutManager.activeCardPosition
@@ -405,12 +400,5 @@ class EventsFragment : Fragment() {
 			return textView
 		}
 
-	}
-
-	companion object {
-
-		@JvmStatic
-		fun newInstance() =
-			EventsFragment()
 	}
 }
