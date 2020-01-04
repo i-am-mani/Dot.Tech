@@ -50,6 +50,7 @@ class NotificationsViewModel(application: Application) : AndroidViewModel(applic
 	}
 
 	private fun initUserNotifications() {
+		// FIXME: When user logs in after notification live data's are initialized then the user level notification won't work, until restart
 		if (!::mUserNotificationsLiveData.isInitialized) {
 			mUserNotificationsLiveData = MutableLiveData()
 			val currentUser = mFireAuth.currentUser

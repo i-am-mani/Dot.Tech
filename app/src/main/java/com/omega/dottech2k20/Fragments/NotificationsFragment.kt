@@ -16,7 +16,7 @@ import com.omega.dottech2k20.Adapters.NotificationItem
 import com.omega.dottech2k20.MainActivity
 import com.omega.dottech2k20.R
 import com.omega.dottech2k20.models.Notification
-import com.omega.dottech2k20.models.UserEventViewModel
+import com.omega.dottech2k20.models.NotificationsViewModel
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import kotlinx.android.synthetic.main.fragment_notifications.*
@@ -26,7 +26,7 @@ class NotificationsFragment : Fragment() {
 	private val TAG = javaClass.simpleName
 	private lateinit var mActivity: MainActivity
 	private lateinit var mAdapter: GroupAdapter<GroupieViewHolder>
-	private lateinit var mViewModel: UserEventViewModel
+	private lateinit var mViewModel: NotificationsViewModel
 
 	override fun onCreateView(
 		inflater: LayoutInflater, container: ViewGroup?,
@@ -49,7 +49,7 @@ class NotificationsFragment : Fragment() {
 
 	override fun onActivityCreated(savedInstanceState: Bundle?) {
 		super.onActivityCreated(savedInstanceState)
-		mViewModel = ViewModelProviders.of(mActivity).get(UserEventViewModel::class.java)
+		mViewModel = ViewModelProviders.of(mActivity).get(NotificationsViewModel::class.java)
 		mViewModel.getNotification().observe(this, Observer {
 			it?.let { notificationList ->
 				if (mAdapter.itemCount == 0) {
