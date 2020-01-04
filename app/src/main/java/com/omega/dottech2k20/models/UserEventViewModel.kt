@@ -12,6 +12,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import es.dmoral.toasty.Toasty
 
 class UserEventViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -191,9 +192,11 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 				it.update(events, FieldPath.of("visibleParticipants"), visibleParticipants)
 			}.addOnCompleteListener {
 				if (it.isSuccessful) {
-					Log.d(TAG, "Joining Events Successful")
+					Toasty.success(getApplication(), "Joining Event Successful").show()
+					Log.i(TAG, "Joining Events Successful")
 				} else {
-					Log.d(TAG, "Joining Events Failed")
+					Toasty.success(getApplication(), "Failed To Join Event").show()
+					Log.e(TAG, "Joining Events Failed")
 				}
 			}
 		} else {
@@ -263,9 +266,11 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 				it.update(events, FieldPath.of("visibleParticipants"), visibleParticipants)
 			}.addOnCompleteListener {
 				if (it.isSuccessful) {
+					Toasty.success(getApplication(), "Leaving Event Successful").show()
 					Log.d(TAG, "UnJoining Events Successful")
 				} else {
-					Log.d(TAG, "UnJoining Events Failed")
+					Toasty.success(getApplication(), "Failed To Leave Event").show()
+					Log.e(TAG, "UnJoining Events Failed")
 				}
 			}
 		}
