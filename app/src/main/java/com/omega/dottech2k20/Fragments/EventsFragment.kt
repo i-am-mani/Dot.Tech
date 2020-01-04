@@ -163,7 +163,7 @@ class EventsFragment : Fragment() {
 			val event: Event = getEventAtPos(activeCard)
 			findNavController().navigate(
 				R.id.event_details,
-				bundleOf(FragmentEventDetails.EVENT_KEY to event)
+				bundleOf(EventDetailsFragment.EVENT_KEY to event)
 			)
 		}
 	}

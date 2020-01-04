@@ -1,15 +1,12 @@
 package com.omega.dottech2k20.Fragments
 
 
-import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.CheckBox
 import androidx.cardview.widget.CardView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -22,7 +19,7 @@ import com.omega.dottech2k20.Adapters.EventDetailItem
 import com.omega.dottech2k20.Adapters.HorizontalImageViewerItem
 import com.omega.dottech2k20.MainActivity
 import com.omega.dottech2k20.R
-import com.omega.dottech2k20.Utils.AuthenticationUtils
+import com.omega.dottech2k20.Utils.EventCallbacks
 import com.omega.dottech2k20.dialogs.BinaryDialog
 import com.omega.dottech2k20.models.Event
 import com.omega.dottech2k20.models.UserEventViewModel
@@ -30,7 +27,7 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import kotlinx.android.synthetic.main.fragment_event_details.*
 
-class FragmentEventDetails : Fragment() {
+class EventDetailsFragment : Fragment() {
 
 	private val TAG: String = javaClass.simpleName
 	lateinit var mEvent: Event
@@ -102,9 +99,8 @@ class FragmentEventDetails : Fragment() {
 			override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
 				super.onScrolled(recyclerView, dx, dy)
 				val view = recyclerView.getChildAt(0)
-				if (view != null && recyclerView.getChildAdapterPosition(view) === 0) {
+				if (view != null && recyclerView.getChildAdapterPosition(view) == 0) {
 					val card = view.findViewById<CardView>(R.id.card_image_holder)
-					Log.d(TAG, "view.top = ${view.top}")
 					// Basically we are moving against the scroll, applying same magnitude of scroll on opposite direction
 					card.translationY = -(view.top) / 2f
 					btn_join.translationX = -(view.top) / 3f
@@ -113,6 +109,7 @@ class FragmentEventDetails : Fragment() {
 			}
 		})
 	}
+
 	private fun hideButtons() {
 		btn_leave.hide()
 		btn_join.hide()
@@ -126,56 +123,17 @@ class FragmentEventDetails : Fragment() {
 
 	private fun setJoinEventCallback() {
 		btn_join.setOnClickListener {
-			if (AuthenticationUtils.currentUser == null) {
-				requestForLoginDialog()
-			} else {
-				context?.let { c ->
-					Dialog(c).apply {
-						setCanceledOnTouchOutside(true)
-
-						setContentView(R.layout.dialog_join_event_confirmation)
-						window.setLayout(
-							ViewGroup.LayoutParams.MATCH_PARENT,
-							ViewGroup.LayoutParams.WRAP_CONTENT
-						)
-						window.setBackgroundDrawableResource(android.R.color.transparent)
-
-						val confirmBtn = findViewById<Button>(R.id.btn_right)
-						val cancelBtn = findViewById<Button>(R.id.btn_left)
-						val chbxAnonUser = findViewById<CheckBox>(R.id.chbx_anon_user)
-
-						confirmBtn.setOnClickListener {
-							mViewModel.joinEvent(mEvent, chbxAnonUser.isChecked)
-							dismiss()
-						}
-
-						cancelBtn.setOnClickListener {
-							dismiss()
-						}
-					}.show()
-				}
+			context?.let { ctx ->
+				EventCallbacks.join(ctx, mEvent, findNavController(), mViewModel)
 			}
 		}
 	}
 
-	private fun navigateToEvents() {
-		findNavController().navigate(R.id.eventsFragment)
-	}
-
 	private fun setLeaveEventCallback() {
 		btn_leave.setOnClickListener {
-
 			context?.let { c ->
-				BinaryDialog(c, R.layout.dialog_event_confirmation).apply {
-					title = "Leave this Event ?"
-					rightButtonCallback = {
-						mViewModel.unjoinEvents(mEvent)
-					}
-					leftButtonCallback = { }
-				}.build()
+				EventCallbacks.leave(c, mEvent, mViewModel)
 			}
-
-
 		}
 	}
 
