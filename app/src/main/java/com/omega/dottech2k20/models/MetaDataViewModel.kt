@@ -6,7 +6,9 @@ import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.firestore.*
+import com.google.firebase.firestore.FieldPath
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
 import com.omega.dottech2k20.Utils.AuthenticationUtils
 import es.dmoral.toasty.Toasty
 
@@ -17,28 +19,10 @@ class MetaDataViewModel(application: Application) : AndroidViewModel(application
 	lateinit var mAboutDescription: MutableLiveData<String>
 	lateinit var mContactsLiveData: MutableLiveData<List<Contact>>
 	lateinit var mReportsLiveData: MutableLiveData<List<Report>>
-	val TAG = this.javaClass.simpleName
-	val mFirestore = FirebaseFirestore.getInstance()
-	val FAQ_DOC_NAME = "FAQ"
-	val META_DATA_COLLECTION_NAME = "MetaData"
-
-
-	private fun addDocumentSnapShotListener(
-		doc: DocumentReference,
-		callback: (snapshot: DocumentSnapshot) -> Unit
-	) {
-		doc.addSnapshotListener { snapshot, e ->
-			when {
-				e != null -> {
-					Log.w(TAG, "Listen failed.", e)
-					return@addSnapshotListener
-				}
-				snapshot != null && snapshot.exists() -> callback(snapshot)
-				else -> Log.d(TAG, "Current data: null")
-			}
-
-		}
-	}
+	private val TAG = this.javaClass.simpleName
+	private val mFirestore = FirebaseFirestore.getInstance()
+	private val FAQ_DOC_NAME = "FAQ"
+	private val META_DATA_COLLECTION_NAME = "MetaData"
 
 	fun getFAQs(): LiveData<List<FAQ>> {
 		if (!::mFaqLiveData.isInitialized) {
@@ -133,7 +117,7 @@ class MetaDataViewModel(application: Application) : AndroidViewModel(application
 			mReportsLiveData = MutableLiveData()
 
 			val query = mFirestore.collection(META_DATA_COLLECTION_NAME).document("Reports")
-			addDocumentSnapShotListener(query) { res ->
+			FirebaseSnapshotListeners.addDocumentSnapShotListener(query) { res ->
 				val listOfReports = mutableListOf<Report>()
 
 				val listOfBugs = res.get("bugReports") as List<HashMap<String, String>>

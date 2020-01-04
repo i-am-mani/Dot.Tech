@@ -8,17 +8,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.*
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FieldPath
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
 
 class UserEventViewModel(application: Application) : AndroidViewModel(application) {
 
 	private var mUserProfileLiveData: MutableLiveData<User> = MutableLiveData()
 	private var mEventsLiveData: MutableLiveData<List<Event>> = MutableLiveData()
 	private var mUserEventsLiveData: MediatorLiveData<List<Event>>? = null
-	private lateinit var mGlobalNotificationsLiveData: MutableLiveData<List<Notification>>
-	private lateinit var mUserNotificationsLiveData: MutableLiveData<List<Notification>>
-	private lateinit var mNotificationsLiveData: MediatorLiveData<List<Notification>>
-	private lateinit var mNoticeLiveData: MutableLiveData<List<Notice>>
+
 	private val mFirestore = FirebaseFirestore.getInstance()
 	private val mFireAuth = FirebaseAuth.getInstance()
 	private val TAG: String = javaClass.simpleName
@@ -30,7 +30,7 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 		Log.d(TAG, "Initial value  = ${mUserProfileLiveData.value}")
 		val document: DocumentReference = mFirestore.collection("Users").document(uid)
 		if (mUserProfileLiveData.value == null) {
-			addDocumentSnapShotListener(document) {
+			FirebaseSnapshotListeners.addDocumentSnapShotListener(document) {
 				mUserProfileLiveData.value = it.toObject(User::class.java)
 			}
 		}
@@ -98,29 +98,6 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 
 
 	/**
-	 * Listens to Changes in Document
-	 *
-	 * Attaches snapshot listener to document reference, and executes provided callback whenever
-	 * the snapshot listener is triggered (i.e due to change in data)
-	 */
-	private fun addDocumentSnapShotListener(
-		doc: DocumentReference,
-		callback: (snapshot: DocumentSnapshot) -> Unit
-	) {
-		doc.addSnapshotListener { snapshot, e ->
-			when {
-				e != null -> {
-					Log.w(TAG, "Listen failed.", e)
-					return@addSnapshotListener
-				}
-				snapshot != null && snapshot.exists() -> callback(snapshot)
-				else -> Log.d(TAG, "Current data: null")
-			}
-
-		}
-	}
-
-	/**
 	 * Return LiveData Instance of List of All Events.
 	 *
 	 * Note:- Only one snapshot listener is attached irrespective of number of calls. Once the
@@ -132,42 +109,13 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 		val eventTask = mFirestore.collection("Events").orderBy(FieldPath.of("orderPreference"))
 
 		if (mEventsLiveData.value == null) {
-			addQuerySnapShotListener(eventTask) {
+			FirebaseSnapshotListeners.addQuerySnapShotListener(eventTask) {
 				mEventsLiveData.value = it.toObjects(Event::class.java)
 				Log.d(TAG, "Current data: ${mEventsLiveData.value.toString()}")
 			}
 		}
 		return mEventsLiveData
 	}
-
-	/**
-	 * Listenes to Changes in Collection
-	 *
-	 * Attaches snapshot listener to document reference, and executes provided callback whenever
-	 * the snapshot listener is triggered ( due to change in data etc..)
-	 *
-	 */
-	private fun addQuerySnapShotListener(
-		doc: Query,
-		callback: (snapshot: QuerySnapshot) -> Unit
-	) {
-		doc.addSnapshotListener { snapshot, e ->
-			when {
-				e != null -> {
-					Log.w(TAG, "Listen failed.", e)
-					return@addSnapshotListener
-				}
-				snapshot != null -> {
-					callback(snapshot)
-				}
-				else -> {
-					Log.w(TAG, "Current data: null")
-				}
-			}
-
-		}
-	}
-
 
 	/**
 	 * Adds currently signed in user to the Event.
@@ -399,84 +347,6 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 		}
 		Log.d("ViewModel", "Event list = ${list.count()}")
 		return list
-	}
-
-	private fun fetchGlobalNotifications() {
-		if (!::mGlobalNotificationsLiveData.isInitialized) {
-			mGlobalNotificationsLiveData = MutableLiveData()
-			val notifReference = mFirestore.collection("Notifications")
-
-			addQuerySnapShotListener(notifReference) {
-				val notificationObjects = it.toObjects(Notification::class.java)
-				Log.d(TAG, "Number of Notifications = ${notificationObjects.size}")
-				mGlobalNotificationsLiveData.value = notificationObjects
-			}
-		}
-	}
-
-	fun getNotification(): LiveData<List<Notification>> {
-
-		if (!::mNotificationsLiveData.isInitialized) {
-			fetchGlobalNotifications()
-			fetchUserNotifications()
-			mNotificationsLiveData = MediatorLiveData()
-			mNotificationsLiveData.addSource(mGlobalNotificationsLiveData) {
-				mNotificationsLiveData.value = getAllNotifications()
-			}
-			mNotificationsLiveData.addSource(mUserNotificationsLiveData) {
-				mNotificationsLiveData.value = getAllNotifications()
-			}
-		}
-
-		return mNotificationsLiveData
-	}
-
-	private fun fetchUserNotifications() {
-		if (!::mUserNotificationsLiveData.isInitialized) {
-			mUserNotificationsLiveData = MutableLiveData()
-			val currentUser = mFireAuth.currentUser
-			if (currentUser != null) {
-				val userNotificationColRef =
-					mFirestore.collection("Users").document(currentUser.uid)
-						.collection("Notifications")
-				addQuerySnapShotListener(userNotificationColRef) {
-					val notificationsList = it.toObjects(Notification::class.java)
-					mUserNotificationsLiveData.value = notificationsList
-				}
-			}
-		}
-	}
-
-	private fun getAllNotifications(): List<Notification>? {
-		val notificationsList: MutableList<Notification> = mutableListOf()
-
-		mUserNotificationsLiveData.value?.let {
-			notificationsList.addAll(it)
-		}
-
-		mGlobalNotificationsLiveData.value?.let {
-			notificationsList.addAll(it)
-		}
-
-		return notificationsList
-	}
-
-	private fun getNotices(): LiveData<List<Notice>> {
-		if (!::mNoticeLiveData.isInitialized) {
-			mNoticeLiveData = MutableLiveData()
-			val query = mFirestore.collection("Notices")
-			query.get().addOnCompleteListener {
-				if (it.isSuccessful) {
-					val result = it.result
-					if (result != null) {
-						mNoticeLiveData.value = result.toObjects(Notice::class.java)
-					} else {
-						Log.e(TAG, "Failed to fetch notices: ", it.exception)
-					}
-				}
-			}
-		}
-		return mNoticeLiveData
 	}
 }
 
