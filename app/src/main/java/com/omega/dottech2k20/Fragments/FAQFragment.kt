@@ -6,13 +6,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseUser
 import com.omega.dottech2k20.Adapters.FAQItem
 import com.omega.dottech2k20.MainActivity
@@ -83,7 +81,6 @@ class FAQFragment : Fragment() {
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		initRecyclerView()
-		setUpScrollListener()
 		setUpFabClickListener()
 	}
 
@@ -104,20 +101,6 @@ class FAQFragment : Fragment() {
 			}
 
 		}
-	}
-
-	private fun setUpScrollListener() {
-		rv_faq.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-			override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-				super.onScrolled(recyclerView, dx, dy)
-				val view = recyclerView.getChildAt(0)
-				if (view != null) {
-					val card = view.findViewById<CardView>(R.id.card_faq)
-					// Basically we are moving against the scroll, applying same magnitude of scroll on opposite direction
-					card.translationX = -(view.top) / 2f
-				}
-			}
-		})
 	}
 
 	private fun initRecyclerView() {
