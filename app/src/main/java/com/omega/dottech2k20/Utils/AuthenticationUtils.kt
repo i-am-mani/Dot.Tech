@@ -9,7 +9,7 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
-import com.omega.dottech2k20.Models.User
+import com.omega.dottech2k20.models.User
 
 class AuthenticationUtils {
 

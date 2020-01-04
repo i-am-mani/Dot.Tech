@@ -8,9 +8,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import com.omega.dottech2k20.MainActivity
 import com.omega.dottech2k20.R
 import com.omega.dottech2k20.Utils.AuthenticationUtils
+import com.omega.dottech2k20.models.UserEventViewModel
 
 class SignOutFragment : Fragment() {
 
@@ -35,6 +37,7 @@ class SignOutFragment : Fragment() {
 		if (AuthenticationUtils.currentUser != null) {
 			AuthenticationUtils.signOutUser()
 			activity.setNavigationMenuItems()
+			val viewModel = ViewModelProviders.of(activity).get(UserEventViewModel::class.java)
 		} else {
 			Log.e(TAG, "SignOut: Attempt To Sign out when, user isn't signed in. ")
 		}

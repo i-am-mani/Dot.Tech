@@ -5,9 +5,9 @@ import android.content.Context
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
-import com.omega.dottech2k20.Models.Event
-import com.omega.dottech2k20.Models.UserEventViewModel
 import com.omega.dottech2k20.R
+import com.omega.dottech2k20.models.Event
+import com.omega.dottech2k20.models.UserEventViewModel
 
 object JoinEventConfirmationDialog {
 	fun show(context: Context, event: Event, viewModel: UserEventViewModel) {

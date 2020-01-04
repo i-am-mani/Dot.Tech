@@ -25,13 +25,13 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnFlingListener
 import com.omega.dottech2k20.Adapters.UserEventItem
 import com.omega.dottech2k20.MainActivity
-import com.omega.dottech2k20.Models.Event
-import com.omega.dottech2k20.Models.User
-import com.omega.dottech2k20.Models.UserEventViewModel
 import com.omega.dottech2k20.R
 import com.omega.dottech2k20.Utils.AuthenticationUtils
 import com.omega.dottech2k20.Utils.Utils
 import com.omega.dottech2k20.dialogs.BinaryDialog
+import com.omega.dottech2k20.models.Event
+import com.omega.dottech2k20.models.User
+import com.omega.dottech2k20.models.UserEventViewModel
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Section
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder

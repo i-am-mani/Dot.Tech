@@ -7,9 +7,9 @@ import androidx.navigation.NavController
 import com.bumptech.glide.Glide
 import com.google.firebase.storage.FirebaseStorage
 import com.omega.dottech2k20.Fragments.NotificationDetailFragment
-import com.omega.dottech2k20.Models.Notification
 import com.omega.dottech2k20.R
 import com.omega.dottech2k20.Utils.Utils
+import com.omega.dottech2k20.models.Notification
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
 import kotlinx.android.synthetic.main.item_notification.*

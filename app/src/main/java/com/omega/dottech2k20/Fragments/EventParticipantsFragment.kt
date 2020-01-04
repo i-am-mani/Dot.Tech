@@ -12,8 +12,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.omega.dottech2k20.Adapters.EventParticipantItem
-import com.omega.dottech2k20.Models.Event
 import com.omega.dottech2k20.R
+import com.omega.dottech2k20.models.Event
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
@@ -109,6 +109,7 @@ class EventParticipantsFragment : Fragment() {
 			position: Int
 		) {
 			viewHolder.apply {
+				tv_total_label.text = "Total Participants"
 				tv_total_count.text = count.toString()
 			}
 		}

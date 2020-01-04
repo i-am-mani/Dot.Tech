@@ -14,9 +14,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.omega.dottech2k20.Adapters.ContactItem
 import com.omega.dottech2k20.MainActivity
-import com.omega.dottech2k20.Models.Contact
-import com.omega.dottech2k20.Models.MetaDataViewModel
 import com.omega.dottech2k20.R
+import com.omega.dottech2k20.models.Contact
+import com.omega.dottech2k20.models.MetaDataViewModel
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import kotlinx.android.synthetic.main.fragment_contacts.*

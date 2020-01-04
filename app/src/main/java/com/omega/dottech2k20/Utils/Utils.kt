@@ -49,5 +49,14 @@ object Utils {
 
 	}
 
+	fun isFullNameValid(name: String): Boolean {
+		// FIXME: Detect Misused words and block the user for next 10 minutes
+		return name.isNotEmpty() && name.length > 5
+	}
+
+	fun isPhoneNumberValid(phone: String): Boolean {
+		return phone.isNotEmpty() && phone.length == 10
+	}
+
 }
 

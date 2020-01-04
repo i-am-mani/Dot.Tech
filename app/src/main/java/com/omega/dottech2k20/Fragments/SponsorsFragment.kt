@@ -15,9 +15,9 @@ import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.omega.dottech2k20.Adapters.SponsorItem
 import com.omega.dottech2k20.MainActivity
-import com.omega.dottech2k20.Models.Sponsor
-import com.omega.dottech2k20.Models.SponsorsViewModel
 import com.omega.dottech2k20.R
+import com.omega.dottech2k20.models.Sponsor
+import com.omega.dottech2k20.models.SponsorsViewModel
 import com.rd.animation.type.AnimationType
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder

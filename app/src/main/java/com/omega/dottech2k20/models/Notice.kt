@@ -1,4 +1,4 @@
-package com.omega.dottech2k20.Models
+package com.omega.dottech2k20.models
 
 import android.os.Parcel
 import android.os.Parcelable

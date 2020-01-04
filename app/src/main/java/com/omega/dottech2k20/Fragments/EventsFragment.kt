@@ -26,14 +26,14 @@ import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import com.google.firebase.Timestamp
 import com.omega.dottech2k20.Adapters.EventImageAdapter
 import com.omega.dottech2k20.MainActivity
-import com.omega.dottech2k20.Models.Event
-import com.omega.dottech2k20.Models.UserEventViewModel
 import com.omega.dottech2k20.R
 import com.omega.dottech2k20.Utils.AuthenticationUtils
 import com.omega.dottech2k20.Utils.SharedPreferenceUtils
 import com.omega.dottech2k20.Utils.Utils
 import com.omega.dottech2k20.Utils.Utils.getEventSchedule
 import com.omega.dottech2k20.dialogs.*
+import com.omega.dottech2k20.models.Event
+import com.omega.dottech2k20.models.UserEventViewModel
 import com.ramotion.cardslider.CardSliderLayoutManager
 import com.ramotion.cardslider.CardSnapHelper
 import kotlinx.android.synthetic.main.fragment_events.*

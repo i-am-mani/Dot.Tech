@@ -15,8 +15,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.omega.dottech2k20.MainActivity
-import com.omega.dottech2k20.Models.MetaDataViewModel
 import com.omega.dottech2k20.R
+import com.omega.dottech2k20.models.MetaDataViewModel
 import kotlinx.android.synthetic.main.fragment_about.*
 
 

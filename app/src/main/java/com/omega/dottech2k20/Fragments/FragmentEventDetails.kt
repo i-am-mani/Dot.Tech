@@ -21,11 +21,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.omega.dottech2k20.Adapters.EventDetailItem
 import com.omega.dottech2k20.Adapters.HorizontalImageViewerItem
 import com.omega.dottech2k20.MainActivity
-import com.omega.dottech2k20.Models.Event
-import com.omega.dottech2k20.Models.UserEventViewModel
 import com.omega.dottech2k20.R
 import com.omega.dottech2k20.Utils.AuthenticationUtils
 import com.omega.dottech2k20.dialogs.BinaryDialog
+import com.omega.dottech2k20.models.Event
+import com.omega.dottech2k20.models.UserEventViewModel
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import kotlinx.android.synthetic.main.fragment_event_details.*

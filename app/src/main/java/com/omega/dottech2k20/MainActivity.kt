@@ -29,9 +29,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
 import com.omega.dottech2k20.Adapters.NoticeItem
-import com.omega.dottech2k20.Models.Notice
-import com.omega.dottech2k20.Models.UserEventViewModel
 import com.omega.dottech2k20.Utils.AuthenticationUtils
+import com.omega.dottech2k20.models.Notice
+import com.omega.dottech2k20.models.UserEventViewModel
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import kotlinx.android.synthetic.main.activity_main.*

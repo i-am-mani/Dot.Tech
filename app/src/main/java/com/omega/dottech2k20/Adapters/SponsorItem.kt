@@ -2,8 +2,8 @@ package com.omega.dottech2k20.Adapters
 
 import com.bumptech.glide.Glide
 import com.google.firebase.storage.FirebaseStorage
-import com.omega.dottech2k20.Models.Sponsor
 import com.omega.dottech2k20.R
+import com.omega.dottech2k20.models.Sponsor
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
 import kotlinx.android.synthetic.main.item_sponsor.*

@@ -10,11 +10,10 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Source
 import com.omega.dottech2k20.Fragments.SplashScreenFragment
 import com.omega.dottech2k20.Fragments.WelcomeScreenFragment
-import com.omega.dottech2k20.Models.Notice
 import com.omega.dottech2k20.Utils.Utils
+import com.omega.dottech2k20.models.Notice
 import com.ramotion.paperonboarding.PaperOnboardingFragment
 import com.ramotion.paperonboarding.PaperOnboardingPage
 import kotlinx.android.synthetic.main.activity_start_up.*
@@ -54,7 +53,7 @@ class StartUpActivity : AppCompatActivity() {
 	private fun fetchNotices() {
 		val query = mFirestore.collection("Notices")
 		// Fetch data from server, avoid cache. As it would also work to check if internet is working.
-		query.get(Source.SERVER).addOnCompleteListener {
+		query.get().addOnCompleteListener {
 			if (it.isSuccessful) {
 				val result = it.result
 

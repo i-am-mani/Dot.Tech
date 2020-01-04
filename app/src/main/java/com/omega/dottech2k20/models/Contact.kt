@@ -1,4 +1,4 @@
-package com.omega.dottech2k20.Models
+package com.omega.dottech2k20.models
 
 /**
  * Model for Contact Details.

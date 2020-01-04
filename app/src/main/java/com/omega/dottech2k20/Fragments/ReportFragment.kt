@@ -13,10 +13,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseUser
 import com.omega.dottech2k20.Adapters.FAQItem
 import com.omega.dottech2k20.MainActivity
-import com.omega.dottech2k20.Models.FAQ
-import com.omega.dottech2k20.Models.MetaDataViewModel
 import com.omega.dottech2k20.R
 import com.omega.dottech2k20.dialogs.UserQueryDialog
+import com.omega.dottech2k20.models.FAQ
+import com.omega.dottech2k20.models.MetaDataViewModel
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Section

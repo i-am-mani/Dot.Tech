@@ -1,8 +1,8 @@
 package com.omega.dottech2k20.Adapters
 
 import android.view.View
-import com.omega.dottech2k20.Models.FAQ
 import com.omega.dottech2k20.R
+import com.omega.dottech2k20.models.FAQ
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
 import kotlinx.android.synthetic.main.item_faq.*

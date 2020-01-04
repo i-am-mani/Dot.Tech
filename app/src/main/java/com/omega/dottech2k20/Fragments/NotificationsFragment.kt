@@ -14,9 +14,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.omega.dottech2k20.Adapters.NotificationItem
 import com.omega.dottech2k20.MainActivity
-import com.omega.dottech2k20.Models.Notification
-import com.omega.dottech2k20.Models.UserEventViewModel
 import com.omega.dottech2k20.R
+import com.omega.dottech2k20.models.Notification
+import com.omega.dottech2k20.models.UserEventViewModel
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import kotlinx.android.synthetic.main.fragment_notifications.*

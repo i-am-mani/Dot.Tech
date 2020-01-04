@@ -13,10 +13,10 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.omega.dottech2k20.MainActivity
-import com.omega.dottech2k20.Models.UserEventViewModel
 import com.omega.dottech2k20.R
 import com.omega.dottech2k20.R.layout
 import com.omega.dottech2k20.Utils.AuthenticationUtils
+import com.omega.dottech2k20.models.UserEventViewModel
 import kotlinx.android.synthetic.main.fragment_sign_in.*
 
 class SignInFragment : Fragment() {

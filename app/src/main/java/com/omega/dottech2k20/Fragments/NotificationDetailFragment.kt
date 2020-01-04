@@ -8,9 +8,9 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.google.firebase.Timestamp
 import com.google.firebase.storage.FirebaseStorage
-import com.omega.dottech2k20.Models.Notification
 import com.omega.dottech2k20.R
 import com.omega.dottech2k20.Utils.Utils
+import com.omega.dottech2k20.models.Notification
 import kotlinx.android.synthetic.main.fragment_notification_detail.*
 
 /**

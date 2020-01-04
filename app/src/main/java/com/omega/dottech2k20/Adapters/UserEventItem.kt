@@ -1,8 +1,8 @@
 package com.omega.dottech2k20.Adapters
 
-import com.omega.dottech2k20.Models.Event
 import com.omega.dottech2k20.R
 import com.omega.dottech2k20.Utils.Utils
+import com.omega.dottech2k20.models.Event
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
 import kotlinx.android.synthetic.main.item_user_event.*

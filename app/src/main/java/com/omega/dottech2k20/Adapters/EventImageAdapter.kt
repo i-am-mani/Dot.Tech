@@ -10,9 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.bumptech.glide.Glide
 import com.google.firebase.storage.FirebaseStorage
-import com.omega.dottech2k20.Models.Event
 import com.omega.dottech2k20.R.id
 import com.omega.dottech2k20.R.layout
+import com.omega.dottech2k20.models.Event
 
 class EventImageAdapter(private val mContext: Context) :
 	Adapter<EventImageAdapter.ViewHolder>() {

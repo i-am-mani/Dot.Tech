@@ -65,7 +65,8 @@ class WelcomeScreenFragment : Fragment() {
 			val px = Utils.convertDPtoPX(it, 28)
 			params.setMargins(0, px, 0, 0)
 
-			val button = MaterialButton(context)
+			context?.let { ctx ->
+				val button = MaterialButton(ctx)
 			button.apply {
 				layoutParams = params
 				background.setColorFilter(
@@ -80,6 +81,7 @@ class WelcomeScreenFragment : Fragment() {
 				mActivity.goToOnBoardingFragment()
 			}
 			root_welcome_text.addView(button)
+			}
 		}
 	}
 
