@@ -1,13 +1,15 @@
 package com.omega.dottech2k20.models
 
+import android.app.Application
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
-class NotificationsViewModel {
+class NotificationsViewModel(application: Application) : AndroidViewModel(application) {
 
 	private lateinit var mGlobalNotificationsLiveData: MutableLiveData<List<Notification>>
 	private lateinit var mUserNotificationsLiveData: MutableLiveData<List<Notification>>
