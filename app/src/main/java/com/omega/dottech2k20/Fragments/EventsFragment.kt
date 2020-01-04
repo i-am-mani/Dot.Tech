@@ -28,10 +28,9 @@ import com.omega.dottech2k20.Adapters.EventImageAdapter
 import com.omega.dottech2k20.MainActivity
 import com.omega.dottech2k20.R
 import com.omega.dottech2k20.Utils.AuthenticationUtils
-import com.omega.dottech2k20.Utils.SharedPreferenceUtils
+import com.omega.dottech2k20.Utils.EventCallbacks
 import com.omega.dottech2k20.Utils.Utils
 import com.omega.dottech2k20.Utils.Utils.getEventSchedule
-import com.omega.dottech2k20.dialogs.*
 import com.omega.dottech2k20.models.Event
 import com.omega.dottech2k20.models.UserEventViewModel
 import com.ramotion.cardslider.CardSliderLayoutManager
@@ -171,54 +170,20 @@ class EventsFragment : Fragment() {
 
 	private fun setJoinEventCallback() {
 		context?.let { ctx ->
-			val currentUser = AuthenticationUtils.currentUser
+			val activeCard: Int = mLayoutManager.activeCardPosition
+			val event = getEventAtPos(activeCard)
 			btn_join.setOnClickListener {
-				when {
-					currentUser == null -> RequestForLoginDialog.show(ctx, findNavController())
-					!currentUser.isEmailVerified -> UnVerifiedEmailDialog.show(ctx)
-					else -> joinEventConfirmation()
-				}
+				EventCallbacks.join(ctx, event, findNavController(), mViewModel)
 			}
 		}
 	}
-
-	private fun joinEventConfirmation() {
-		val id = getEventAtPos(mLayoutManager.activeCardPosition).id
-		val validBackoff = SharedPreferenceUtils.isValidBackoff(context, id)
-		if (validBackoff) {
-			showBackOffDialog()
-		} else {
-			showJoinEventConfirmationDialog()
-		}
-	}
-
-	private fun showJoinEventConfirmationDialog() {
-		val activeCard: Int = mLayoutManager.activeCardPosition
-		val event = getEventAtPos(activeCard)
-		context?.let { c ->
-			JoinEventConfirmationDialog.show(c, event, mViewModel)
-		}
-	}
-
-	private fun showBackOffDialog() {
-		context?.let { c ->
-			BackOffDialog.show(c, getBackOffTime())
-		}
-	}
-
-	private fun getBackOffTime(): Long {
-		val event = getEventAtPos(mLayoutManager.activeCardPosition)
-		val id = event.id
-		return SharedPreferenceUtils.getBackOffTime(context, id)
-	}
-
 
 	private fun setLeaveEventCallback() {
 		val activeCard: Int = mLayoutManager.activeCardPosition
 		val event: Event = getEventAtPos(activeCard)
 		btn_unjoin.setOnClickListener {
 			context?.let {
-				LeaveEventDialog.show(it, event, mViewModel)
+				EventCallbacks.leave(it, event, mViewModel)
 			}
 		}
 
@@ -310,16 +275,12 @@ class EventsFragment : Fragment() {
 
 	private fun changeEventContent(position: Int) {
 		val event: Event = getEventAtPos(position)
-		var animTypeHorizontal =
-			TextAnimationType.RIGHT_TO_LEFT
-		var animTypeVertical =
-			TextAnimationType.TOP_TO_BOTTOM
+		var animTypeHorizontal = TextAnimationType.RIGHT_TO_LEFT
+		var animTypeVertical = TextAnimationType.TOP_TO_BOTTOM
 
 		if (position < mCurrentPosition ?: 0) {
-			animTypeHorizontal =
-				TextAnimationType.LEFT_TO_RIGHT
-			animTypeVertical =
-				TextAnimationType.BOTTOM_TO_TOP
+			animTypeHorizontal = TextAnimationType.LEFT_TO_RIGHT
+			animTypeVertical = TextAnimationType.BOTTOM_TO_TOP
 		}
 		updateButtons(event)
 		setTitle(event.title, animTypeHorizontal)
@@ -359,7 +320,6 @@ class EventsFragment : Fragment() {
 		ts_title.setText(title)
 	}
 
-
 	private fun setTextSwitcherAnimation(ts: TextSwitcher, animationType: TextAnimationType) {
 
 		when (animationType) {
@@ -385,7 +345,6 @@ class EventsFragment : Fragment() {
 			}
 		}
 	}
-
 
 	inner class TextViewFactory(private val resStyle: Int?) : ViewFactory {
 		override fun makeView(): View {
