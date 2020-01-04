@@ -87,8 +87,10 @@ class EventsFragment : Fragment() {
 				val activeCardPosition = mLayoutManager.activeCardPosition
 				if (activeCardPosition != RecyclerView.NO_POSITION) {
 					Log.d(TAG, "position = $activeCardPosition")
-					val event: Event = getEventAtPos(activeCardPosition)
-					updateButtons(event)
+					val event: Event? = getEventAtPos(activeCardPosition)
+					if (event != null) {
+						updateButtons(event)
+					}
 				}
 			}
 		}
@@ -149,22 +151,26 @@ class EventsFragment : Fragment() {
 	private fun setViewParticipantsCallback() {
 		imbtn_view_participants.setOnClickListener {
 			val activeCard: Int = mLayoutManager.activeCardPosition
-			val event: Event = getEventAtPos(activeCard)
-			findNavController().navigate(
-				R.id.eventParticipantsFragment,
-				bundleOf(EventParticipantsFragment.BUNDLE_KEY to event)
-			)
+			val event: Event? = getEventAtPos(activeCard)
+			if (event != null) {
+				findNavController().navigate(
+					R.id.eventParticipantsFragment,
+					bundleOf(EventParticipantsFragment.BUNDLE_KEY to event)
+				)
+			}
 		}
 	}
 
 	private fun setViewDetailsListener() {
 		btn_details.setOnClickListener {
 			val activeCard: Int = mLayoutManager.activeCardPosition
-			val event: Event = getEventAtPos(activeCard)
-			findNavController().navigate(
-				R.id.event_details,
-				bundleOf(EventDetailsFragment.EVENT_KEY to event)
-			)
+			val event: Event? = getEventAtPos(activeCard)
+			if (event != null) {
+				findNavController().navigate(
+					R.id.event_details,
+					bundleOf(EventDetailsFragment.EVENT_KEY to event)
+				)
+			}
 		}
 	}
 
@@ -172,21 +178,24 @@ class EventsFragment : Fragment() {
 		context?.let { ctx ->
 			val activeCard: Int = mLayoutManager.activeCardPosition
 			val event = getEventAtPos(activeCard)
-			btn_join.setOnClickListener {
-				EventCallbacks.join(ctx, event, findNavController(), mViewModel)
+			event?.let {
+				btn_join.setOnClickListener {
+					EventCallbacks.join(ctx, event, findNavController(), mViewModel)
+				}
 			}
 		}
 	}
 
 	private fun setLeaveEventCallback() {
 		val activeCard: Int = mLayoutManager.activeCardPosition
-		val event: Event = getEventAtPos(activeCard)
-		btn_unjoin.setOnClickListener {
-			context?.let {
-				EventCallbacks.leave(it, event, mViewModel)
+		val event: Event? = getEventAtPos(activeCard)
+		event?.let {
+			btn_unjoin.setOnClickListener {
+				context?.let {
+					EventCallbacks.leave(it, event, mViewModel)
+				}
 			}
 		}
-
 	}
 
 	private fun initRV(events: List<Event>) {
@@ -232,8 +241,8 @@ class EventsFragment : Fragment() {
 		})
 	}
 
-	private fun getEventAtPos(position: Int): Event {
-		return mAdapter!!.getItem(position)!!
+	private fun getEventAtPos(position: Int): Event? {
+		return mAdapter?.getItem(position)
 	}
 
 
@@ -274,20 +283,22 @@ class EventsFragment : Fragment() {
 	}
 
 	private fun changeEventContent(position: Int) {
-		val event: Event = getEventAtPos(position)
-		var animTypeHorizontal = TextAnimationType.RIGHT_TO_LEFT
-		var animTypeVertical = TextAnimationType.TOP_TO_BOTTOM
+		val event: Event? = getEventAtPos(position)
+		if (event != null) {
+			var animTypeHorizontal = TextAnimationType.RIGHT_TO_LEFT
+			var animTypeVertical = TextAnimationType.TOP_TO_BOTTOM
 
-		if (position < mCurrentPosition ?: 0) {
-			animTypeHorizontal = TextAnimationType.LEFT_TO_RIGHT
-			animTypeVertical = TextAnimationType.BOTTOM_TO_TOP
+			if (position < mCurrentPosition ?: 0) {
+				animTypeHorizontal = TextAnimationType.LEFT_TO_RIGHT
+				animTypeVertical = TextAnimationType.BOTTOM_TO_TOP
+			}
+			updateButtons(event)
+			setTitle(event.title, animTypeHorizontal)
+			setDateTime(event.startTime, event.endTime, animTypeVertical)
+			setDescription(event.shortDescription)
+			setParticipantCount(event.participantCount, animTypeVertical)
+			mCurrentPosition = position
 		}
-		updateButtons(event)
-		setTitle(event.title, animTypeHorizontal)
-		setDateTime(event.startTime, event.endTime, animTypeVertical)
-		setDescription(event.shortDescription)
-		setParticipantCount(event.participantCount, animTypeVertical)
-		mCurrentPosition = position
 	}
 
 	private fun setParticipantCount(
