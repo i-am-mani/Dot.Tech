@@ -19,6 +19,8 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 	private var mUserProfileLiveData: MutableLiveData<User> = MutableLiveData()
 	private var mEventsLiveData: MutableLiveData<List<Event>> = MutableLiveData()
 	private lateinit var mUserEventsLiveData: MediatorLiveData<List<Event>>
+	// index used for resuming and storing index of event on pause
+	private val mEventIndex: MutableLiveData<Int> = MutableLiveData()
 
 	private val mFirestore = FirebaseFirestore.getInstance()
 	private val mFireAuth = FirebaseAuth.getInstance()
@@ -351,6 +353,14 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 		}
 		Log.d("ViewModel", "Event list = ${list.count()}")
 		return list
+	}
+
+	fun getEventIndex(): Int? {
+		return mEventIndex.value
+	}
+
+	fun setEventIndex(index: Int?) {
+		mEventIndex.value = index
 	}
 }
 

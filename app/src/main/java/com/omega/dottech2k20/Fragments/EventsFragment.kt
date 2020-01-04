@@ -66,6 +66,12 @@ class EventsFragment : Fragment() {
 		mAdapter = null
 	}
 
+	override fun onPause() {
+		super.onPause()
+		val index = mLayoutManager.activeCardPosition
+		mViewModel.setEventIndex(index)
+	}
+
 	override fun onActivityCreated(savedInstanceState: Bundle?) {
 		super.onActivityCreated(savedInstanceState)
 		mViewModel = ViewModelProviders.of(mMainActivity).get(UserEventViewModel::class.java)
@@ -202,7 +208,10 @@ class EventsFragment : Fragment() {
 		setRecyclerViewLayoutManager()
 		setRecyclerViewAdapter(events)
 		setRecyclerViewListener()
-		changeEventContent(0)
+		val index = mViewModel.getEventIndex() ?: 0
+		changeEventContent(index)
+		mLayoutManager.scrollToPosition(index)
+
 
 		CardSnapHelper().attachToRecyclerView(rv_event_thumb_nails)
 	}
