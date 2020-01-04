@@ -17,7 +17,7 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 
 	private var mUserProfileLiveData: MutableLiveData<User> = MutableLiveData()
 	private var mEventsLiveData: MutableLiveData<List<Event>> = MutableLiveData()
-	private var mUserEventsLiveData: MediatorLiveData<List<Event>>? = null
+	private lateinit var mUserEventsLiveData: MediatorLiveData<List<Event>>
 
 	private val mFirestore = FirebaseFirestore.getInstance()
 	private val mFireAuth = FirebaseAuth.getInstance()
@@ -126,7 +126,7 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 	 * @param event : Event which user will join
 	 */
 	fun joinEvent(event: Event, isAnonymous: Boolean) {
-		var user: User? = mUserProfileLiveData.value
+		val user: User? = mUserProfileLiveData.value
 		if (user == null) {
 			val uid = mFireAuth.currentUser?.uid ?: return
 
@@ -209,7 +209,7 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 	 */
 	fun unjoinEvents(event: Event) {
 
-		var user: User? = mUserProfileLiveData.value
+		val user: User? = mUserProfileLiveData.value
 
 		if (user == null) {
 			val uid = mFireAuth.currentUser?.uid ?: return
@@ -283,26 +283,25 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 		// we need both of them. Hence, Using MediatorLiveDat we can add them as sources and when
 		// the data of either changes the final output would be changed too.
 
-		if (mUserEventsLiveData != null) {
-			return mUserEventsLiveData
-		}
-
-		// Initialize live data in case it hasn't been
-		if (mUserProfileLiveData.value == null) {
-			getUserProfile()
-		}
-		if (mEventsLiveData.value == null) {
-			getEvents()
-		}
-
-		mUserEventsLiveData = MediatorLiveData()
-
-		mUserEventsLiveData?.let {
-			it.addSource(mUserProfileLiveData) {
-				mUserEventsLiveData?.value = liveDataChanged(mUserProfileLiveData, mEventsLiveData)
+		if (!::mUserEventsLiveData.isInitialized) {
+			// Initialize live data in case it hasn't been
+			if (mUserProfileLiveData.value == null) {
+				getUserProfile()
 			}
-			it.addSource(mEventsLiveData) {
-				mUserEventsLiveData?.value = liveDataChanged(mUserProfileLiveData, mEventsLiveData)
+			if (mEventsLiveData.value == null) {
+				getEvents()
+			}
+			mUserEventsLiveData = MediatorLiveData()
+
+			mUserEventsLiveData.apply {
+				addSource(mUserProfileLiveData) {
+					mUserEventsLiveData.value =
+						liveDataChanged(mUserProfileLiveData, mEventsLiveData)
+				}
+				addSource(mEventsLiveData) {
+					mUserEventsLiveData.value =
+						liveDataChanged(mUserProfileLiveData, mEventsLiveData)
+				}
 			}
 		}
 
