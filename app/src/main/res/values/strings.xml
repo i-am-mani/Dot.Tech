@@ -7,4 +7,8 @@
     <string name="leave_event_btn_name">Leave</string>
     <!-- `/` is the delimiter, each word would be displayed at a time   -->
     <string name="splash_screen_welcome_string">Welcome/To/Dot Tech</string>
+    <string name="channel_name">dot.tech</string>
+    <string name="channel_id">com.omega.notifications</string>
+    <string name="channel_description">General Notifications related to Events</string>
+    <string name="title_activity_sign_out">SignOutActivity</string>
 </resources>

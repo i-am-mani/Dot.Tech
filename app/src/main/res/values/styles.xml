@@ -33,14 +33,29 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="TitleText" parent="TextAppearance.AppCompat.Title">
+    <style name="TitleTextEczar" parent="TextAppearance.AppCompat.Title">
         <item name="android:textSize">@dimen/text_title_size</item>
         <item name="android:fontFamily">@font/eczar_medium</item>
     </style>
 
-    <style name="SubTitleText" parent="TextAppearance.AppCompat.Title">
+    <style name="TitleTextMarcellus" parent="TextAppearance.AppCompat.Title">
+        <item name="android:textSize">@dimen/text_title_size</item>
+        <item name="android:fontFamily">@font/marcellus</item>
+    </style>
+
+    <style name="SubTitleTextMarcellus" parent="TextAppearance.AppCompat.Title">
+        <item name="android:textSize">@dimen/text_sub_title_size</item>
+        <item name="android:fontFamily">@font/marcellus</item>
+    </style>
+
+    <style name="SubTitleTextEczar" parent="TextAppearance.AppCompat.Title">
         <item name="android:textSize">@dimen/text_sub_title_size</item>
         <item name="android:fontFamily">@font/eczar_medium</item>
+    </style>
+
+    <style name="SubTitleTextDosis">
+        <item name="android:textSize">@dimen/text_sub_title_size</item>
+        <item name="android:fontFamily">@font/dosis</item>
     </style>
 
     <style name="CaptionText">
@@ -53,19 +68,29 @@
         <item name="android:fontFamily">@font/dosis</item>
     </style>
 
+    <style name="ButtonTextEczar" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="fontFamily">@font/eczar</item>
+        <item name="android:textSize">@dimen/text_size_normal</item>
+    </style>
+
     <style name="DateTimeAppearance">
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">@dimen/text_size_normal</item>
         <item name="android:fontFamily">@font/eczar_medium</item>
     </style>
 
     <style name="ProfileTitleLight">
-        <item name="android:textSize">24sp</item>
-        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textSize">@dimen/text_title_size</item>
+        <item name="android:fontFamily">@font/marcellus</item>
     </style>
 
     <style name="ProfileSubTitleLight">
-        <item name="android:textSize">14sp</item>
-        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textSize">@dimen/text_size_normal</item>
+        <item name="android:fontFamily">@font/marcellus</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
 

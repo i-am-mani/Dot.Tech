@@ -2,6 +2,7 @@
 <resources>
     <array name="preloaded_fonts" translatable="false">
         <item>@font/dosis</item>
+        <item>@font/eczar</item>
         <item>@font/eczar_medium</item>
     </array>
 </resources>

@@ -78,7 +78,7 @@
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/event_details"
-        android:name="com.omega.dottech2k20.Fragments.FragmentEventDetails"
+        android:name="com.omega.dottech2k20.Fragments.EventDetailsFragment"
         android:label="Event Details">
         <argument
             android:name="event"

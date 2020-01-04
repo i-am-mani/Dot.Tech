@@ -16,5 +16,8 @@
     <color name="MaterialGray">#000000</color>
     <color name="Danger">#C62828</color>
     <color name="DangerLightText">#EF9A9A</color>
+    <color name="Blue100">#BBDEFB</color>
+    <color name="Blue800">#1565C0</color>
+    <color name="Blue400">#42A5F5</color>
 
 </resources>
