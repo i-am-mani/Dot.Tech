@@ -128,7 +128,7 @@ class ProfileFragment : Fragment() {
 	private fun viewDetails(events: Event) {
 		findNavController().navigate(
 			R.id.event_details,
-			bundleOf(FragmentEventDetails.EVENT_KEY to events)
+			bundleOf(EventDetailsFragment.EVENT_KEY to events)
 		)
 	}
 
