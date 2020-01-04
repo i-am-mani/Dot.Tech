@@ -82,7 +82,7 @@
         android:label="Event Details">
         <argument
             android:name="event"
-            app:argType="com.omega.dottech2k20.Models.Event" />
+            app:argType="com.omega.dottech2k20.models.Event" />
         <action
             android:id="@+id/action_fragment_event_details_to_eventsFragment"
             app:destination="@id/eventsFragment" />
@@ -105,7 +105,7 @@
         tools:layout="@layout/fragment_event_participants">
         <argument
             android:name="event"
-            app:argType="com.omega.dottech2k20.Models.Event" />
+            app:argType="com.omega.dottech2k20.models.Event" />
     </fragment>
     <fragment
         android:id="@+id/FAQFragment"
@@ -138,6 +138,6 @@
         tools:layout="@layout/fragment_notification_detail">
         <argument
             android:name="Notification"
-            app:argType="com.omega.dottech2k20.Models.Notification" />
+            app:argType="com.omega.dottech2k20.models.Notification" />
     </fragment>
 </navigation>
