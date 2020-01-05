@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.omega.dottech2k20.MainActivity
 import com.omega.dottech2k20.R
@@ -42,6 +43,7 @@ class SignInFragment : Fragment() {
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		btn_sign_in.setOnClickListener { signInUser(it) }
+		btn_switch_to_sign_up.setOnClickListener { switchToSignUp(it) }
 	}
 
 	fun signInUser(view: View?) {
@@ -62,7 +64,9 @@ class SignInFragment : Fragment() {
 		}
 	}
 
-	fun switchToSignUp(view: View?) {}
+	fun switchToSignUp(view: View?) {
+		findNavController().navigate(R.id.signUpFragment)
+	}
 
 	private fun isDataValid(): Boolean {
 		val email: String = et_login_email.text.toString()
