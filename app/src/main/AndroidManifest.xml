@@ -11,8 +11,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".MainActivity"
-            android:windowSoftInputMode="adjustPan"></activity>
+        <activity
+            android:name=".MainActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".SignOutActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".StartUpActivity"
             >
             <intent-filter>
