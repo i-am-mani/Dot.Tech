@@ -29,7 +29,7 @@
                 android:layout_gravity="top"
                 android:layout_marginTop="16dp"
                 android:gravity="center"
-                android:textAppearance="@style/NormalText"
+                android:textAppearance="@style/NormalTextRubik"
                 android:textStyle="bold"
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"

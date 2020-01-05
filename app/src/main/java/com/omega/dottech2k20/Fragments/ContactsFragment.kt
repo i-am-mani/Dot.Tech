@@ -21,9 +21,7 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import kotlinx.android.synthetic.main.fragment_contacts.*
 
-/**
- * A simple [Fragment] subclass.
- */
+
 class ContactsFragment : Fragment() {
 
 
@@ -50,6 +48,9 @@ class ContactsFragment : Fragment() {
 				val contactItems: List<ContactItem> = getContactItems(it)
 				if (mAdapter.itemCount == 0) {
 					mAdapter.addAll(contactItems)
+					card_header_icon.visibility = View.VISIBLE
+					rv_contacts.visibility = View.VISIBLE
+					pb_contacsts.visibility = View.GONE
 				} else {
 					mAdapter.update(contactItems)
 				}
@@ -80,12 +81,12 @@ class ContactsFragment : Fragment() {
 		rv_contacts.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 			override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
 				super.onScrolled(recyclerView, dx, dy)
-				val view = recyclerView.getChildAt(0)
-				if (view != null && recyclerView.getChildAdapterPosition(view) === 0) {
+				val child = recyclerView.getChildAt(0)
+				if (child != null && recyclerView.getChildAdapterPosition(child) == 0) {
 					val card = card_header_icon
-					Log.d(TAG, "view.top = ${view.top}")
+					Log.d(TAG, "view.top = ${child.top}")
 					// Basically we are moving against the scroll, applying same magnitude of scroll on opposite direction
-					card.translationX = -((view.top) - 200) / 1f
+					card.translationX = -((child.top) - 200) / 1f
 				}
 			}
 		})
