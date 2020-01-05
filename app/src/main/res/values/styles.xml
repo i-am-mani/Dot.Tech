@@ -68,6 +68,11 @@
         <item name="android:fontFamily">@font/dosis</item>
     </style>
 
+    <style name="NormalTextRubik" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textSize">@dimen/text_size_normal</item>
+        <item name="android:fontFamily">@font/rubik</item>
+    </style>
+
     <style name="ButtonTextEczar" parent="TextAppearance.MaterialComponents.Body1">
         <item name="fontFamily">@font/eczar</item>
         <item name="android:textSize">@dimen/text_size_normal</item>
@@ -80,12 +85,12 @@
 
     <style name="ProfileTitleLight">
         <item name="android:textSize">@dimen/text_title_size</item>
-        <item name="android:fontFamily">@font/marcellus</item>
+        <item name="android:fontFamily">@font/rubik</item>
     </style>
 
     <style name="ProfileSubTitleLight">
         <item name="android:textSize">@dimen/text_size_normal</item>
-        <item name="android:fontFamily">@font/marcellus</item>
+        <item name="android:fontFamily">@font/rubik</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

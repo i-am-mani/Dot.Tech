@@ -28,10 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:layout_marginTop="-1dp"
-                android:layout_weight="9"
-                android:fontFamily="@font/marcellus"
-                android:textAppearance="@style/SubTitleTextMarcellus"
+                android:textAppearance="@style/SubTitleTextRubik"
                 tools:text="How are you ?" />
 
             <ImageButton

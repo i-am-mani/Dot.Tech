@@ -50,7 +50,7 @@ class WelcomeScreenFragment : Fragment() {
 			tempTV.apply {
 				gravity = Gravity.CENTER
 				text = i
-				setTextAppearance(R.style.TitleTextMarcellus)
+				setTextAppearance(R.style.TitleTextRubik)
 				setTextSize(TypedValue.COMPLEX_UNIT_SP, 32f)
 				alpha = 0f
 			}
