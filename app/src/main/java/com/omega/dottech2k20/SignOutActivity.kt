@@ -13,7 +13,7 @@ class SignOutActivity : AppCompatActivity() {
 		actionBar?.hide()
 
 		Handler(mainLooper).postDelayed({
-			val mainAppIntent = Intent(this, MainActivity::class.java)
+			val mainAppIntent = Intent(this, StartUpActivity::class.java)
 			startActivity(mainAppIntent)
 			finish()
 		}, 1000)
