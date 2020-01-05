@@ -44,7 +44,7 @@
     <fragment
         android:id="@+id/signUpFragment"
         android:name="com.omega.dottech2k20.Fragments.SignUpFragment"
-        android:label="Sign Up">
+        android:label="Authentication">
         <action
             android:id="@+id/action_signUpFragment_to_signInFragment"
             app:destination="@id/signInFragment" />
@@ -52,7 +52,7 @@
     <fragment
         android:id="@+id/signInFragment"
         android:name="com.omega.dottech2k20.Fragments.SignInFragment"
-        android:label="Sign In">
+        android:label="Authentication">
         <action
             android:id="@+id/action_signInFragment_to_signUpFragment"
             app:destination="@id/signUpFragment" />
@@ -60,7 +60,6 @@
     <fragment
         android:id="@+id/signOutFragment"
         android:name="com.omega.dottech2k20.Fragments.SignOutFragment"
-        android:label="fragment_sign_out"
         tools:layout="@layout/fragment_sign_out" />
     <fragment
         android:id="@+id/notificationsFragment"
