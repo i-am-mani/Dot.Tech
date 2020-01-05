@@ -1,9 +1,6 @@
 package com.omega.dottech2k20.Utils
 
-import android.app.Activity
-import android.content.Context
 import android.util.Log
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
@@ -32,7 +29,15 @@ class AuthenticationUtils {
 		 *  @param callback Function would be executed when the process finishes successfully or fails
 		 *
 		 */
-		fun createNewUser(user: FirebaseUser,id:String,fullName: String,email: String,phone: String,password: String,callback: (Boolean,Exception?)-> Unit) {
+		private fun createNewUser(
+			user: FirebaseUser,
+			id: String,
+			fullName: String,
+			email: String,
+			phone: String,
+			password: String,
+			callback: (Boolean, Exception?) -> Unit
+		) {
 			val firestore = FirebaseFirestore.getInstance()
 			val userObject = User(id, fullName, email, phone)
 			val users: Task<Void> =
@@ -50,7 +55,10 @@ class AuthenticationUtils {
 			}
 		}
 
-		fun registerNewUser(fullName: String,email: String,phone: String,password: String,callback: (Boolean,Exception?)-> Unit) {
+		/**
+		 * Creates user with given credentials and send email verification mail
+		 */
+		fun registerNewUser(fullName: String, email: String, phone: String, password: String, callback: (Boolean, Exception?)-> Unit) {
 			val authTask: Task<AuthResult> = mAuth.createUserWithEmailAndPassword(email, password)
 			authTask.addOnCompleteListener{
 				if(it.isSuccessful){
@@ -70,7 +78,14 @@ class AuthenticationUtils {
 			}
 		}
 
-
+		/**
+		 * Signs in User with provided details.
+		 *
+		 * @param email User email
+		 * @param password User password
+		 * @param callback Function with Boolean as first parameter indicating success or failure
+		 * 					Exception is seconds parameter, if any.
+		 */
 		fun signInUser(email: String,password: String,callback: (Boolean, Exception?) -> Unit) {
 			val task: Task<AuthResult> = mAuth.signInWithEmailAndPassword(email, password)
 			task.addOnCompleteListener{if(it.isSuccessful){
@@ -96,16 +111,6 @@ class AuthenticationUtils {
 					}
 				}
 			}
-		}
-
-		fun verifyCurrentUserEmail(context: Context, listener: OnCompleteListener<Void>) {
-			val currentUser = currentUser
-			if (currentUser == null) {
-				Log.d(TAG, "Current user is Null")
-				return
-			}
-
-			currentUser.sendEmailVerification().addOnCompleteListener(context as Activity, listener)
 		}
 
 		val currentUser: FirebaseUser?
