@@ -6,4 +6,5 @@
     <dimen name="medium_progress_bar">120dp</dimen>
     <dimen name="item_sponsers_image_height">160dp</dimen>
     <dimen name="event_details_image_card_height">200dp</dimen>
+    <dimen name="authentication_header_image_height">200dp</dimen>
 </resources>
