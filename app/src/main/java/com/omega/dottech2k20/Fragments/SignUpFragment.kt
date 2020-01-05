@@ -7,13 +7,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.omega.dottech2k20.MainActivity
 import com.omega.dottech2k20.R
 import com.omega.dottech2k20.Utils.AuthenticationUtils
 import com.omega.dottech2k20.Utils.Utils
+import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.fragment_sign_up.*
 
 class SignUpFragment : Fragment() {
@@ -41,14 +42,13 @@ class SignUpFragment : Fragment() {
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		btn_sign_up.setOnClickListener{signUp(it)}
+		btn_sign_up.setOnClickListener { signUp(it) }
+		btn_switch_to_sign_in.setOnClickListener { findNavController().navigate(R.id.signInFragment) }
 	}
 
 	fun signUp(view: View?) {
-
-		progress_bar_sign_up?.visibility = View.VISIBLE
-
 		if (isDataValid()) {
+			progress_bar_sign_up?.visibility = View.VISIBLE
 			val email = et_sign_up_email.text.toString()
 			val password = et_sign_up_password1.text.toString()
 			val fullName = et_sign_up_full_name.text.toString()
@@ -57,14 +57,11 @@ class SignUpFragment : Fragment() {
 				fullName,
 				email,
 				phone,
-				password, this::onRegistrationCompletionCallBack)
+				password, this::onRegistrationCompletionCallBack
+			)
 		} else {
 			Log.d(TAG, "signUp: Data is invalid")
-			Toast.makeText(
-				context,
-				"Data Provided is Invalid!",
-				Toast.LENGTH_SHORT
-			).show()
+			context?.let { Toasty.warning(it, "Data Provided is Invalid!").show() }
 		}
 	}
 
@@ -84,20 +81,19 @@ class SignUpFragment : Fragment() {
 
 	private fun highlightEmptyFields() {}
 
-	private fun onRegistrationCompletionCallBack(state: Boolean, exception: Exception?){
-		when(state){
-			true -> {
-				if(progress_bar_sign_up != null){
-					progress_bar_sign_up.visibility = View.INVISIBLE
-					progress_bar_sign_up.findNavController().popBackStack()
-					progress_bar_sign_up.findNavController().navigate(R.id.eventsFragment)
-				}
-				Toast.makeText(
-					context,
-					"Account has been created and Login Successful",
-					Toast.LENGTH_SHORT
-				).show()
-				mActivity.setNavigationMenuItems()
+	private fun onRegistrationCompletionCallBack(state: Boolean, exception: Exception?) {
+		progress_bar_sign_up.visibility = View.INVISIBLE
+		if (state) {
+			progress_bar_sign_up.findNavController().popBackStack()
+			progress_bar_sign_up.findNavController().navigate(R.id.eventsFragment)
+
+			context?.let {
+				Toasty.success(it, "Account has been created and Login Successful").show()
+			}
+			mActivity.setNavigationMenuItems()
+		} else {
+			context?.let {
+				Toasty.error(it, "Failed to create account").show()
 			}
 		}
 	}
