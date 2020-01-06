@@ -33,18 +33,20 @@ class EventTeamsFragment : Fragment() {
 	private lateinit var mAdapter: GroupAdapter<GroupieViewHolder>
 	private lateinit var mViewModel: UserEventViewModel
 	private lateinit var mEvent: Event
+	private var isJoinEnabled: Boolean? = null
 
 	override fun onCreateView(
 		inflater: LayoutInflater, container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View? {
 		mAdapter = GroupAdapter()
-		extractEvent()
+		extractArguments()
 		return inflater.inflate(R.layout.fragment_event_teams, container, false)
 	}
 
 	private fun initRV() {
 		rv_teams.adapter = mAdapter
+		rv_teams.itemAnimator = null // To prevent blinking of RV
 		rv_teams.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 	}
 
@@ -86,10 +88,20 @@ class EventTeamsFragment : Fragment() {
 
 	private fun getTeamItems(eventTeams: List<Team>): List<TeamItem> {
 		val listOfItems = mutableListOf<TeamItem>()
-		context?.let { ctx ->
-			for (team in eventTeams) {
-				val teamItem = TeamItem(ctx, team, ::deleteTeam, ::removeTeammate, ::addUserToTeam)
-				listOfItems.add(teamItem)
+		isJoinEnabled?.let { isJoin ->
+			context?.let { ctx ->
+				for (team in eventTeams) {
+					val teamItem = TeamItem(
+						ctx,
+						team,
+						isJoin,
+						mEvent.registrationOpen,
+						::deleteTeam,
+						::removeTeammate,
+						::addUserToTeam
+					)
+					listOfItems.add(teamItem)
+				}
 			}
 		}
 		return listOfItems
@@ -123,10 +135,12 @@ class EventTeamsFragment : Fragment() {
 	/**
 	 * Will store the event in global mEvent variable, in case it's null, Navigate back to Events
 	 */
-	private fun extractEvent() {
+	private fun extractArguments() {
 		val event = arguments?.getParcelable<Event>(EVENT_KEY)
-		if (event != null) {
+		val joinEnabled = arguments?.getBoolean(JOIN_ENABLED_KEY)
+		if (event != null && joinEnabled != null) {
 			mEvent = event
+			isJoinEnabled = joinEnabled
 		} else {
 			Log.e(TAG, "Null Event Passed", NullPointerException())
 			findNavController().navigate(R.id.eventsFragment)
@@ -135,6 +149,7 @@ class EventTeamsFragment : Fragment() {
 
 
 	companion object {
+		val JOIN_ENABLED_KEY = "isUserPartOfTeam"
 		val EVENT_KEY = "event"
 	}
 }
