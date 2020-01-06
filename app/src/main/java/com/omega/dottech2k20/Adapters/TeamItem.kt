@@ -7,6 +7,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.omega.dottech2k20.R
 import com.omega.dottech2k20.Utils.AuthenticationUtils
 import com.omega.dottech2k20.dialogs.BinaryDialog
+import com.omega.dottech2k20.dialogs.SingleTextFieldDialog
 import com.omega.dottech2k20.models.Team
 import com.omega.dottech2k20.models.Teammate
 import com.xwray.groupie.GroupAdapter
@@ -64,7 +65,7 @@ class TeamItem(
 	) {
 		for (teammate in teammates) {
 			// if join is disabled then leave team is not permitted
-			if (currentUser?.uid == teammate.id && isUserPartOfTeam && !userCreator) {
+			if (currentUser?.uid == teammate.id && isUserPartOfTeam && userCreator) {
 				btn_join.visibility = View.GONE
 				btn_leave.visibility = View.VISIBLE
 			}
@@ -91,19 +92,31 @@ class TeamItem(
 	}
 
 	private fun GroupieViewHolder.setJoinTeamCallback(
-		name: String?,
+		teamName: String,
 		id: String,
 		userCreator: Boolean
 	) {
-		if (userCreator || !isUserPartOfTeam) {
+		if (userCreator || isUserPartOfTeam) {
 			btn_join.visibility = View.GONE
 		} else {
 			btn_join.visibility = View.VISIBLE
 			btn_join.setOnClickListener {
-				BinaryDialog(context, R.layout.dialog_event_confirmation).apply {
-					title = "Join $name ?"
-					rightButtonCallback = { onJoinTeamCallback(id) }
-					build()
+				val passcode = mTeam.passcode
+				if (passcode != null) {
+					SingleTextFieldDialog(context).apply {
+						title = "Join Team?"
+						name = teamName
+						minQueryFieldLines = 1
+						hint = "Enter Passcode"
+						onSubmit = { name: String, query: String ->
+							if (query == passcode) {
+								onJoinTeamCallback(id)
+							}
+						}
+						build()
+					}
+				} else {
+					Toasty.warning(context, "Invalid Passcode")
 				}
 			}
 		}
