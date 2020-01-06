@@ -3,8 +3,10 @@ package com.omega.dottech2k20.Adapters
 import android.content.Context
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.firebase.auth.FirebaseUser
 import com.omega.dottech2k20.R
 import com.omega.dottech2k20.Utils.AuthenticationUtils
+import com.omega.dottech2k20.dialogs.BinaryDialog
 import com.omega.dottech2k20.models.Team
 import com.omega.dottech2k20.models.Teammate
 import com.xwray.groupie.GroupAdapter
@@ -23,7 +25,9 @@ import kotlinx.android.synthetic.main.item_teammate.*
  */
 class TeamItem(
 	val context: Context,
-	val mTeam: Team,
+	private val mTeam: Team,
+	private val isUserPartOfTeam: Boolean, // If user is part of the event
+	val isRegistrationOpen: Boolean, // If users can join
 	val onDeleteTeamCallback: (teamId: String) -> Unit,
 	private val onRemoveTeammateCallback: (teammate: Teammate) -> Unit,
 	val onJoinTeamCallback: (teamId: String) -> Unit
@@ -31,17 +35,21 @@ class TeamItem(
 
 	override fun bind(viewHolder: GroupieViewHolder, position: Int) {
 		viewHolder.apply {
+			val currentUser = AuthenticationUtils.currentUser
 			val (id, name, creator, passcode, teammates) = mTeam
-			if (id != null && name != null && creator != null && passcode != null && teammates != null) {
+			if (id != null && name != null && creator != null && passcode != null) {
 				tv_team_name.text = name
-				imbtn_remove_team.setOnClickListener {
-					// TODO Show warning Dialog
-					onDeleteTeamCallback(id)
+				val isUserCreator = currentUser?.uid.equals(creator)
+				setDeleteTeamCallback(name, id, isUserCreator)
+				setJoinTeamCallback(name, id, isUserCreator)
+				setLeaveTeamCallback(teammates, currentUser, isUserCreator)
+				// Show Remove teammate option only if user is creator and registration is open
+				initTeammatesRV(viewHolder, isUserCreator && isRegistrationOpen)
+				if (!isRegistrationOpen) {
+					imbtn_remove_team.visibility = View.GONE
+					btn_leave.visibility = View.GONE
+					btn_join.visibility = View.GONE
 				}
-				btn_join.setOnClickListener {
-					onJoinTeamCallback(id)
-				}
-				initTeammatesRV(viewHolder)
 			} else {
 				Toasty.info(context, "NO Teams to display")
 				// Change visibility of card
@@ -49,9 +57,64 @@ class TeamItem(
 		}
 	}
 
-	private fun initTeammatesRV(viewHolder: GroupieViewHolder) {
+	private fun GroupieViewHolder.setLeaveTeamCallback(
+		teammates: List<Teammate>,
+		currentUser: FirebaseUser?,
+		userCreator: Boolean
+	) {
+		for (teammate in teammates) {
+			// if join is disabled then leave team is not permitted
+			if (currentUser?.uid == teammate.id && isUserPartOfTeam && !userCreator) {
+				btn_join.visibility = View.GONE
+				btn_leave.visibility = View.VISIBLE
+			}
+		}
+	}
+
+	private fun GroupieViewHolder.setDeleteTeamCallback(
+		name: String?,
+		id: String,
+		userCreator: Boolean
+	) {
+		if (userCreator) {
+			imbtn_remove_team.visibility = View.VISIBLE
+			imbtn_remove_team.setOnClickListener {
+				BinaryDialog(context, R.layout.dialog_event_confirmation).apply {
+					title = "Delete $name ?"
+					description =
+						"you won't be able to create another team for this event for next 12 Hours"
+					rightButtonCallback = { onDeleteTeamCallback(id) }
+					build()
+				}
+			}
+		}
+	}
+
+	private fun GroupieViewHolder.setJoinTeamCallback(
+		name: String?,
+		id: String,
+		userCreator: Boolean
+	) {
+		if (userCreator || !isUserPartOfTeam) {
+			btn_join.visibility = View.GONE
+		} else {
+			btn_join.visibility = View.VISIBLE
+			btn_join.setOnClickListener {
+				BinaryDialog(context, R.layout.dialog_event_confirmation).apply {
+					title = "Join $name ?"
+					rightButtonCallback = { onJoinTeamCallback(id) }
+					build()
+				}
+			}
+		}
+	}
+
+	private fun initTeammatesRV(
+		viewHolder: GroupieViewHolder,
+		isRemoveEnabled: Boolean
+	) {
 		val adapter = GroupAdapter<com.xwray.groupie.GroupieViewHolder>()
-		adapter.addAll(getTeammateItems())
+		adapter.addAll(getTeammateItems(isRemoveEnabled))
 		viewHolder.apply {
 			rv_teammates.adapter = adapter
 			rv_teammates.layoutManager =
@@ -60,12 +123,12 @@ class TeamItem(
 
 	}
 
-	private fun getTeammateItems(): List<TeammateItem> {
+	private fun getTeammateItems(removeEnabled: Boolean): List<TeammateItem> {
 		val listOfItems = mutableListOf<TeammateItem>()
 		for (teammate in mTeam.teammates) {
 			val creatorsId = mTeam.creator
 			if (creatorsId != null) {
-				val item = TeammateItem(teammate, creatorsId, onRemoveTeammateCallback)
+				val item = TeammateItem(teammate, removeEnabled, onRemoveTeammateCallback)
 				listOfItems.add(item)
 			}
 		}
@@ -76,9 +139,9 @@ class TeamItem(
 		return R.layout.item_team
 	}
 
-	class TeammateItem(
+	inner class TeammateItem(
 		private val teammate: Teammate,
-		private val creatorsId: String,
+		private val isRemoveTeammateEnabled: Boolean,
 		val onRemoveTeammateCallback: (teammate: Teammate) -> Unit
 	) : Item() {
 		override fun bind(viewHolder: GroupieViewHolder, position: Int) {
@@ -88,7 +151,7 @@ class TeamItem(
 				if (id != null && name != null && user != null) {
 					tv_teammate_name.text = name
 
-					if (user.uid == creatorsId || user.uid == id) {
+					if (isRemoveTeammateEnabled) {
 						imbtn_remove_teammate.visibility = View.VISIBLE
 						imbtn_remove_teammate.setOnClickListener { onRemoveTeammateCallback(teammate) }
 					}
