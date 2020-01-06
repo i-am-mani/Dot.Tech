@@ -13,7 +13,11 @@ import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.omega.dottech2k20.Utils.FirestoreFieldNames.EVENT_COLLECTION
+import com.omega.dottech2k20.Utils.FirestoreFieldNames.EVENT_PARTICIPANTS_COUNT_FIELD
 import com.omega.dottech2k20.Utils.FirestoreFieldNames.EVENT_TEAM_COLLECTION
+import com.omega.dottech2k20.Utils.FirestoreFieldNames.TEAMMATES_FIELD
+import com.omega.dottech2k20.Utils.FirestoreFieldNames.USERS_EVENT_FIELD
+import com.omega.dottech2k20.Utils.FirestoreFieldNames.USER_COLLECTION
 import es.dmoral.toasty.Toasty
 import java.util.*
 
@@ -471,6 +475,82 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 					Toasty.error(getApplication(), "Failed to remove teammate from Team")
 				}
 			}
+	}
+
+	fun joinTeam(event: Event, team: String) {
+		val user: User? = mUserProfileLiveData.value
+		if (user == null) {
+			val uid = mFireAuth.currentUser?.uid ?: return
+
+			val document: DocumentReference = mFirestore.collection("Users").document(uid)
+			document.get().addOnCompleteListener { task ->
+				if (task.isSuccessful) {
+					// Check of nullability
+					task.result?.let { documentSnapshot ->
+						documentSnapshot.toObject(User::class.java)?.let {
+							mUserProfileLiveData.value = it
+							addUserToTeam(event, team, it)
+						}
+					}
+
+					Toast.makeText(
+						getApplication(),
+						"Joining Event Successfull",
+						Toast.LENGTH_SHORT
+					).show()
+
+				} else {
+					Log.e(TAG, "Failed To get User : ", task.exception)
+				}
+			}
+		} else {
+			addUserToTeam(event, team, user)
+		}
+	}
+
+	private fun addUserToTeam(event: Event, tid: String, user: User) {
+		val eid = event.id
+		val uid = user.id
+		val fullName = user.fullName
+
+		if (eid != null && uid != null && fullName != null) {
+			val updateTeammateQuery =
+				mFirestore.collection(EVENT_COLLECTION).document(eid).collection(
+					EVENT_TEAM_COLLECTION
+				).document(tid)
+			val updateUserQuery = mFirestore.collection(USER_COLLECTION).document(uid)
+			val updateParticipantsCountQuery = mFirestore.collection(EVENT_COLLECTION).document(eid)
+
+			val ids = Ids(eid, tid)
+			val teammate = Teammate(uid, fullName)
+
+			mFirestore.runBatch { batch ->
+				// Add teammate
+				batch.update(
+					updateTeammateQuery,
+					FieldPath.of(TEAMMATES_FIELD),
+					FieldValue.arrayUnion(teammate)
+				)
+				// Add ids to user's `events` field
+				batch.update(
+					updateUserQuery,
+					FieldPath.of(USERS_EVENT_FIELD),
+					FieldValue.arrayUnion(ids)
+				)
+				// update participant's counter
+				batch.update(
+					updateParticipantsCountQuery, FieldPath.of(
+						EVENT_PARTICIPANTS_COUNT_FIELD
+					), FieldValue.increment(1)
+				)
+			}.addOnCompleteListener {
+				if (it.isSuccessful) {
+					Toasty.success(getApplication(), "Joining Team Successful").show()
+				} else {
+					Toasty.error(getApplication(), "Joining Team Failed").show()
+				}
+			}
+		}
 	}
 
 

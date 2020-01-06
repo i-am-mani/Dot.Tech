@@ -65,7 +65,7 @@ class TeamItem(
 	) {
 		for (teammate in teammates) {
 			// if join is disabled then leave team is not permitted
-			if (currentUser?.uid == teammate.id && isUserPartOfTeam && userCreator) {
+			if (currentUser?.uid == teammate.id && isUserPartOfTeam && !userCreator) {
 				btn_join.visibility = View.GONE
 				btn_leave.visibility = View.VISIBLE
 			}

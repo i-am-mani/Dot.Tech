@@ -65,6 +65,17 @@ class EventTeamsFragment : Fragment() {
 	override fun onActivityCreated(savedInstanceState: Bundle?) {
 		super.onActivityCreated(savedInstanceState)
 		mViewModel = ViewModelProviders.of(mActivity).get(UserEventViewModel::class.java)
+		mViewModel.getUserProfile()?.observe(this, Observer { user ->
+			if (user != null) {
+				isUserPartOfTeam = user.events.find {
+					it.eventId == mEvent.id
+				} != null
+				setTeamsObserver()
+			}
+		})
+	}
+
+	private fun setTeamsObserver() {
 		mEvent.id?.let { eid ->
 			mViewModel.getTeamsOfEvent(eid).observe(this, Observer { teams ->
 				if (teams != null) {
@@ -117,7 +128,8 @@ class EventTeamsFragment : Fragment() {
 	}
 
 	private fun addUserToTeam(teamId: String) {
-		// TODO implement user addition to team
+		mViewModel.joinTeam(mEvent, teamId)
+		findNavController().navigate(R.id.eventsFragment)
 	}
 
 	private fun addFABCallback() {
@@ -138,11 +150,9 @@ class EventTeamsFragment : Fragment() {
 	 */
 	private fun extractArguments() {
 		val event = arguments?.getParcelable<Event>(EVENT_KEY)
-		val partOfTeam = arguments?.getBoolean(IS_USER_PART_OF_TEAM)
 		val readOnly = arguments?.getBoolean(READ_ONLY) ?: false
-		if (event != null && partOfTeam != null) {
+		if (event != null) {
 			mEvent = event
-			isUserPartOfTeam = partOfTeam
 			isReadOnly = readOnly
 		} else {
 			Log.e(TAG, "Null Event Passed", NullPointerException())
@@ -152,7 +162,6 @@ class EventTeamsFragment : Fragment() {
 
 
 	companion object {
-		val IS_USER_PART_OF_TEAM = "isUserPartOfTeam"
 		val READ_ONLY = "readOnly"
 		val EVENT_KEY = "event"
 	}

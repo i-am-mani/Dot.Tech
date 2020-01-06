@@ -193,14 +193,10 @@ class EventsFragment : Fragment() {
 								EventCallbacks.join(ctx, event, findNavController(), mViewModel)
 							}
 							event.type == FirestoreFieldNames.EVENT_TYPE_TEAM -> {
-								val isJoinEnabled = mUserEventList?.find {
-									it.id == event.id
-								} == null
 								findNavController().navigate(
 									R.id.eventTeamsFragment,
 									bundleOf(
 										EventTeamsFragment.EVENT_KEY to event,
-										EventTeamsFragment.IS_USER_PART_OF_TEAM to isJoinEnabled,
 										EventTeamsFragment.READ_ONLY to false
 									)
 								)
@@ -219,8 +215,18 @@ class EventsFragment : Fragment() {
 		val event: Event? = getEventAtPos(activeCard)
 		event?.let {
 			btn_unjoin.setOnClickListener {
-				context?.let {
-					EventCallbacks.leave(it, event, mViewModel)
+				if (event.type == FirestoreFieldNames.EVENT_TYPE_INDIVIDUAL) {
+					context?.let {
+						EventCallbacks.leave(it, event, mViewModel)
+					}
+				} else if (event.type == FirestoreFieldNames.EVENT_TYPE_TEAM) {
+					findNavController().navigate(
+						R.id.eventTeamsFragment,
+						bundleOf(
+							EventTeamsFragment.EVENT_KEY to event,
+							EventTeamsFragment.READ_ONLY to false
+						)
+					)
 				}
 			}
 		}
