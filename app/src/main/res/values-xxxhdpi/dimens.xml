@@ -2,7 +2,7 @@
 <resources>
     <item name="event_card_width" type="dimen">180dp</item>
     <dimen name="startup_dialog_icon_card">110dp</dimen>
-    <dimen name="startup_dialog_icon_card_corner_radius">70dp</dimen>
+    <dimen name="startup_dialog_icon_card_corner_radius">55dp</dimen>
     <dimen name="medium_progress_bar">150dp</dimen>
     <dimen name="item_sponsers_image_height">200dp</dimen>
     <dimen name="event_details_image_card_height">260dp</dimen>

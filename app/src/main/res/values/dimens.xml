@@ -15,13 +15,13 @@
 
     <dimen name="card_corner_radius">10dp</dimen>
 
-    <dimen name="icon_dialog_start_up_header_width">100dp</dimen>
-    <dimen name="icon_dialog_start_up_header_height">100dp</dimen>
-    <dimen name="icon_card_medium">100dp</dimen>
     <dimen name="icon_small">30dp</dimen>
-    <dimen name="icon_card_medium_corner_radius">35dp</dimen>
+
     <dimen name="event_card_width">150dp</dimen>
+
     <dimen name="startup_dialog_icon_card_corner_radius">40dp</dimen>
+    <dimen name="startup_dialog_icon_card">90dp</dimen>
+
     <dimen name="large_progress_bar">150dp</dimen>
     <dimen name="item_sponsers_image_height">150dp</dimen>
     <dimen name="event_details_image_card_height">200dp</dimen>
