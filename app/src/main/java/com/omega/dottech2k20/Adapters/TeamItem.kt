@@ -27,7 +27,7 @@ class TeamItem(
 	val context: Context,
 	private val mTeam: Team,
 	private val isUserPartOfTeam: Boolean, // If user is part of the event
-	val isRegistrationOpen: Boolean, // If users can join
+	private val isReadOnly: Boolean, // Do not allow any actions on Team
 	val onDeleteTeamCallback: (teamId: String) -> Unit,
 	private val onRemoveTeammateCallback: (teammate: Teammate) -> Unit,
 	val onJoinTeamCallback: (teamId: String) -> Unit
@@ -44,8 +44,8 @@ class TeamItem(
 				setJoinTeamCallback(name, id, isUserCreator)
 				setLeaveTeamCallback(teammates, currentUser, isUserCreator)
 				// Show Remove teammate option only if user is creator and registration is open
-				initTeammatesRV(viewHolder, isUserCreator && isRegistrationOpen)
-				if (!isRegistrationOpen) {
+				initTeammatesRV(viewHolder, isUserCreator && !isReadOnly)
+				if (isReadOnly) {
 					imbtn_remove_team.visibility = View.GONE
 					btn_leave.visibility = View.GONE
 					btn_join.visibility = View.GONE

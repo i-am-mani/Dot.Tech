@@ -28,12 +28,13 @@ import kotlinx.android.synthetic.main.fragment_event_teams.*
 
 class EventTeamsFragment : Fragment() {
 
+	private var isReadOnly: Boolean? = null
 	private val TAG = javaClass.simpleName
 	private lateinit var mActivity: MainActivity
 	private lateinit var mAdapter: GroupAdapter<GroupieViewHolder>
 	private lateinit var mViewModel: UserEventViewModel
 	private lateinit var mEvent: Event
-	private var isJoinEnabled: Boolean? = null
+	private var isUserPartOfTeam: Boolean? = null
 
 	override fun onCreateView(
 		inflater: LayoutInflater, container: ViewGroup?,
@@ -88,14 +89,14 @@ class EventTeamsFragment : Fragment() {
 
 	private fun getTeamItems(eventTeams: List<Team>): List<TeamItem> {
 		val listOfItems = mutableListOf<TeamItem>()
-		isJoinEnabled?.let { isJoin ->
+		isUserPartOfTeam?.let { isJoin ->
 			context?.let { ctx ->
 				for (team in eventTeams) {
 					val teamItem = TeamItem(
 						ctx,
 						team,
 						isJoin,
-						mEvent.registrationOpen,
+						isReadOnly ?: false,
 						::deleteTeam,
 						::removeTeammate,
 						::addUserToTeam
@@ -137,10 +138,12 @@ class EventTeamsFragment : Fragment() {
 	 */
 	private fun extractArguments() {
 		val event = arguments?.getParcelable<Event>(EVENT_KEY)
-		val joinEnabled = arguments?.getBoolean(JOIN_ENABLED_KEY)
-		if (event != null && joinEnabled != null) {
+		val partOfTeam = arguments?.getBoolean(IS_USER_PART_OF_TEAM)
+		val readOnly = arguments?.getBoolean(READ_ONLY) ?: false
+		if (event != null && partOfTeam != null) {
 			mEvent = event
-			isJoinEnabled = joinEnabled
+			isUserPartOfTeam = partOfTeam
+			isReadOnly = readOnly
 		} else {
 			Log.e(TAG, "Null Event Passed", NullPointerException())
 			findNavController().navigate(R.id.eventsFragment)
@@ -149,7 +152,8 @@ class EventTeamsFragment : Fragment() {
 
 
 	companion object {
-		val JOIN_ENABLED_KEY = "isUserPartOfTeam"
+		val IS_USER_PART_OF_TEAM = "isUserPartOfTeam"
+		val READ_ONLY = "readOnly"
 		val EVENT_KEY = "event"
 	}
 }

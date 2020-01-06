@@ -189,14 +189,20 @@ class EventsFragment : Fragment() {
 					val event = getEventAtPos(activeCard)
 					event?.let {
 						when {
-
 							event.type == FirestoreFieldNames.EVENT_TYPE_INDIVIDUAL -> {
 								EventCallbacks.join(ctx, event, findNavController(), mViewModel)
 							}
 							event.type == FirestoreFieldNames.EVENT_TYPE_TEAM -> {
+								val isJoinEnabled = mUserEventList?.find {
+									it.id == event.id
+								} == null
 								findNavController().navigate(
 									R.id.eventTeamsFragment,
-									bundleOf(EventTeamsFragment.EVENT_KEY to event)
+									bundleOf(
+										EventTeamsFragment.EVENT_KEY to event,
+										EventTeamsFragment.IS_USER_PART_OF_TEAM to isJoinEnabled,
+										EventTeamsFragment.READ_ONLY to false
+									)
 								)
 							}
 

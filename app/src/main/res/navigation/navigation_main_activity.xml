@@ -150,5 +150,11 @@
         <argument
             android:name="event"
             app:argType="com.omega.dottech2k20.models.Event" />
+        <argument
+            android:name="isUserPartOfTeam"
+            app:argType="boolean" />
+        <argument
+            android:name="readOnly"
+            app:argType="boolean" />
     </fragment>
 </navigation>
