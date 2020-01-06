@@ -158,7 +158,7 @@ class ProfileFragment : Fragment() {
 	}
 
 	private fun setUpScrollListener() {
-		rv_user_events.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+		rv_user_events?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 			override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
 				super.onScrolled(recyclerView, dx, dy)
 				val view = recyclerView.getChildAt(0)

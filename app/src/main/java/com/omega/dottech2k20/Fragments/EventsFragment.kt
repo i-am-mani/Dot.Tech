@@ -183,22 +183,24 @@ class EventsFragment : Fragment() {
 
 	private fun setJoinEventCallback() {
 		context?.let { ctx ->
-			val activeCard: Int = mLayoutManager.activeCardPosition
-			val event = getEventAtPos(activeCard)
-			event?.let {
+			let {
 				btn_join.setOnClickListener {
-					when {
+					val activeCard: Int = mLayoutManager.activeCardPosition
+					val event = getEventAtPos(activeCard)
+					event?.let {
+						when {
 
-						event.type == FirestoreFieldNames.EVENT_TYPE_INDIVIDUAL -> {
-							EventCallbacks.join(ctx, event, findNavController(), mViewModel)
-						}
-						event.type == FirestoreFieldNames.EVENT_TYPE_TEAM -> {
-							findNavController().navigate(
-								R.id.eventTeamsFragment,
-								bundleOf(EventTeamsFragment.EVENT_KEY to event)
-							)
-						}
+							event.type == FirestoreFieldNames.EVENT_TYPE_INDIVIDUAL -> {
+								EventCallbacks.join(ctx, event, findNavController(), mViewModel)
+							}
+							event.type == FirestoreFieldNames.EVENT_TYPE_TEAM -> {
+								findNavController().navigate(
+									R.id.eventTeamsFragment,
+									bundleOf(EventTeamsFragment.EVENT_KEY to event)
+								)
+							}
 
+						}
 					}
 
 				}
@@ -272,11 +274,12 @@ class EventsFragment : Fragment() {
 	private fun updateButtons(event: Event) {
 
 		val matchingEvent = mUserEventList?.find {
-			Log.d(TAG, "it.id = ${it.id}, even.id = ${event.id}")
+			//			Log.d(TAG, "it.id = ${it.id}, even.id = ${event.id}")
 			it.id == event.id
 		}
-		btn_join.isEnabled = event.registrationOpen
 		// Disable the button if registration is closed
+		btn_join.isEnabled = event.registrationOpen
+		// null event would imply that event doesn't exist in user's events field
 		if (matchingEvent == null) {
 			Log.d(TAG, "Changing Visibility")
 			btn_join.animate().alpha(1f).withEndAction {

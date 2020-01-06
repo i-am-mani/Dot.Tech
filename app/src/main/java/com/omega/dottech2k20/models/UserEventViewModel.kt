@@ -72,25 +72,25 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 				// re-set User (Update user)
 				val userDoc = mFirestore.collection("Users").document(userId)
 				batch.set(userDoc, user)
-
 				val userEventIds = user.events
-				if (userEventIds != null) {
-					for (eventIds in userEventIds) {
-						// Events -> Participant -> user_doc (Update user_doc)
-						val eventParticipantDoc = mFirestore.collection("Events")
-							.document(eventIds).collection("Participants").document(userId)
+				for (eventIds in userEventIds) {
+					val eventId = eventIds.eventId
+					val eventParticipantDoc: DocumentReference
+
+					if (eventId != null) {// Events -> Participant -> user_doc (Update user_doc)
+						eventParticipantDoc = mFirestore.collection("Events")
+							.document(eventId).collection("Participants").document(userId)
 
 						// Update name in visibleParticipants Map of Event
 						user.fullName?.let { name ->
 							val eventDoc = mFirestore.collection("Events")
-								.document(eventIds)
+								.document(eventId)
 							batch.update(
 								eventDoc,
 								FieldPath.of("visibleParticipants"),
 								hashMapOf(userId to name)
 							)
 						}
-
 						batch.set(eventParticipantDoc, user)
 					}
 				}
@@ -187,8 +187,9 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 			}
 
 			mFirestore.runBatch {
+				val eventIds = Ids(eventId) // Event Ids and Team Id.
 				// add event id to user's events field
-				it.update(userEvents, FieldPath.of("events"), FieldValue.arrayUnion(eventId))
+				it.update(userEvents, FieldPath.of("events"), FieldValue.arrayUnion(eventIds))
 				// add Event to participant's collection inside Event
 				it.set(eventParticipantsDoc, user)
 				// increment participantCount of Event
@@ -261,10 +262,11 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 			visibleParticipants.remove(userId)
 
 			mFirestore.runBatch {
+				val eventIds = Ids(eventId) // Event Ids and Team Id.
 				// Delete User doc inside Participant collection of Event
 				it.delete(eventParticipantsDoc)
-				// Remove event id from events field of User
-				it.update(userEvents, FieldPath.of("events"), FieldValue.arrayRemove(event.id))
+				// Remove event ids from events field of User
+				it.update(userEvents, FieldPath.of("events"), FieldValue.arrayRemove(eventIds))
 				// decrement participantCount
 				it.update(events, FieldPath.of("participantCount"), FieldValue.increment(-1))
 				// remove participant from visibleParticipant map
@@ -327,7 +329,7 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 				val eventIds = user.events
 				val events = eventsLiveData.value
 
-				if (eventIds != null && events != null) {
+				if (events != null) {
 					return getMatchingEventsById(eventIds, events)
 				}
 			}
@@ -341,14 +343,22 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 	}
 
 
+	/**
+	 * Return ArrayList of Event having Ids matching with eventIds
+	 */
 	private fun getMatchingEventsById(
-		eventIds: List<String>,
+		eventIds: List<Ids>,
 		events: List<Event>
 	): ArrayList<Event> {
 		val list = arrayListOf<Event>()
 		for (id in eventIds) {
-			val event: Event? = events.find {
-				it.id.equals(id)
+			val eventId = id.eventId
+			val event: Event? = events.find { event ->
+				if (eventId != null && event.id != null) {
+					event.id == eventId
+				} else {
+					false
+				}
 			}
 			if (event != null) {
 				list.add(event)
