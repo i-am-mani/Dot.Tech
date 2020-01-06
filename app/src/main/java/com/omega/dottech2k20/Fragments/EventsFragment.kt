@@ -29,6 +29,7 @@ import com.omega.dottech2k20.MainActivity
 import com.omega.dottech2k20.R
 import com.omega.dottech2k20.Utils.AuthenticationUtils
 import com.omega.dottech2k20.Utils.EventCallbacks
+import com.omega.dottech2k20.Utils.FirestoreFieldNames
 import com.omega.dottech2k20.Utils.Utils
 import com.omega.dottech2k20.Utils.Utils.getEventSchedule
 import com.omega.dottech2k20.models.Event
@@ -186,7 +187,20 @@ class EventsFragment : Fragment() {
 			val event = getEventAtPos(activeCard)
 			event?.let {
 				btn_join.setOnClickListener {
-					EventCallbacks.join(ctx, event, findNavController(), mViewModel)
+					when {
+
+						event.type == FirestoreFieldNames.EVENT_TYPE_INDIVIDUAL -> {
+							EventCallbacks.join(ctx, event, findNavController(), mViewModel)
+						}
+						event.type == FirestoreFieldNames.EVENT_TYPE_TEAM -> {
+							findNavController().navigate(
+								R.id.eventTeamsFragment,
+								bundleOf(EventTeamsFragment.EVENT_KEY to event)
+							)
+						}
+
+					}
+
 				}
 			}
 		}

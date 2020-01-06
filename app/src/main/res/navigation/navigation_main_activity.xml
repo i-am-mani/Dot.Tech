@@ -40,6 +40,9 @@
         <action
             android:id="@+id/action_eventsFragment_to_reportFragment"
             app:destination="@id/reportFragment" />
+        <action
+            android:id="@+id/action_eventsFragment_to_eventTeamsFragment"
+            app:destination="@id/eventTeamsFragment" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
@@ -138,5 +141,14 @@
         <argument
             android:name="Notification"
             app:argType="com.omega.dottech2k20.models.Notification" />
+    </fragment>
+    <fragment
+        android:id="@+id/eventTeamsFragment"
+        android:name="com.omega.dottech2k20.Fragments.EventTeamsFragment"
+        android:label="fragment_event_teams"
+        tools:layout="@layout/fragment_event_teams">
+        <argument
+            android:name="event"
+            app:argType="com.omega.dottech2k20.models.Event" />
     </fragment>
 </navigation>

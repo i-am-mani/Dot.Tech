@@ -4,6 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ServerTimestamp
+import com.omega.dottech2k20.Utils.FirestoreFieldNames
 
 data class Event(
 	val id: String? = null,
@@ -17,7 +18,9 @@ data class Event(
 	@ServerTimestamp val startTime: Timestamp? = null,
 	@ServerTimestamp val endTime: Timestamp? = null,
 	val registrationOpen: Boolean = true,
-	val orderPreference: Int? = null
+	val orderPreference: Int? = null,
+	val type: String = FirestoreFieldNames.EVENT_TYPE_INDIVIDUAL,
+	val teamSize: Int? = null
 ) : Parcelable {
 	constructor(source: Parcel) : this(
 		source.readString(),
@@ -31,6 +34,8 @@ data class Event(
 		source.readParcelable<Timestamp>(Timestamp::class.java.classLoader),
 		source.readParcelable<Timestamp>(Timestamp::class.java.classLoader),
 		1 == source.readInt(),
+		source.readValue(Int::class.java.classLoader) as Int?,
+		source.readString(),
 		source.readValue(Int::class.java.classLoader) as Int?
 	)
 
@@ -49,6 +54,8 @@ data class Event(
 		writeParcelable(endTime, 0)
 		writeInt((if (registrationOpen) 1 else 0))
 		writeValue(orderPreference)
+		writeString(type)
+		writeValue(teamSize)
 	}
 
 	companion object {

@@ -12,7 +12,10 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.omega.dottech2k20.Utils.FirestoreFieldNames.EVENT_COLLECTION
+import com.omega.dottech2k20.Utils.FirestoreFieldNames.EVENT_TEAM_COLLECTION
 import es.dmoral.toasty.Toasty
+import java.util.*
 
 class UserEventViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -362,5 +365,104 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 	fun setEventIndex(index: Int?) {
 		mEventIndex.value = index
 	}
+
+	//	-------------------- Team CRUD/Join/Leave ------------------------------  //
+	lateinit var mTeams: MutableLiveData<HashMap<String, List<Team>>>
+	// Of form { id : [teamObj1,teamObj2...] }
+
+	fun getTeamsOfEvent(eventId: String): MutableLiveData<HashMap<String, List<Team>>> {
+
+		if (!::mTeams.isInitialized) {
+			mTeams = MutableLiveData()
+			mTeams.value = hashMapOf()
+		}
+
+		val query = mFirestore.collection(EVENT_COLLECTION).document(eventId).collection(
+			EVENT_TEAM_COLLECTION
+		)
+
+		FirebaseSnapshotListeners.addQuerySnapShotListener(query) {
+			val teams = it.toObjects(Team::class.java)
+			val curValue = mTeams.value
+			curValue?.put(eventId, teams)
+			mTeams.value = curValue
+			Log.d(TAG, " eid = $eventId, Teams = $teams")
+		}
+
+		return mTeams
+	}
+
+	fun createTeamToEvent(eventId: String, teamName: String, teamPasscode: String) {
+		val user: User? = mUserProfileLiveData.value
+		if (user == null) {
+			val uid = mFireAuth.currentUser?.uid ?: return
+			Toasty.info(getApplication(), "Processing User Info").show()
+			val document: DocumentReference = mFirestore.collection("Users").document(uid)
+			document.get().addOnCompleteListener { task ->
+				if (task.isSuccessful) {
+					// Check of nullability
+					task.result?.let { documentSnapshot ->
+						documentSnapshot.toObject(User::class.java)?.let {
+							mUserProfileLiveData.value = it
+							addTeamToEvent(eventId, teamName, it, teamPasscode)
+						}
+					}
+				} else {
+					Log.e(TAG, "Failed To get User : ", task.exception)
+				}
+			}
+		} else {
+			addTeamToEvent(eventId, teamName, user, teamPasscode)
+		}
+	}
+
+	private fun addTeamToEvent(
+		eventId: String,
+		teamName: String,
+		creator: User,
+		teamPasscode: String
+	) {
+		val query = mFirestore.collection(EVENT_COLLECTION).document(eventId).collection(
+			EVENT_TEAM_COLLECTION
+		).document()
+		val teamId = query.id
+		val uid = creator.id
+		val fullName = creator.fullName
+		if (uid != null && fullName != null) {
+			val teammateObject = Teammate(uid, fullName) // since creator is a teammate too
+			val team = Team(
+				teamId,
+				teamName,
+				uid,
+				teamPasscode,
+				listOf(teammateObject)
+			)
+			query.set(team).addOnCompleteListener {
+				if (it.isSuccessful) {
+					Toasty.success(getApplication(), "Creating team successful").show()
+				} else {
+					Toasty.error(getApplication(), "Failed to create team").show()
+				}
+			}
+		}
+
+	}
+
+	fun removeTeammate(eventId: String, teamId: String, teammate: Teammate) {
+		val query = mFirestore.collection(EVENT_COLLECTION).document(eventId).collection(
+			EVENT_TEAM_COLLECTION
+		).document(teamId)
+
+		query.update(FieldPath.of("teammates"), FieldValue.arrayRemove(teammate))
+			.addOnCompleteListener {
+				if (it.isSuccessful) {
+					Toasty.success(getApplication(), "Removing Teammate Successful").show()
+				} else {
+					Toasty.error(getApplication(), "Failed to remove teammate from Team")
+				}
+			}
+	}
+
+
 }
 
