@@ -8,7 +8,7 @@ import android.view.Window
 import com.omega.dottech2k20.R
 import kotlinx.android.synthetic.main.dialog_submit_text.*
 
-class UserQueryDialog(val context: Context) {
+class SingleTextFieldDialog(val context: Context) {
 
 	val layoutId = R.layout.dialog_submit_text
 	private val TAG = javaClass.simpleName
@@ -21,6 +21,7 @@ class UserQueryDialog(val context: Context) {
 	var headerIconId = R.drawable.ic_info_outline_white_24dp
 	var isNameFieldEnabled = false
 	var nameFieldHint = ""
+	var minQueryFieldLines = 3
 
 	fun build() {
 		val dialog = Dialog(context)
@@ -37,14 +38,16 @@ class UserQueryDialog(val context: Context) {
 		dialog.apply {
 			tv_dialog_title.text = title
 
-			et_user_name.setText(name)
-			et_user_name.isEnabled = isNameFieldEnabled
-			et_user_name.hint = nameFieldHint
+			et_name.setText(name)
+			et_name.isEnabled = isNameFieldEnabled
+			et_name.hint = nameFieldHint
 
 			et_query_inputlayout.hint = hint
+			et_query.minLines = minQueryFieldLines
+
 			im_dialog_header.setImageResource(headerIconId)
 			btn_submit.setOnClickListener {
-				onSubmit(et_user_name.text.toString(), et_query.text.toString())
+				onSubmit(et_name.text.toString(), et_query.text.toString())
 				dismiss()
 			}
 		}
