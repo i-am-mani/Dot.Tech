@@ -127,8 +127,8 @@ class EventTeamsFragment : Fragment() {
 		}
 	}
 
-	private fun deleteTeam(teamId: String) {
-		// TODO implement delete team
+	private fun deleteTeam(team: Team) {
+		mEvent.id?.let { mViewModel.deleteTeamFromEvent(team, it) }
 	}
 
 	private fun addUserToTeam(teamId: String) {
