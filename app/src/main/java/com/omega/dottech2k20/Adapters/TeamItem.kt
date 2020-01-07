@@ -30,7 +30,7 @@ class TeamItem(
 	private val isUserPartOfTeam: Boolean, // If user is part of the event
 	private val isReadOnly: Boolean, // Do not allow any actions on Team
 	val onDeleteTeamCallback: (teamId: String) -> Unit,
-	private val onRemoveTeammateCallback: (teammate: Teammate) -> Unit,
+	private val onRemoveTeammateCallback: (team: Team, teammate: Teammate) -> Unit,
 	val onJoinTeamCallback: (teamId: String) -> Unit
 ) : Item() {
 
@@ -65,9 +65,18 @@ class TeamItem(
 	) {
 		for (teammate in teammates) {
 			// if join is disabled then leave team is not permitted
-			if (currentUser?.uid == teammate.id && isUserPartOfTeam && !userCreator) {
-				btn_join.visibility = View.GONE
+			val uid = currentUser?.uid
+			if (uid == teammate.id && isUserPartOfTeam && !userCreator) {
 				btn_leave.visibility = View.VISIBLE
+
+				btn_leave.setOnClickListener {
+					val userTeammateObject = mTeam.teammates.find { it.id == uid }
+					if (userTeammateObject != null) {
+						onRemoveTeammateCallback(mTeam, teammate)
+					}
+				}
+			} else {
+				btn_leave.visibility = View.GONE
 			}
 		}
 	}
@@ -140,8 +149,13 @@ class TeamItem(
 		val listOfItems = mutableListOf<TeammateItem>()
 		for (teammate in mTeam.teammates) {
 			val creatorsId = mTeam.creator
+			val isCreatorsTeammateItem = creatorsId == teammate.id
 			if (creatorsId != null) {
-				val item = TeammateItem(teammate, removeEnabled, onRemoveTeammateCallback)
+				val item = TeammateItem(
+					teammate,
+					!isCreatorsTeammateItem && removeEnabled,
+					onRemoveTeammateCallback
+				)
 				listOfItems.add(item)
 			}
 		}
@@ -155,7 +169,7 @@ class TeamItem(
 	inner class TeammateItem(
 		private val teammate: Teammate,
 		private val isRemoveTeammateEnabled: Boolean,
-		val onRemoveTeammateCallback: (teammate: Teammate) -> Unit
+		val onRemoveTeammateCallback: (team: Team, teammate: Teammate) -> Unit
 	) : Item() {
 		override fun bind(viewHolder: GroupieViewHolder, position: Int) {
 			val user = AuthenticationUtils.currentUser
@@ -165,8 +179,11 @@ class TeamItem(
 					tv_teammate_name.text = name
 
 					if (isRemoveTeammateEnabled) {
+						// remove imbtn is hidden by default
 						imbtn_remove_teammate.visibility = View.VISIBLE
-						imbtn_remove_teammate.setOnClickListener { onRemoveTeammateCallback(teammate) }
+						imbtn_remove_teammate.setOnClickListener {
+							onRemoveTeammateCallback(mTeam, teammate)
+						}
 					}
 				}
 

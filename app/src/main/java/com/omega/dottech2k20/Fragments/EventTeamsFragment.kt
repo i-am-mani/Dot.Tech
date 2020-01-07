@@ -119,8 +119,12 @@ class EventTeamsFragment : Fragment() {
 		return listOfItems
 	}
 
-	private fun removeTeammate(teammate: Teammate) {
-
+	private fun removeTeammate(team: Team, teammate: Teammate) {
+		val eid = mEvent.id
+		val tid = team.id
+		if (eid != null && tid != null) {
+			mViewModel.removeTeammate(eid, tid, teammate)
+		}
 	}
 
 	private fun deleteTeam(teamId: String) {
@@ -129,7 +133,6 @@ class EventTeamsFragment : Fragment() {
 
 	private fun addUserToTeam(teamId: String) {
 		mViewModel.joinTeam(mEvent, teamId)
-		findNavController().navigate(R.id.eventsFragment)
 	}
 
 	private fun addFABCallback() {
