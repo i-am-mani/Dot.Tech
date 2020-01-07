@@ -59,14 +59,12 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 	 *
 	 * 	Note :- the data is being replaced!
 	 */
-	fun updateUserProfile(user: User) {
+	fun updateNotificationId(notificationId: String) {
 
-		user.id?.let { id ->
-			mFirestore.collection("Users").document(id).set(user).addOnCompleteListener {
-				if (it.isSuccessful) {
-					Log.d(TAG, "Updating user Successful!")
-				}
-			}
+		val curUser = mFireAuth.currentUser
+		if (curUser != null) {
+			mFirestore.collection(USER_COLLECTION).document(curUser.uid)
+				.update("notificationIds", FieldValue.arrayUnion(notificationId))
 		}
 	}
 
@@ -388,6 +386,7 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 	}
 
 	//	-------------------- Team CRUD/Join/Leave ------------------------------  //
+
 	lateinit var mTeams: MutableLiveData<HashMap<String, List<Team>>>
 	// Of form { id : [teamObj1,teamObj2...] }
 
@@ -450,6 +449,9 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 		val uid = creator.id
 		val fullName = creator.fullName
 		if (uid != null && fullName != null) {
+			val updateUserQuery = mFirestore.collection(USER_COLLECTION).document(uid)
+			val ids = Ids(eventId, teamId)
+
 			val teammateObject = Teammate(uid, fullName) // since creator is a teammate too
 			val team = Team(
 				teamId,
@@ -458,17 +460,76 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 				teamPasscode,
 				listOf(teammateObject)
 			)
-			query.set(team).addOnCompleteListener {
-				if (it.isSuccessful) {
-					Toasty.success(getApplication(), "Creating team successful").show()
-				} else {
-					Toasty.error(getApplication(), "Failed to create team").show()
-				}
+			mFirestore.runBatch { batch ->
+				batch.set(query, team) // Create Team inside Event Collection
+				batch.update(           // Make event and team part of User's events field
+					updateUserQuery,
+					FieldPath.of(USERS_EVENT_FIELD),
+					FieldValue.arrayUnion(ids)
+				)
 			}
 		}
 
 	}
 
+	/**
+	 *  Delete the team from the respective event
+	 *
+	 *  All the teammates, including the Creator are first removed the team, then Team document is
+	 *  deleted. Write are queued in Batch, which guaranty that if one write, no data is written,
+	 *  changes are rolled back
+	 *
+	 *  @param team The Team which has to be deleted
+	 *  @param eid The Event Id of the event which team belongs to
+	 */
+	fun deleteTeamFromEvent(team: Team, eid: String) {
+		val tid = team.id
+		if (tid != null) {
+			val teamQuery = mFirestore.collection(EVENT_COLLECTION).document(eid).collection(
+				EVENT_TEAM_COLLECTION
+			).document(tid)
+			val updateParticipantsCountQuery = mFirestore.collection(EVENT_COLLECTION).document(eid)
+			val ids = Ids(eid, tid)
+			mFirestore.runBatch { batch ->
+				// Remove all teammates
+				for (teammate in team.teammates) {
+					val teammateId = teammate.id
+					if (teammateId != null) {
+						val updateUserQuery =
+							mFirestore.collection(USER_COLLECTION).document(teammateId)
+						// Remove teammate
+						batch.update(
+							teamQuery,
+							FieldPath.of(TEAMMATES_FIELD),
+							FieldValue.arrayRemove(teammate)
+						)
+						// Remove ids to user's `events` field
+						batch.update(
+							updateUserQuery,
+							FieldPath.of(USERS_EVENT_FIELD),
+							FieldValue.arrayRemove(ids)
+						)
+						// update participant's counter
+						batch.update(
+							updateParticipantsCountQuery, FieldPath.of(
+								EVENT_PARTICIPANTS_COUNT_FIELD
+							), FieldValue.increment(-1)
+						)
+					}
+				}
+				// Delete team
+				batch.delete(teamQuery)
+			}.addOnCompleteListener {
+				if (it.isSuccessful) {
+					Toasty.success(getApplication(), "Deleting Team Successful").show()
+				} else {
+					Toasty.success(getApplication(), "Deleting Team Failed").show()
+					Log.e(TAG, "Failed to Delete Team", it.exception)
+				}
+			}
+
+		}
+	}
 
 	fun joinTeam(event: Event, team: String) {
 		val user: User? = mUserProfileLiveData.value
@@ -560,13 +621,13 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 			val ids = Ids(eid, tid)
 
 			mFirestore.runTransaction { batch ->
-				// Add teammate
+				// Remove teammate
 				batch.update(
 					updateTeammateQuery,
 					FieldPath.of(TEAMMATES_FIELD),
 					FieldValue.arrayRemove(teammate)
 				)
-				// Add ids to user's `events` field
+				// Remove ids to user's `events` field
 				batch.update(
 					updateUserQuery,
 					FieldPath.of(USERS_EVENT_FIELD),
