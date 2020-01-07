@@ -70,9 +70,18 @@ class TeamItem(
 				btn_leave.visibility = View.VISIBLE
 
 				btn_leave.setOnClickListener {
-					val userTeammateObject = mTeam.teammates.find { it.id == uid }
-					if (userTeammateObject != null) {
-						onRemoveTeammateCallback(mTeam, teammate)
+
+					BinaryDialog(context, R.layout.dialog_event_confirmation).apply {
+						title = "Leave ${mTeam.name} ?"
+						description =
+							"you won't be able to join another team for this event for next 1 Hours"
+						rightButtonCallback = {
+							val userTeammateObject = mTeam.teammates.find { it.id == uid }
+							if (userTeammateObject != null) {
+								onRemoveTeammateCallback(mTeam, teammate)
+							}
+						}
+						build()
 					}
 				}
 			} else {
