@@ -159,16 +159,10 @@ class MainActivity : AppCompatActivity() {
 							val notificationIds = user.notificationIds
 
 							// If token isn't present, add it to list and replace the notificationIds
-							if (notificationIds != null && notificationIds.find { it == token } == null) {
-								val newNotificationIds = notificationIds.toMutableList()
-								newNotificationIds.add(token)
-								user.notificationIds = newNotificationIds
+							if (notificationIds.find { it == token } == null) {
+								viewModel.updateNotificationId(token)
 								Log.d("Notification", "New User data $user")
-							} else if (notificationIds == null) {
-								user.notificationIds = listOf(token)
 							}
-
-							viewModel.updateUserProfile(user)
 							Log.d(TAG, "FirebaseInstanceId = $token")
 						}
 					}
