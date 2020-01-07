@@ -29,7 +29,7 @@ class TeamItem(
 	private val mTeam: Team,
 	private val isUserPartOfTeam: Boolean, // If user is part of the event
 	private val isReadOnly: Boolean, // Do not allow any actions on Team
-	val onDeleteTeamCallback: (teamId: String) -> Unit,
+	val onDeleteTeamCallback: (team: Team) -> Unit,
 	private val onRemoveTeammateCallback: (team: Team, teammate: Teammate) -> Unit,
 	val onJoinTeamCallback: (teamId: String) -> Unit
 ) : Item() {
@@ -41,7 +41,7 @@ class TeamItem(
 			if (id != null && name != null && creator != null && passcode != null) {
 				tv_team_name.text = name
 				val isUserCreator = currentUser?.uid.equals(creator)
-				setDeleteTeamCallback(name, id, isUserCreator)
+				setDeleteTeamCallback(isUserCreator)
 				setJoinTeamCallback(name, id, isUserCreator)
 				setLeaveTeamCallback(teammates, currentUser, isUserCreator)
 				// Show Remove teammate option only if user is creator and registration is open
@@ -82,21 +82,21 @@ class TeamItem(
 	}
 
 	private fun GroupieViewHolder.setDeleteTeamCallback(
-		name: String?,
-		id: String,
 		userCreator: Boolean
 	) {
 		if (userCreator) {
 			imbtn_remove_team.visibility = View.VISIBLE
 			imbtn_remove_team.setOnClickListener {
 				BinaryDialog(context, R.layout.dialog_event_confirmation).apply {
-					title = "Delete $name ?"
+					title = "Delete ${mTeam.name} ?"
 					description =
 						"you won't be able to create another team for this event for next 12 Hours"
-					rightButtonCallback = { onDeleteTeamCallback(id) }
+					rightButtonCallback = { onDeleteTeamCallback(mTeam) }
 					build()
 				}
 			}
+		} else {
+			imbtn_remove_team.visibility = View.GONE
 		}
 	}
 
