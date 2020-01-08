@@ -15,7 +15,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.omega.dottech2k20.Adapters.TeamItem
 import com.omega.dottech2k20.MainActivity
 import com.omega.dottech2k20.R
+import com.omega.dottech2k20.Utils.AuthenticationUtils
+import com.omega.dottech2k20.Utils.SharedPreferenceUtils
+import com.omega.dottech2k20.dialogs.BackOffDialog
 import com.omega.dottech2k20.dialogs.CreateTeamDialog
+import com.omega.dottech2k20.dialogs.SingleTextFieldDialog
 import com.omega.dottech2k20.models.Event
 import com.omega.dottech2k20.models.Team
 import com.omega.dottech2k20.models.Teammate
@@ -123,7 +127,7 @@ class EventTeamsFragment : Fragment() {
 							teamSize,
 							::deleteTeam,
 							::removeTeammate,
-							::addUserToTeam
+							::joinTeam
 						)
 						listOfItems.add(teamItem)
 					}
@@ -138,8 +142,19 @@ class EventTeamsFragment : Fragment() {
 	private fun removeTeammate(team: Team, teammate: Teammate) {
 		val eid = mEvent.id
 		val tid = team.id
-		if (eid != null && tid != null) {
+		val teammateId = teammate.id
+		if (eid != null && tid != null && teammateId != null) {
 			mViewModel.removeTeammate(eid, tid, teammate)
+			// If User leaves the event then set timestamp to follow back-off strategy
+			setEventLeaveTimestamp(teammate.id)
+		}
+	}
+
+	private fun setEventLeaveTimestamp(teammateId: String) {
+		AuthenticationUtils.currentUser?.let { user ->
+			if (user.uid == teammateId) {
+				SharedPreferenceUtils.registerTimeStamp(context, mEvent.id)
+			}
 		}
 	}
 
@@ -147,8 +162,40 @@ class EventTeamsFragment : Fragment() {
 		mEvent.id?.let { mViewModel.deleteTeamFromEvent(team, it) }
 	}
 
-	private fun addUserToTeam(teamId: String) {
-		mViewModel.joinTeam(mEvent, teamId)
+	/**
+	 * Adds currently logged in user to the team.
+	 *
+	 * Prevents Joining Team if the user has left the some team in the same event in given back off
+	 * period.
+	 */
+	private fun joinTeam(team: Team) {
+		val tid = team.id
+		val teamName = team.name
+		val passcode = team.passcode
+		if (tid != null && teamName != null && passcode != null) {
+			context?.let { ctx ->
+				val validBackoff = SharedPreferenceUtils.isValidBackoff(context, mEvent.id)
+				if (!validBackoff) {
+					SingleTextFieldDialog(ctx).apply {
+						title = "Join Team?"
+						name = team.name
+						minQueryFieldLines = 1
+						hint = "Enter Passcode"
+						onSubmit = { name: String, query: String ->
+							if (query == team.passcode) {
+								mViewModel.joinTeam(mEvent, tid)
+							}
+						}
+						build()
+					}
+				} else {
+					BackOffDialog.show(
+						ctx,
+						SharedPreferenceUtils.getBackOffTime(context, mEvent.id)
+					)
+				}
+			}
+		}
 	}
 
 	private fun addFABCallback() {
@@ -183,5 +230,9 @@ class EventTeamsFragment : Fragment() {
 	companion object {
 		val READ_ONLY = "readOnly"
 		val EVENT_KEY = "event"
+		val TEAM_COOLDOWN = 12 * 60 // 12 hours in minutes
+		val getSharedPreferenceTeamID = { tid: String ->
+			"team_$tid"
+		}
 	}
 }

@@ -7,7 +7,6 @@ import com.google.firebase.auth.FirebaseUser
 import com.omega.dottech2k20.R
 import com.omega.dottech2k20.Utils.AuthenticationUtils
 import com.omega.dottech2k20.dialogs.BinaryDialog
-import com.omega.dottech2k20.dialogs.SingleTextFieldDialog
 import com.omega.dottech2k20.models.Team
 import com.omega.dottech2k20.models.Teammate
 import com.xwray.groupie.GroupAdapter
@@ -32,7 +31,7 @@ class TeamItem(
 	private val mTeamSize: Int,
 	val onDeleteTeamCallback: (team: Team) -> Unit,
 	private val onRemoveTeammateCallback: (team: Team, teammate: Teammate) -> Unit,
-	val onJoinTeamCallback: (teamId: String) -> Unit
+	val onJoinTeamCallback: (team: Team) -> Unit
 ) : Item() {
 
 	override fun bind(viewHolder: GroupieViewHolder, position: Int) {
@@ -133,18 +132,7 @@ class TeamItem(
 			btn_join.setOnClickListener {
 				val passcode = mTeam.passcode
 				if (passcode != null) {
-					SingleTextFieldDialog(context).apply {
-						title = "Join Team?"
-						name = teamName
-						minQueryFieldLines = 1
-						hint = "Enter Passcode"
-						onSubmit = { name: String, query: String ->
-							if (query == passcode) {
-								onJoinTeamCallback(id)
-							}
-						}
-						build()
-					}
+					onJoinTeamCallback(mTeam)
 				} else {
 					Toasty.warning(context, "Invalid Passcode").show()
 				}
