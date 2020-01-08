@@ -47,6 +47,5 @@ object SharedPreferenceUtils {
 		val sharedPreference = PreferenceManager.getDefaultSharedPreferences(context)
 		val lastRegisteredTimestamp = sharedPreference.getLong(id, 0)
 		return (System.currentTimeMillis() - lastRegisteredTimestamp) <= (backOfTime * 60 * 1000)
-//		return false
 	}
 }
