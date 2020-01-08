@@ -2,7 +2,6 @@ package com.omega.dottech2k20.dialogs
 
 import android.app.Dialog
 import android.content.Context
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
@@ -23,15 +22,15 @@ class BinaryDialog(
 	var rightButtonId = R.id.btn_right
 	var leftButtonId = R.id.btn_left
 
-	var rightButtonName: String = ""
-	var leftButtonName: String = ""
+	var rightButtonName: String = "Confirm"
+	var leftButtonName: String = "Cancel"
 
 	var isRightButtonVisible = true
 	var isLeftButtonVisible = true
 
 
-	var rightButtonCallback: () -> Unit = { Log.d(TAG, "Right Button Clicked") }
-	var leftButtonCallback: () -> Unit = { Log.d(TAG, "Right Button Clicked") }
+	var rightButtonCallback: () -> Unit = { }
+	var leftButtonCallback: () -> Unit = { }
 
 	fun build() {
 		val dialog = Dialog(context)
