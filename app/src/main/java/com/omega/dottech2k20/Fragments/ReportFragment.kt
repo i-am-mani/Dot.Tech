@@ -14,7 +14,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.omega.dottech2k20.Adapters.FAQItem
 import com.omega.dottech2k20.MainActivity
 import com.omega.dottech2k20.R
-import com.omega.dottech2k20.dialogs.UserQueryDialog
+import com.omega.dottech2k20.dialogs.SingleTextFieldDialog
 import com.omega.dottech2k20.models.FAQ
 import com.omega.dottech2k20.models.MetaDataViewModel
 import com.xwray.groupie.GroupAdapter
@@ -80,7 +80,7 @@ class ReportFragment : Fragment() {
 
 	fun showReportBugDialog() {
 		context?.let { ctx ->
-			UserQueryDialog(ctx).apply {
+			SingleTextFieldDialog(ctx).apply {
 				title = "Report Bug"
 				isNameFieldEnabled = true
 				nameFieldHint = "Title"
@@ -97,7 +97,7 @@ class ReportFragment : Fragment() {
 
 	fun showRequestFeatureDialog() {
 		context?.let { ctx ->
-			UserQueryDialog(ctx).apply {
+			SingleTextFieldDialog(ctx).apply {
 				title = "Feature Request"
 				isNameFieldEnabled = true
 				nameFieldHint = "Title"
