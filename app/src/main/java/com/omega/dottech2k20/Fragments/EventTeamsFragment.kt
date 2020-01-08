@@ -71,8 +71,17 @@ class EventTeamsFragment : Fragment() {
 					it.eventId == mEvent.id
 				} != null
 				setTeamsObserver()
+				updateFAB()
 			}
 		})
+	}
+
+	private fun updateFAB() {
+		if (isUserPartOfTeam == true) {
+			fab_create_team.hide()
+		} else {
+			fab_create_team.show()
+		}
 	}
 
 	private fun setTeamsObserver() {
