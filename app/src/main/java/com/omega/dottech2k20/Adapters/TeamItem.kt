@@ -42,7 +42,7 @@ class TeamItem(
 				tv_team_name.text = name
 				val isUserCreator = currentUser?.uid.equals(creator)
 				setDeleteTeamCallback(isUserCreator)
-				setJoinTeamCallback(name, id, isUserCreator)
+				setJoinTeamCallback(isUserCreator)
 				setLeaveTeamCallback(teammates, currentUser, isUserCreator)
 				// Show Remove teammate option only if user is creator and registration is open
 				initTeammatesRV(viewHolder, isUserCreator && !isReadOnly)
@@ -118,8 +118,6 @@ class TeamItem(
 	 * 3) Team is full
 	 */
 	private fun GroupieViewHolder.setJoinTeamCallback(
-		teamName: String,
-		id: String,
 		userCreator: Boolean
 	) {
 		// Hide join in case team is full
