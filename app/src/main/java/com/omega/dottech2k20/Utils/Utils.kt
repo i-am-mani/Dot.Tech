@@ -16,11 +16,15 @@ object Utils {
 		).matches()
 	}
 
+	/**
+	 * Returns date in from of "Sun, 23 Feb  12:30 - 02:30"
+	 * Useful for representing time range on same day
+	 */
 	fun getEventSchedule(
 		startTime: Timestamp,
 		endTime: Timestamp
 	): String {
-		val dateFormatter = SimpleDateFormat("MMM, EEE")
+		val dateFormatter = SimpleDateFormat("EEE, d MMM")
 		val timeFormatter = SimpleDateFormat("hh:mm")
 		val date = startTime.toDate()
 		val eventDate = dateFormatter.format(date)
@@ -32,8 +36,11 @@ object Utils {
 		return time
 	}
 
+	/**
+	 * Returns date time formatted in form of "Tue, 12 Nov 2019 03.00"
+	 */
 	fun getFormattedTime(timestamp: Timestamp): String {
-		val dateFormatter = SimpleDateFormat("MMM, EEE")
+		val dateFormatter = SimpleDateFormat("EEE, d MMM YYYY")
 		val timeFormatter = SimpleDateFormat("hh:mm")
 		val date = timestamp.toDate()
 		return "${dateFormatter.format(date)}   ${timeFormatter.format(date)}"
