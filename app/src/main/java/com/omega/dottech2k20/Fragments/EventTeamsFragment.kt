@@ -150,6 +150,9 @@ class EventTeamsFragment : Fragment() {
 		}
 	}
 
+	/**
+	 * Stores EventId with Timestamp in SP
+	 */
 	private fun setEventLeaveTimestamp(teammateId: String) {
 		AuthenticationUtils.currentUser?.let { user ->
 			if (user.uid == teammateId) {
@@ -158,8 +161,17 @@ class EventTeamsFragment : Fragment() {
 		}
 	}
 
+	/**
+	 * Deletes the team passed as param, And Stores Timestamp with team_eventId as label. Used for
+	 * preventing team creation within defined time period.
+	 */
 	private fun deleteTeam(team: Team) {
-		mEvent.id?.let { mViewModel.deleteTeamFromEvent(team, it) }
+		context?.let { ctx ->
+			mEvent.id?.let { eventId ->
+				mViewModel.deleteTeamFromEvent(team, eventId)
+				SharedPreferenceUtils.registerTimeStamp(ctx, getSharedPreferenceIdForTeam(eventId))
+			}
+		}
 	}
 
 	/**
@@ -201,12 +213,35 @@ class EventTeamsFragment : Fragment() {
 	private fun addFABCallback() {
 		fab_create_team.setOnClickListener {
 			context?.let { ctx ->
-				CreateTeamDialog.show(ctx) { name, passcode ->
-					mEvent.id?.let { it1 ->
-						mViewModel.createTeamToEvent(it1, name, passcode)
-						Toasty.info(ctx, "Creating team ...").show()
-					}
+
+				val validBackoff =
+					SharedPreferenceUtils.isValidBackoff(
+						ctx,
+						getSharedPreferenceIdForTeam(mEvent.id),
+						TEAM_COOLDOWN
+					)
+				if (!validBackoff) {
+					showTeamCreationDialog(ctx)
+				} else {
+					BackOffDialog.show(
+						ctx,
+						SharedPreferenceUtils.getBackOffTime(
+							context,
+							getSharedPreferenceIdForTeam(mEvent.id),
+							TEAM_COOLDOWN
+						),
+						TEAM_COOLDOWN
+					)
 				}
+			}
+		}
+	}
+
+	private fun showTeamCreationDialog(ctx: Context) {
+		CreateTeamDialog.show(ctx) { name, passcode ->
+			mEvent.id?.let { eventId ->
+				mViewModel.createTeamToEvent(eventId, name, passcode)
+				Toasty.info(ctx, "Creating team ...").show()
 			}
 		}
 	}
@@ -230,9 +265,9 @@ class EventTeamsFragment : Fragment() {
 	companion object {
 		val READ_ONLY = "readOnly"
 		val EVENT_KEY = "event"
-		val TEAM_COOLDOWN = 12 * 60 // 12 hours in minutes
-		val getSharedPreferenceTeamID = { tid: String ->
-			"team_$tid"
+		val TEAM_COOLDOWN: Long = 12 * 60 // 12 hours in minutes
+		val getSharedPreferenceIdForTeam = { id: String? ->
+			"team_$id"
 		}
 	}
 }
