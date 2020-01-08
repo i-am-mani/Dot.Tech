@@ -150,9 +150,28 @@ class EventDetailsFragment : Fragment() {
 
 	private fun setLeaveEventCallback() {
 		btn_leave.setOnClickListener {
-			context?.let { c ->
-				EventCallbacks.leave(c, mEvent, mViewModel)
+			context?.let { ctx ->
+				val authenticationDialogStatus =
+					EventCallbacks.authenticationDialog(ctx, findNavController())
+				if (authenticationDialogStatus) {
+					when {
+						mEvent.type == FirestoreFieldNames.EVENT_TYPE_INDIVIDUAL -> {
+							EventCallbacks.leave(ctx, mEvent, mViewModel)
+						}
+						mEvent.type == FirestoreFieldNames.EVENT_TYPE_TEAM -> {
+							findNavController().navigate(
+								R.id.eventTeamsFragment,
+								bundleOf(
+									EventTeamsFragment.EVENT_KEY to mEvent,
+									EventTeamsFragment.READ_ONLY to false
+								)
+							)
+						}
+
+					}
+				}
 			}
+
 		}
 	}
 

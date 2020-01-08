@@ -13,6 +13,7 @@ import android.util.Log
 import android.view.*
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
@@ -46,10 +47,11 @@ class MainActivity : AppCompatActivity() {
 	lateinit var navController: NavController
 	lateinit var notices: ArrayList<Notice>
 	val TAG = javaClass.simpleName
+	lateinit var mViewModel: UserEventViewModel
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-
+		mViewModel = ViewModelProviders.of(this).get(UserEventViewModel::class.java)
 		setContentView(R.layout.activity_main)
 		setNavigationBar()
 		setNavigationController()
@@ -148,8 +150,7 @@ class MainActivity : AppCompatActivity() {
 	 */
 	private fun registerTokenToUserData() {
 
-		val viewModel = ViewModelProviders.of(this).get(UserEventViewModel::class.java)
-		viewModel.getUserProfile()?.observe(this, Observer { user ->
+		mViewModel.getUserProfile()?.observe(this, Observer { user ->
 			if (user != null) {
 				FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener { task ->
 					if (task.isSuccessful) {
@@ -160,7 +161,7 @@ class MainActivity : AppCompatActivity() {
 
 							// If token isn't present, add it to list and replace the notificationIds
 							if (notificationIds.find { it == token } == null) {
-								viewModel.updateNotificationId(token)
+								mViewModel.updateNotificationId(token)
 								Log.d("Notification", "New User data $user")
 							}
 							Log.d(TAG, "FirebaseInstanceId = $token")
@@ -215,12 +216,30 @@ class MainActivity : AppCompatActivity() {
 		drawer_layout.closeDrawers()
 		nav_view.menu.clear()
 		nav_view.inflateMenu(R.menu.drawer_navigation_unsigned_menu)
+
+		val headerView = nav_view.getHeaderView(0)
+		if (headerView != null) {
+			nav_view.removeHeaderView(headerView)
+		}
 	}
 
 	private fun setSignedNavigationMenu() {
 		drawer_layout.closeDrawers()
 		nav_view.menu.clear()
 		nav_view.inflateMenu(R.menu.drawer_navigation_signed_user)
+
+		mViewModel.getUserProfile()?.observe(this, Observer {
+			if (it != null) {
+				var navView = nav_view.getHeaderView(0)
+				if (navView == null) {
+					navView = nav_view.inflateHeaderView(R.layout.nav_header_main)
+				}
+				val name = navView.findViewById<TextView>(R.id.tv_nav_full_name)
+				val email = navView.findViewById<TextView>(R.id.tv_nav_email)
+				email.text = it.email
+				name.text = it.fullName
+			}
+		})
 	}
 
 	override fun onSupportNavigateUp(): Boolean {
