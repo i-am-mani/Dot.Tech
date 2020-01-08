@@ -4,17 +4,20 @@ import android.content.Context
 import android.preference.PreferenceManager
 import android.util.Log
 
+/**
+ *  Helper class to Read/Write to Shard Preferences. Specifically used for managing BackOfTime.
+ *
+ * Note :- BackOfTime is in minutes the default is set to 10 minutes.
+ */
 object SharedPreferenceUtils {
-
-	private val BACK_OFF_TIME = 10 // minutes
 	private val TAG = javaClass.simpleName
 
-	fun getBackOffTime(context: Context?, id: String?): Long {
+	fun getBackOffTime(context: Context?, id: String?, backOfTime: Long = 10): Long {
 		return if (context != null && id != null) {
 			val sharedPreference = PreferenceManager.getDefaultSharedPreferences(context)
 			val lastRegisteredTimestamp = sharedPreference.getLong(id, 0)
 			val diff = System.currentTimeMillis() - lastRegisteredTimestamp
-			BACK_OFF_TIME - (diff / (1000 * 60))
+			backOfTime - (diff / (1000 * 60))
 		} else {
 			Log.e(TAG, "COntext or id is null: ", NullPointerException())
 			0
@@ -38,12 +41,12 @@ object SharedPreferenceUtils {
 	/**
 	 * Return true if user join same event within defined time interval.
 	 */
-	fun isValidBackoff(context: Context?, id: String?): Boolean {
+	fun isValidBackoff(context: Context?, id: String?, backOfTime: Long = 10): Boolean {
 		// Check if the user hasn't left the same event since last 10 mins
 		// To avoid Spamming, and overloading db with constant queries
 		val sharedPreference = PreferenceManager.getDefaultSharedPreferences(context)
 		val lastRegisteredTimestamp = sharedPreference.getLong(id, 0)
-//		return (System.currentTimeMillis() - lastRegisteredTimestamp) <= (BACK_OFF_TIME * 60 * 1000)
-		return false
+		return (System.currentTimeMillis() - lastRegisteredTimestamp) <= (backOfTime * 60 * 1000)
+//		return false
 	}
 }
