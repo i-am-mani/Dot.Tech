@@ -9,21 +9,8 @@ import com.omega.dottech2k20.models.UserEventViewModel
 
 object EventCallbacks {
 
-	fun join(
-		ctx: Context,
-		event: Event,
-		navController: NavController,
-		viewModel: UserEventViewModel
-	) {
-		val currentUser = AuthenticationUtils.currentUser
-		when {
-			currentUser == null -> RequestForLoginDialog.show(ctx, navController)
-			!currentUser.isEmailVerified -> UnVerifiedEmailDialog.show(ctx)
-			else -> joinEventConfirmation(ctx, event, viewModel)
-		}
-	}
 
-	private fun joinEventConfirmation(
+	fun joinEvent(
 		context: Context,
 		event: Event,
 		viewModel: UserEventViewModel
@@ -41,5 +28,19 @@ object EventCallbacks {
 		LeaveEventDialog.show(context, event, mViewModel)
 	}
 
+	fun authenticationDialog(ctx: Context, navController: NavController): Boolean {
+		val currentUser = AuthenticationUtils.currentUser
+		when {
+			currentUser == null -> {
+				RequestForLoginDialog.show(ctx, navController)
+				return false
+			}
+			!currentUser.isEmailVerified -> {
+				UnVerifiedEmailDialog.show(ctx)
+				return false
+			}
+		}
+		return true
+	}
 
 }

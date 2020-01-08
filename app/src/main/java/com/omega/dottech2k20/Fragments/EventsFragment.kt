@@ -183,29 +183,30 @@ class EventsFragment : Fragment() {
 
 	private fun setJoinEventCallback() {
 		context?.let { ctx ->
-			let {
-				btn_join.setOnClickListener {
-					val activeCard: Int = mLayoutManager.activeCardPosition
-					val event = getEventAtPos(activeCard)
-					event?.let {
-						when {
-							event.type == FirestoreFieldNames.EVENT_TYPE_INDIVIDUAL -> {
-								EventCallbacks.join(ctx, event, findNavController(), mViewModel)
-							}
-							event.type == FirestoreFieldNames.EVENT_TYPE_TEAM -> {
-								findNavController().navigate(
-									R.id.eventTeamsFragment,
-									bundleOf(
-										EventTeamsFragment.EVENT_KEY to event,
-										EventTeamsFragment.READ_ONLY to false
-									)
-								)
-							}
+			btn_join.setOnClickListener {
+				val activeCard: Int = mLayoutManager.activeCardPosition
+				val event = getEventAtPos(activeCard)
 
+				val authenticationDialogStatus =
+					EventCallbacks.authenticationDialog(ctx, findNavController())
+				if (authenticationDialogStatus && event != null) {
+					when {
+						event.type == FirestoreFieldNames.EVENT_TYPE_INDIVIDUAL -> {
+							EventCallbacks.joinEvent(ctx, event, mViewModel)
 						}
-					}
+						event.type == FirestoreFieldNames.EVENT_TYPE_TEAM -> {
+							findNavController().navigate(
+								R.id.eventTeamsFragment,
+								bundleOf(
+									EventTeamsFragment.EVENT_KEY to event,
+									EventTeamsFragment.READ_ONLY to false
+								)
+							)
+						}
 
+					}
 				}
+
 			}
 		}
 	}

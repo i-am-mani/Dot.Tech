@@ -20,6 +20,7 @@ import com.omega.dottech2k20.Adapters.HorizontalImageViewerItem
 import com.omega.dottech2k20.MainActivity
 import com.omega.dottech2k20.R
 import com.omega.dottech2k20.Utils.EventCallbacks
+import com.omega.dottech2k20.Utils.FirestoreFieldNames
 import com.omega.dottech2k20.dialogs.BinaryDialog
 import com.omega.dottech2k20.models.Event
 import com.omega.dottech2k20.models.UserEventViewModel
@@ -124,7 +125,25 @@ class EventDetailsFragment : Fragment() {
 	private fun setJoinEventCallback() {
 		btn_join.setOnClickListener {
 			context?.let { ctx ->
-				EventCallbacks.join(ctx, mEvent, findNavController(), mViewModel)
+				val authenticationDialogStatus =
+					EventCallbacks.authenticationDialog(ctx, findNavController())
+				if (authenticationDialogStatus) {
+					when {
+						mEvent.type == FirestoreFieldNames.EVENT_TYPE_INDIVIDUAL -> {
+							EventCallbacks.joinEvent(ctx, mEvent, mViewModel)
+						}
+						mEvent.type == FirestoreFieldNames.EVENT_TYPE_TEAM -> {
+							findNavController().navigate(
+								R.id.eventTeamsFragment,
+								bundleOf(
+									EventTeamsFragment.EVENT_KEY to mEvent,
+									EventTeamsFragment.READ_ONLY to false
+								)
+							)
+						}
+
+					}
+				}
 			}
 		}
 	}
