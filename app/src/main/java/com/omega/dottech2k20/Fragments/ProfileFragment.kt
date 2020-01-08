@@ -27,6 +27,8 @@ import com.omega.dottech2k20.Adapters.UserEventItem
 import com.omega.dottech2k20.MainActivity
 import com.omega.dottech2k20.R
 import com.omega.dottech2k20.Utils.AuthenticationUtils
+import com.omega.dottech2k20.Utils.EventCallbacks
+import com.omega.dottech2k20.Utils.FirestoreFieldNames
 import com.omega.dottech2k20.Utils.Utils
 import com.omega.dottech2k20.dialogs.BinaryDialog
 import com.omega.dottech2k20.models.Event
@@ -113,16 +115,24 @@ class ProfileFragment : Fragment() {
 	}
 
 	private fun leaveEvent(event: Event) {
-		context?.let { c ->
-			BinaryDialog(c, R.layout.dialog_event_confirmation).apply {
-				title = "Leave this Event ?"
-				rightButtonCallback = {
-					mViewModel.unjoinEvents(event)
+		// Since profile is visible would imply that user has logged in
+		// and since unverified accounts cannot join event, both the checks aren't needed.
+		context?.let { ctx ->
+			when {
+				event.type == FirestoreFieldNames.EVENT_TYPE_INDIVIDUAL -> {
+					EventCallbacks.leave(ctx, event, mViewModel)
 				}
-				leftButtonCallback = { }
-			}.build()
+				event.type == FirestoreFieldNames.EVENT_TYPE_TEAM -> {
+					findNavController().navigate(
+						R.id.eventTeamsFragment,
+						bundleOf(
+							EventTeamsFragment.EVENT_KEY to event,
+							EventTeamsFragment.READ_ONLY to false
+						)
+					)
+				}
+			}
 		}
-
 	}
 
 	private fun viewDetails(events: Event) {
