@@ -110,20 +110,26 @@ class EventTeamsFragment : Fragment() {
 
 	private fun getTeamItems(eventTeams: List<Team>): List<TeamItem> {
 		val listOfItems = mutableListOf<TeamItem>()
+		val teamSize = mEvent.teamSize
 		isUserPartOfTeam?.let { isJoin ->
-			context?.let { ctx ->
-				for (team in eventTeams) {
-					val teamItem = TeamItem(
-						ctx,
-						team,
-						isJoin,
-						isReadOnly ?: false,
-						::deleteTeam,
-						::removeTeammate,
-						::addUserToTeam
-					)
-					listOfItems.add(teamItem)
+			if (teamSize != null) {
+				context?.let { ctx ->
+					for (team in eventTeams) {
+						val teamItem = TeamItem(
+							ctx,
+							team,
+							isJoin,
+							isReadOnly ?: false,
+							teamSize,
+							::deleteTeam,
+							::removeTeammate,
+							::addUserToTeam
+						)
+						listOfItems.add(teamItem)
+					}
 				}
+			} else {
+				Log.e(TAG, "Team size is Null", NullPointerException("teamSize"))
 			}
 		}
 		return listOfItems

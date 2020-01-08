@@ -29,6 +29,7 @@ class TeamItem(
 	private val mTeam: Team,
 	private val isUserPartOfTeam: Boolean, // If user is part of the event
 	private val isReadOnly: Boolean, // Do not allow any actions on Team
+	private val mTeamSize: Int,
 	val onDeleteTeamCallback: (team: Team) -> Unit,
 	private val onRemoveTeammateCallback: (team: Team, teammate: Teammate) -> Unit,
 	val onJoinTeamCallback: (teamId: String) -> Unit
@@ -109,12 +110,23 @@ class TeamItem(
 		}
 	}
 
+	/**
+	 * Sets Visibility and action for join team.
+	 *
+	 * Join button is hidden if User is
+	 * 1) Creator
+	 * 2) Is a teammate
+	 * 3) Team is full
+	 */
 	private fun GroupieViewHolder.setJoinTeamCallback(
 		teamName: String,
 		id: String,
 		userCreator: Boolean
 	) {
-		if (userCreator || isUserPartOfTeam) {
+		// Hide join in case team is full
+		val isTeamFull = mTeam.teammates.count() == mTeamSize
+
+		if (userCreator || isUserPartOfTeam || isTeamFull) {
 			btn_join.visibility = View.GONE
 		} else {
 			btn_join.visibility = View.VISIBLE
@@ -134,7 +146,7 @@ class TeamItem(
 						build()
 					}
 				} else {
-					Toasty.warning(context, "Invalid Passcode")
+					Toasty.warning(context, "Invalid Passcode").show()
 				}
 			}
 		}
