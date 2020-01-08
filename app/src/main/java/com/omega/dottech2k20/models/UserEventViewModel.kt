@@ -445,6 +445,7 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 		val query = mFirestore.collection(EVENT_COLLECTION).document(eventId).collection(
 			EVENT_TEAM_COLLECTION
 		).document()
+		val updateParticipantsCountQuery = mFirestore.collection(EVENT_COLLECTION).document(eventId)
 		val teamId = query.id
 		val uid = creator.id
 		val fullName = creator.fullName
@@ -466,6 +467,11 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 					updateUserQuery,
 					FieldPath.of(USERS_EVENT_FIELD),
 					FieldValue.arrayUnion(ids)
+				)
+				batch.update(
+					updateParticipantsCountQuery,
+					EVENT_PARTICIPANTS_COUNT_FIELD,
+					FieldValue.increment(1)
 				)
 			}
 		}
