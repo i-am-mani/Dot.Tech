@@ -55,6 +55,7 @@ class EventTeamsFragment : Fragment() {
 		super.onViewCreated(view, savedInstanceState)
 		initRV()
 		addFABCallback()
+		updateFAB()
 	}
 
 	override fun onAttach(context: Context) {
@@ -77,7 +78,7 @@ class EventTeamsFragment : Fragment() {
 	}
 
 	private fun updateFAB() {
-		if (isUserPartOfTeam == true) {
+		if (isUserPartOfTeam == true || isReadOnly == true) {
 			fab_create_team.hide()
 		} else {
 			fab_create_team.show()
