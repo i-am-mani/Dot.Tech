@@ -26,10 +26,11 @@
             android:id="@+id/imbtn_remove_teammate"
             android:layout_width="@dimen/icon_small"
             android:layout_height="@dimen/icon_small"
-            android:src="@drawable/ic_close"
-            android:background="@android:color/transparent"
             android:layout_gravity="end"
-            android:tint="@color/Danger" />
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_close"
+            android:tint="@color/Danger"
+            android:visibility="gone" />
 
     </FrameLayout>
 

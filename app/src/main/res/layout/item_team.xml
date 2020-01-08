@@ -31,9 +31,10 @@
                 android:id="@+id/imbtn_remove_team"
                 android:layout_width="@dimen/icon_small"
                 android:layout_height="@dimen/icon_small"
+                android:background="@android:color/transparent"
                 android:src="@drawable/ic_close"
                 android:tint="@color/Danger"
-                android:background="@android:color/transparent" />
+                android:visibility="gone" />
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -48,9 +49,21 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginTop="8dp"
-            android:text="Join"
             android:backgroundTint="@color/BackgroundGreen"
-            android:textColor="@color/TextGreen" />
+            android:text="Join"
+            android:textColor="@color/TextGreen"
+            android:visibility="visible" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_leave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="@color/DangerLightText"
+            android:text="Leave"
+            android:textColor="@color/Danger"
+            android:visibility="gone" />
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>
