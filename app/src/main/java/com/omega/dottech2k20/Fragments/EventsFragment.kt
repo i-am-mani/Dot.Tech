@@ -222,10 +222,10 @@ class EventsFragment : Fragment() {
 	}
 
 	private fun setLeaveEventCallback() {
-		val activeCard: Int = mLayoutManager.activeCardPosition
-		val event: Event? = getEventAtPos(activeCard)
-		event?.let {
-			btn_leave.setOnClickListener {
+		btn_leave.setOnClickListener {
+			val activeCard: Int = mLayoutManager.activeCardPosition
+			val event: Event? = getEventAtPos(activeCard)
+			if (event != null) {
 				if (event.type == FirestoreFieldNames.EVENT_TYPE_INDIVIDUAL) {
 					context?.let {
 						EventCallbacks.leave(it, event, mViewModel)
@@ -241,6 +241,7 @@ class EventsFragment : Fragment() {
 				}
 			}
 		}
+
 	}
 
 	private fun initRV(events: List<Event>) {
