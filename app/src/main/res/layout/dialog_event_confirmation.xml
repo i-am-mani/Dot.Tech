@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="75dp"
-        android:layout_height="75dp"
+        android:layout_height="@dimen/startup_dialog_icon_card"
+        android:layout_width="@dimen/startup_dialog_icon_card"
         android:layout_gravity="center"
         android:layout_marginBottom="-36dp"
-        app:cardCornerRadius="50dp"
+        app:cardCornerRadius="@dimen/startup_dialog_icon_card_corner_radius"
         app:cardElevation="5dp">
 
+        <!-- Add width and height to dimens -->
         <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_gravity="center"
-            android:scaleType="center"
+            android:background="@drawable/ic_checked_tick"
             android:backgroundTint="@color/MaterialGreen"
-            android:layout_margin="20dp"
-            android:background="@drawable/ic_checked_tick">
+            android:scaleType="center">
 
         </ImageView>
     </androidx.cardview.widget.CardView>
@@ -28,8 +29,8 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginEnd="36dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         app:cardCornerRadius="10dp"
         app:cardElevation="3dp"
         app:cardUseCompatPadding="true">
@@ -45,18 +46,21 @@
                 android:id="@+id/text_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
+                android:layout_marginBottom="16dp"
                 android:gravity="center"
-                android:textSize="24sp" />
+                android:textAppearance="@style/SubTitleTextEczar"
+                tools:text="Lorem ipsum" />
 
             <TextView
                 android:id="@+id/text_sub_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
+                android:layout_marginBottom="8dp"
+                android:alpha="0.7"
                 android:gravity="center"
-                android:visibility="gone"
-                android:textSize="24sp" />
+                android:textAppearance="@style/NormalTextRubik"
+                android:visibility="visible"
+                tools:text="Lorem ipsum" />
 
             <LinearLayout
 
@@ -80,6 +84,8 @@
                     android:id="@+id/divider7"
                     android:layout_width="2dp"
                     android:layout_height="match_parent"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
                     android:background="@color/SkeletonText" />
 
                 <com.google.android.material.button.MaterialButton
