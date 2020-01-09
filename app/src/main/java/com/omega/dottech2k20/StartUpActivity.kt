@@ -20,10 +20,10 @@ import kotlinx.android.synthetic.main.activity_start_up.*
 
 class StartUpActivity : AppCompatActivity() {
 
-	val TAG = "StartUpActivity"
-	val mFirestore = FirebaseFirestore.getInstance()
-	var notices: List<Notice>? = null
-	var isAnimationCompleted = false
+	private val TAG = "StartUpActivity"
+	private val mFirestore = FirebaseFirestore.getInstance()
+	private var notices: List<Notice>? = null
+	private var isAnimationCompleted = false
 	/***
 	 * If App is opened for first time, then show longer version of splash screen, and proceed to OnBoarding.
 	 * Otherwise show shorter version of Splash screen and proceed directly to main app.
@@ -104,7 +104,6 @@ class StartUpActivity : AppCompatActivity() {
 	 *	This method is bound to work.
 	 */
 	fun goToMainActivity() {
-		displayFetchingLoader()
 		if (isAnimationCompleted && notices != null) {
 			val intent = Intent(this, MainActivity::class.java)
 
@@ -116,8 +115,13 @@ class StartUpActivity : AppCompatActivity() {
 		}
 	}
 
+	/**
+	 * must be called after completing animation, otherwise goToMainActivity won't trigger
+	 * Activity Change.
+	 */
 	fun markAnimationCompleted() {
 		isAnimationCompleted = true
+		displayFetchingLoader()
 	}
 
 	fun displayFetchingLoader() {
@@ -137,42 +141,54 @@ class StartUpActivity : AppCompatActivity() {
 	}
 
 	private fun getOnBoardingPages(): ArrayList<PaperOnboardingPage> {
-		val notificationPage = PaperOnboardingPage(
-			"Notification",
-			"Be updated with latest information on events",
-			Color.parseColor("#CE93D8"),
-			R.drawable.ic_notification_1,
-			R.drawable.ic_notification_2
-		)
-		val signupPage = PaperOnboardingPage(
-			"Sign-up",
-			"Register now, and get started!",
-			Color.parseColor("#F48FB1"),
-			R.drawable.ic_register,
-			R.drawable.ic_register
-		)
 		val browseEventsPage = PaperOnboardingPage(
-			"Browse",
-			"Go through Variety of Events",
-			Color.parseColor("#BBDEFB"),
-			R.drawable.ic_events_2,
-			R.drawable.ic_events_2
-		)
-		val joinEventsPage = PaperOnboardingPage(
-			"Join",
-			"Participate in any Event on the fly",
-			Color.parseColor("#D1C4E9"),
-			R.drawable.ic_events_1,
-			R.drawable.ic_events_1
+			"Explore",
+			"Browse through over 14 Events spanning across 3 days!",
+			Color.parseColor("#EDE7F6"),
+			R.drawable.illustration_explore,
+			R.drawable.illustration_explore
 		)
 
-		var pages = arrayListOf<PaperOnboardingPage>(
+		val joinEventsPage = PaperOnboardingPage(
+			"Participate",
+			"Join or Leave any Event on fly!",
+			Color.parseColor("#E8EAF6"),
+			R.drawable.illustration_participation,
+			R.drawable.illustration_participation
+		)
+
+		val realTimePage = PaperOnboardingPage(
+			"Blazing Fast",
+			"Events, Participants, Notifications, are updated in Real-Time," +
+					" available across multiple devices instantaneously",
+			Color.parseColor("#C5CAE9"),
+			R.drawable.illustration_speed,
+			R.drawable.illustration_speed
+		)
+
+		val notificationPage = PaperOnboardingPage(
+			"Notifications",
+			"Be updated with latest information on events.",
+			Color.parseColor("#8C9EFF"),
+			R.drawable.illustration_notification,
+			R.drawable.illustration_notification
+		)
+
+		val signupPage = PaperOnboardingPage(
+			"Join Us!",
+			"Register now, and get started! \n\n (swipe right to continue)",
+			Color.parseColor("#FFCDD2"),
+			R.drawable.illustration_rocket_launch,
+			R.drawable.illustration_rocket_launch
+		)
+
+		return arrayListOf(
 			browseEventsPage,
 			joinEventsPage,
+			realTimePage,
 			notificationPage,
 			signupPage
 		)
-		return pages
 	}
 
 }

@@ -25,9 +25,9 @@ import kotlinx.android.synthetic.main.fragment_welcome_screen.*
 
 
 class WelcomeScreenFragment : Fragment() {
-	val TAG = javaClass.simpleName
-	lateinit var mActivity: StartUpActivity
-	val DURATION = 800L
+	private val TAG = javaClass.simpleName
+	private lateinit var mActivity: StartUpActivity
+	private val DURATION = 1000L
 	override fun onCreateView(
 		inflater: LayoutInflater, container: ViewGroup?,
 		savedInstanceState: Bundle?
@@ -46,11 +46,10 @@ class WelcomeScreenFragment : Fragment() {
 		val welcomeStringList: List<String> = welcomeString.split("/")
 
 		for (i in welcomeStringList) {
-			val tempTV = TextView(context)
+			val tempTV = TextView(context, null, 0, R.style.TitleTextEczar)
 			tempTV.apply {
 				gravity = Gravity.CENTER
 				text = i
-				setTextAppearance(R.style.TitleTextRubik)
 				setTextSize(TypedValue.COMPLEX_UNIT_SP, 32f)
 				alpha = 0f
 			}
@@ -79,6 +78,7 @@ class WelcomeScreenFragment : Fragment() {
 			}
 			button.setOnClickListener {
 				mActivity.goToOnBoardingFragment()
+				mActivity.markAnimationCompleted()
 			}
 			root_welcome_text.addView(button)
 			}
@@ -94,8 +94,7 @@ class WelcomeScreenFragment : Fragment() {
 
 	private fun animateFirstTimeSplashScreen() {
 
-		// Introduce a slight delay
-		Handler().postDelayed(Runnable {
+		Handler().postDelayed({
 			val calculateDelay = { i: Int -> i * DURATION + i * 100 }
 			val children = root_welcome_text.children
 			var i = 0
