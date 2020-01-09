@@ -11,12 +11,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.omega.dottech2k20.MainActivity
 import com.omega.dottech2k20.R
 import com.omega.dottech2k20.R.layout
 import com.omega.dottech2k20.Utils.AuthenticationUtils
+import com.omega.dottech2k20.dialogs.SingleTextFieldDialog
 import com.omega.dottech2k20.models.UserEventViewModel
 import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.fragment_sign_in.*
@@ -43,7 +43,28 @@ class SignInFragment : Fragment() {
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		btn_sign_in.setOnClickListener { signInUser(it) }
-		btn_switch_to_sign_up.setOnClickListener { switchToSignUp(it) }
+		btn_forgot_password.setOnClickListener {
+			context?.let { ctx ->
+				SingleTextFieldDialog(ctx).apply {
+					title = "Forgot Password"
+					nameFieldHint = "Please enter email address of your account"
+					hint = "E-Mail"
+					minQueryFieldLines = 1
+					queryType = "email"
+					onSubmit = { name: String, query: String ->
+						AuthenticationUtils.sendResetPasswordEmail(query) { exception: Exception? ->
+							if (exception == null) {
+								Toasty.success(ctx, "Reset Password email sent successfully").show()
+								Toasty.info(ctx, "Do check your spam folder of your email provider")
+							} else {
+								Toasty.error(ctx, "Failed to send Reset Password Email").show()
+							}
+						}
+					}
+					build()
+				}
+			}
+		}
 	}
 
 	fun signInUser(view: View?) {
@@ -62,10 +83,6 @@ class SignInFragment : Fragment() {
 				Toasty.warning(it, "Invalid Data Provided").show()
 			}
 		}
-	}
-
-	fun switchToSignUp(view: View?) {
-		findNavController().navigate(R.id.signUpFragment)
 	}
 
 	private fun isDataValid(): Boolean {
