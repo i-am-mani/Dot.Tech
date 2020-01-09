@@ -15,7 +15,6 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
@@ -26,7 +25,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
 import com.omega.dottech2k20.Adapters.NoticeItem
@@ -43,11 +41,11 @@ import kotlin.math.abs
 
 class MainActivity : AppCompatActivity() {
 
-	lateinit var appBarConfiguration: AppBarConfiguration
-	lateinit var navController: NavController
-	lateinit var notices: ArrayList<Notice>
-	val TAG = javaClass.simpleName
-	lateinit var mViewModel: UserEventViewModel
+	private lateinit var appBarConfiguration: AppBarConfiguration
+	private lateinit var navController: NavController
+	private lateinit var notices: ArrayList<Notice>
+	private val TAG = javaClass.simpleName
+	private lateinit var mViewModel: UserEventViewModel
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -60,7 +58,7 @@ class MainActivity : AppCompatActivity() {
 		createNotificationChannel()
 		subscribeToTopicAll()
 		registerTokenToUserData()
-		initStartUpDialog(savedInstanceState)
+		initStartUpDialog()
 	}
 
 	override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -80,13 +78,16 @@ class MainActivity : AppCompatActivity() {
 		return false
 	}
 
-	private fun initStartUpDialog(savedInstanceState: Bundle?) {
-		notices = intent.extras.getParcelableArrayList<Notice>("notices")
-		showNoticesDialog()
+	private fun initStartUpDialog() {
+		try {
+			notices = intent.extras.getParcelableArrayList<Notice>("notices")
+			showNoticesDialog()
+		} catch (e: Exception) {
+			Log.e(TAG, "Error occurred in displaying notices dialog: ", e)
+		}
 	}
 
 	private fun showNoticesDialog() {
-		//TODO Use try catch and to avoid initialization problems
 		if (::notices.isInitialized && notices.count() > 0) {
 			val noticesItems = mutableListOf<NoticeItem>()
 			for (notice in notices) {
@@ -102,18 +103,19 @@ class MainActivity : AppCompatActivity() {
 			setCanceledOnTouchOutside(true)
 
 			setContentView(R.layout.dialog_start_up)
-			window.setLayout(
+			window?.setLayout(
 				ViewGroup.LayoutParams.MATCH_PARENT,
 				ViewGroup.LayoutParams.MATCH_PARENT
 			)
-			window.setGravity(Gravity.TOP)
-			window.setBackgroundDrawableResource(android.R.color.transparent)
+			window?.setGravity(Gravity.TOP)
+			window?.setBackgroundDrawableResource(android.R.color.transparent)
 
 			val rv_notices = findViewById<RecyclerView>(R.id.rv_notices)
-			var adapter: GroupAdapter<GroupieViewHolder>? = GroupAdapter()
-			adapter?.addAll(items)
+			val adapter: GroupAdapter<GroupieViewHolder> = GroupAdapter()
 			val layoutManager =
 				LinearLayoutManager(this@MainActivity, LinearLayoutManager.HORIZONTAL, false)
+			adapter.addAll(items)
+
 			rv_notices.layoutManager =
 				layoutManager
 			LinearSnapHelper().attachToRecyclerView(rv_notices)
@@ -124,13 +126,13 @@ class MainActivity : AppCompatActivity() {
 			val close = findViewById<Button>(R.id.btn_close)
 			next.setOnClickListener {
 				val pos = layoutManager.findFirstCompletelyVisibleItemPosition()
-				adapter?.let {
+				adapter.let {
 					layoutManager.scrollToPosition((pos + 1) % adapter.itemCount)
 				}
 			}
 			prev.setOnClickListener {
 				val pos = layoutManager.findFirstCompletelyVisibleItemPosition()
-				adapter?.let {
+				adapter.let {
 					layoutManager.scrollToPosition(abs(pos - 1) % adapter.itemCount)
 				}
 			}
@@ -322,19 +324,4 @@ class MainActivity : AppCompatActivity() {
 		}
 	}
 
-	fun circularRevealedAtCenter(view: FloatingActionButton) {
-		val cx = (view.left + view.right) / 2
-		val cy = (view.top + view.bottom) / 2
-		val finalRadius = Math.max(view.width, view.height)
-
-		if (view.isAttachedToWindow) {
-			val anim =
-				ViewAnimationUtils.createCircularReveal(view, cx, cy, 0f, finalRadius.toFloat())
-//			view.visibility = View.VISIBLE
-			view.show()
-			view.setBackgroundColor(ContextCompat.getColor(this, R.color.IndicatorDotColor))
-			anim.duration = 550
-			anim.start()
-		}
-	}
 }
