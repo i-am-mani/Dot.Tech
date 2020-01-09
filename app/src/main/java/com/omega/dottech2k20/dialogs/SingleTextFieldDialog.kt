@@ -2,9 +2,11 @@ package com.omega.dottech2k20.dialogs
 
 import android.app.Dialog
 import android.content.Context
+import android.text.InputType
 import android.util.Log
 import android.view.ViewGroup
 import android.view.Window
+import com.google.android.material.textfield.TextInputEditText
 import com.omega.dottech2k20.R
 import kotlinx.android.synthetic.main.dialog_submit_text.*
 
@@ -16,6 +18,9 @@ class SingleTextFieldDialog(val context: Context) {
 	var title = ""
 	var name = ""
 	var hint = ""
+
+	var queryType = "name"
+
 	var onSubmit: (name: String, query: String) -> Unit =
 		{ name, query -> Log.d(TAG, "Submit button clicked") }
 	var headerIconId = R.drawable.ic_info_outline_white_24dp
@@ -46,12 +51,20 @@ class SingleTextFieldDialog(val context: Context) {
 			et_query.minLines = minQueryFieldLines
 
 			im_dialog_header.setImageResource(headerIconId)
+			setQueryType(et_query)
 			btn_submit.setOnClickListener {
 				onSubmit(et_name.text.toString(), et_query.text.toString())
 				dismiss()
 			}
 		}
 		dialog.show()
+	}
+
+	private fun setQueryType(etQuery: TextInputEditText?) {
+		when (queryType) {
+			"email" -> etQuery?.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+			"phone" -> etQuery?.inputType = InputType.TYPE_CLASS_PHONE
+		}
 	}
 
 }
