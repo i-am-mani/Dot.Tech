@@ -10,15 +10,15 @@ data class Event(
 	val id: String? = null,
 	val title: String? = null,
 	val thumbnail: String? = null,
-	val shortDescription: String? = null,
+	val shortDescription: String = "",
 	val visibleParticipants: HashMap<String, String> = HashMap(),
-	val participantCount: Int? = null,
-	val longDescription: String? = null,
-	val images: List<String>? = null,
+	val participantCount: Int = 0,
+	val longDescription: String = "",
+	val images: List<String> = listOf(),
 	@ServerTimestamp val startTime: Timestamp? = null,
 	@ServerTimestamp val endTime: Timestamp? = null,
 	val registrationOpen: Boolean = true,
-	val orderPreference: Int? = null,
+	val orderPreference: Int = 100000, // if not specified give least priority (considering ascending order listing)
 	val type: String = FirestoreFieldNames.EVENT_TYPE_INDIVIDUAL,
 	val teamSize: Int? = null
 ) : Parcelable {
@@ -28,13 +28,13 @@ data class Event(
 		source.readString(),
 		source.readString(),
 		source.readSerializable() as HashMap<String, String>,
-		source.readValue(Int::class.java.classLoader) as Int?,
+		source.readInt(),
 		source.readString(),
 		source.createStringArrayList(),
 		source.readParcelable<Timestamp>(Timestamp::class.java.classLoader),
 		source.readParcelable<Timestamp>(Timestamp::class.java.classLoader),
 		1 == source.readInt(),
-		source.readValue(Int::class.java.classLoader) as Int?,
+		source.readInt(),
 		source.readString(),
 		source.readValue(Int::class.java.classLoader) as Int?
 	)
@@ -47,13 +47,13 @@ data class Event(
 		writeString(thumbnail)
 		writeString(shortDescription)
 		writeSerializable(visibleParticipants)
-		writeValue(participantCount)
+		writeInt(participantCount)
 		writeString(longDescription)
 		writeStringList(images)
 		writeParcelable(startTime, 0)
 		writeParcelable(endTime, 0)
 		writeInt((if (registrationOpen) 1 else 0))
-		writeValue(orderPreference)
+		writeInt(orderPreference)
 		writeString(type)
 		writeValue(teamSize)
 	}
