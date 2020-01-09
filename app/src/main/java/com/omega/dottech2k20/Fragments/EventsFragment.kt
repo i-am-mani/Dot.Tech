@@ -303,6 +303,7 @@ class EventsFragment : Fragment() {
 		}
 		// Disable the button if registration is closed
 		btn_join.isEnabled = event.registrationOpen
+		btn_leave.isEnabled = event.registrationOpen
 		// null event would imply that event doesn't exist in user's events field
 		if (matchingEvent == null) {
 			Log.d(TAG, "Changing Visibility")

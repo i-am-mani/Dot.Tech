@@ -25,6 +25,7 @@ class UserEventItem(
 				tv_event_datetime.text = Utils.getEventSchedule(startTime,endTime)
 			}
 
+			btn_event_leave.isEnabled = event.registrationOpen
 			btn_event_leave.setOnClickListener { leaveEventCallback(event) }
 			btn_event_details.setOnClickListener { viewDetailsCallback(event) }
 		}
