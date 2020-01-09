@@ -113,6 +113,16 @@ class AuthenticationUtils {
 			}
 		}
 
+		fun sendResetPasswordEmail(email: String, callback: (Exception?) -> Unit) {
+			mAuth.sendPasswordResetEmail(email).addOnCompleteListener {
+				if (it.isSuccessful) {
+					callback(null)
+				} else {
+					callback(it.exception)
+				}
+			}
+		}
+
 		val currentUser: FirebaseUser?
 			get() = mAuth.currentUser
 		}
