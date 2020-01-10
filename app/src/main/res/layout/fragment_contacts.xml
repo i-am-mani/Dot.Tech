@@ -10,16 +10,17 @@
         android:id="@+id/card_header_icon"
         android:layout_width="@dimen/startup_dialog_icon_card"
         android:layout_height="@dimen/startup_dialog_icon_card"
-        android:layout_gravity="center|top"
-        android:layout_marginTop="8dp"
-        android:visibility="gone"
+        android:layout_gravity="center|center_horizontal|top"
+        android:layout_marginTop="10dp"
+        android:visibility="visible"
         app:cardCornerRadius="@dimen/startup_dialog_icon_card_corner_radius"
         app:cardElevation="8dp">
 
         <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
+            android:layout_margin="20dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_multicolor_contacts" />
     </com.google.android.material.card.MaterialCardView>
