@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import com.omega.dottech2k20.R
+import es.dmoral.toasty.Toasty
 
 object CreateTeamDialog {
 	fun show(context: Context, callback: (name: String, passcode: String) -> Unit) {
@@ -27,8 +28,17 @@ object CreateTeamDialog {
 			confirm.setOnClickListener {
 				val name = etName.text.toString()
 				val passcode = etPasscode.text.toString()
-				callback(name, passcode)
-				dismiss()
+				if (name.isEmpty() || passcode.isEmpty()) {
+					Toasty.warning(context, "You have left a field empty!").show()
+				} else if (passcode.length <= 4) {
+					Toasty.warning(
+						context,
+						"Password too short. It Should be at least 4 character long."
+					).show()
+				} else if (name.isNotEmpty() && passcode.isNotEmpty() && passcode.length >= 4) {
+					callback(name, passcode)
+					dismiss()
+				}
 			}
 
 			cancel.setOnClickListener {
