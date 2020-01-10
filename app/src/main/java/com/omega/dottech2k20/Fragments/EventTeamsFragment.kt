@@ -28,7 +28,6 @@ import com.omega.dottech2k20.models.UserEventViewModel
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Section
-import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.fragment_event_teams.*
 
 
@@ -250,7 +249,6 @@ class EventTeamsFragment : Fragment() {
 		CreateTeamDialog.show(ctx) { name, passcode ->
 			mEvent.id?.let { eventId ->
 				mViewModel.createTeamToEvent(eventId, name, passcode)
-				Toasty.info(ctx, "Creating team ...").show()
 			}
 		}
 	}

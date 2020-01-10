@@ -416,7 +416,6 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 		val user: User? = mUserProfileLiveData.value
 		if (user == null) {
 			val uid = mFireAuth.currentUser?.uid ?: return
-			Toasty.info(getApplication(), "Processing User Info").show()
 			val document: DocumentReference = mFirestore.collection("Users").document(uid)
 			document.get().addOnCompleteListener { task ->
 				if (task.isSuccessful) {
@@ -429,6 +428,7 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 					}
 				} else {
 					Log.e(TAG, "Failed To get User : ", task.exception)
+					Toasty.error(getApplication(), "Failed To Create Team").show()
 				}
 			}
 		} else {
@@ -473,6 +473,13 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 					EVENT_PARTICIPANTS_COUNT_FIELD,
 					FieldValue.increment(1)
 				)
+			}.addOnCompleteListener {
+				if (it.isSuccessful) {
+					Toasty.success(getApplication(), "Team Creation Successful!").show()
+				} else {
+					Toasty.error(getApplication(), "Team Creation Failed").show()
+					Log.e(TAG, "Failed to create team", it.exception)
+				}
 			}
 		}
 
@@ -529,7 +536,7 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 				if (it.isSuccessful) {
 					Toasty.success(getApplication(), "Deleting Team Successful").show()
 				} else {
-					Toasty.success(getApplication(), "Deleting Team Failed").show()
+					Toasty.error(getApplication(), "Deleting Team Failed").show()
 					Log.e(TAG, "Failed to Delete Team", it.exception)
 				}
 			}
