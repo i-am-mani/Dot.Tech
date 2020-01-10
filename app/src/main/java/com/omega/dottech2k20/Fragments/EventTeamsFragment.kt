@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.omega.dottech2k20.Adapters.HeaderCountItem
 import com.omega.dottech2k20.Adapters.TeamItem
 import com.omega.dottech2k20.MainActivity
 import com.omega.dottech2k20.R
@@ -26,6 +27,7 @@ import com.omega.dottech2k20.models.Teammate
 import com.omega.dottech2k20.models.UserEventViewModel
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
+import com.xwray.groupie.Section
 import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.fragment_event_teams.*
 
@@ -38,6 +40,7 @@ class EventTeamsFragment : Fragment() {
 	private lateinit var mAdapter: GroupAdapter<GroupieViewHolder>
 	private lateinit var mViewModel: UserEventViewModel
 	private lateinit var mEvent: Event
+	private lateinit var mTeamSection: Section
 	private var isUserPartOfTeam: Boolean? = null
 
 	override fun onCreateView(
@@ -45,8 +48,15 @@ class EventTeamsFragment : Fragment() {
 		savedInstanceState: Bundle?
 	): View? {
 		mAdapter = GroupAdapter()
+		mTeamSection = Section()
+		setTeamsHeader(0)
+		mAdapter.add(mTeamSection)
 		extractArguments()
 		return inflater.inflate(R.layout.fragment_event_teams, container, false)
+	}
+
+	private fun setTeamsHeader(count: Int) {
+		mTeamSection.setHeader(HeaderCountItem("Total Teams", count))
 	}
 
 	private fun initRV() {
@@ -92,8 +102,7 @@ class EventTeamsFragment : Fragment() {
 	private fun setTeamsObserver() {
 		mEvent.id?.let { eid ->
 			mViewModel.getTeamsOfEvent(eid).observe(this, Observer { teams ->
-				if (teams != null) {
-					Log.d(TAG, "Teams = $teams")
+				if (teams != null && teams.count() > 0) {
 					val eventTeams = teams[eid]
 					if (eventTeams != null) {
 						populateAdapter(eventTeams)
@@ -105,11 +114,11 @@ class EventTeamsFragment : Fragment() {
 
 	private fun populateAdapter(eventTeams: List<Team>) {
 		if (mAdapter.itemCount == 0) {
-			mAdapter.addAll(getTeamItems(eventTeams))
-
+			mTeamSection.addAll(getTeamItems(eventTeams))
 		} else {
-			mAdapter.update(getTeamItems(eventTeams))
+			mTeamSection.update(getTeamItems(eventTeams))
 		}
+		setTeamsHeader(eventTeams.count())
 	}
 
 	private fun getTeamItems(eventTeams: List<Team>): List<TeamItem> {
