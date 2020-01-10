@@ -36,7 +36,7 @@ object CreateTeamDialog {
 						"Password too short. It Should be at least 4 character long."
 					).show()
 				} else if (name.isNotEmpty() && passcode.isNotEmpty() && passcode.length >= 4) {
-					callback(name, passcode)
+					callback(name.trim(), passcode)
 					dismiss()
 				}
 			}
