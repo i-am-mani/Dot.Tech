@@ -6,18 +6,19 @@
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="@dimen/startup_dialog_icon_card"
-        android:layout_height="@dimen/startup_dialog_icon_card"
+        android:layout_width="@dimen/medium_icon_card"
+        android:layout_height="@dimen/medium_icon_card"
         android:layout_gravity="center"
         android:layout_marginBottom="-36dp"
-        app:cardCornerRadius="50dp"
+        app:cardCornerRadius="@dimen/medium_icon_card_corner_radius"
         app:cardElevation="5dp">
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:background="@drawable/ic_team_rounded"
+            android:layout_margin="15dp"
+            android:background="@drawable/ic_team"
             android:scaleType="center">
 
         </ImageView>

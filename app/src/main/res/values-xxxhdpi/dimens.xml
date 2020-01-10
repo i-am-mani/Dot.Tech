@@ -7,4 +7,6 @@
     <dimen name="item_sponsers_image_height">200dp</dimen>
     <dimen name="event_details_image_card_height">260dp</dimen>
     <dimen name="authentication_header_image_height">300dp</dimen>
+    <dimen name="medium_icon_card">100dp</dimen>
+    <dimen name="medium_icon_card_corner_radius">50dp</dimen>
 </resources>

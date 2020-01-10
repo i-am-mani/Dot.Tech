@@ -6,11 +6,11 @@
     android:layout_height="match_parent">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="75dp"
-        android:layout_height="75dp"
+        android:layout_width="@dimen/medium_icon_card"
+        android:layout_height="@dimen/medium_icon_card"
         android:layout_gravity="center"
         android:layout_marginBottom="-36dp"
-        app:cardCornerRadius="50dp"
+        app:cardCornerRadius="@dimen/medium_icon_card_corner_radius"
         app:cardElevation="5dp">
 
         <ImageView

@@ -7,18 +7,19 @@
     android:layout_height="match_parent">
 
     <androidx.cardview.widget.CardView
-        android:layout_height="@dimen/startup_dialog_icon_card"
-        android:layout_width="@dimen/startup_dialog_icon_card"
+        android:layout_width="@dimen/medium_icon_card"
+        android:layout_height="@dimen/medium_icon_card"
         android:layout_gravity="center"
         android:layout_marginBottom="-36dp"
-        app:cardCornerRadius="@dimen/startup_dialog_icon_card_corner_radius"
+        app:cardCornerRadius="@dimen/medium_icon_card_corner_radius"
         app:cardElevation="5dp">
 
         <!-- Add width and height to dimens -->
         <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
+            android:layout_margin="15dp"
             android:background="@drawable/ic_checked_tick"
             android:backgroundTint="@color/MaterialGreen"
             android:scaleType="center">
