@@ -61,7 +61,7 @@ class NotificationDetailFragment : Fragment() {
 
 	private fun setImage(image: String?) {
 		val ctx = context
-		if (image != null && ctx != null) {
+		if (image != null && ctx != null && image.isNotEmpty()) {
 			if (image.contains(Regex("https|HTTPS"))) {
 				Glide.with(ctx).load(image).into(im_notification)
 			} else {
@@ -69,7 +69,7 @@ class NotificationDetailFragment : Fragment() {
 				Glide.with(ctx).load(reference).into(im_notification)
 			}
 		} else {
-			im_notification.visibility = View.GONE
+			card_im_notification.visibility = View.GONE
 		}
 	}
 
