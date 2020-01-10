@@ -23,6 +23,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnFlingListener
+import com.omega.dottech2k20.Adapters.HeaderCountItem
 import com.omega.dottech2k20.Adapters.UserEventItem
 import com.omega.dottech2k20.MainActivity
 import com.omega.dottech2k20.R
@@ -37,9 +38,7 @@ import com.omega.dottech2k20.models.UserEventViewModel
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Section
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
-import com.xwray.groupie.kotlinandroidextensions.Item
 import kotlinx.android.synthetic.main.fragment_profile.*
-import kotlinx.android.synthetic.main.item_total_count.*
 
 class ProfileFragment : Fragment() {
 	val TAG = javaClass.simpleName
@@ -90,14 +89,14 @@ class ProfileFragment : Fragment() {
 
 		if (!::eventsGroupieSection.isInitialized) {
 			eventsGroupieSection = Section()
-			eventsGroupieSection.setHeader(EventSummaryItem(eventItems.count()))
+			eventsGroupieSection.setHeader(HeaderCountItem("Total Events", eventItems.count()))
 			eventsGroupieSection.addAll(eventItems)
 			// Attach the section with Groupie adapter
 			mAdapter.add(eventsGroupieSection)
 		} else {
 			// In case the event count has changed
 			eventsGroupieSection.removeHeader()
-			eventsGroupieSection.setHeader(EventSummaryItem(eventItems.count()))
+			eventsGroupieSection.setHeader(HeaderCountItem("Total Events", eventItems.count()))
 			eventsGroupieSection.update(eventItems)
 		}
 
@@ -302,18 +301,6 @@ class ProfileFragment : Fragment() {
 		return inflater.inflate(R.layout.unsigned_user_layout, container, false)
 	}
 
-	inner class EventSummaryItem(val count: Int) : Item() {
-		override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-			viewHolder.apply {
-				tv_total_count.text = count.toString()
-			}
-		}
-
-		override fun getLayout(): Int {
-			return R.layout.item_total_count
-		}
-
-	}
 
 	fun showToast(message: String) {
 		Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
