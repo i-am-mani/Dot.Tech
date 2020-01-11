@@ -41,12 +41,12 @@
         app:layout_constraintTop_toTopOf="@+id/guideline14">
 
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/icon_small"
+            android:layout_height="@dimen/icon_small"
             android:layout_gravity="start"
-            android:layout_marginStart="8dp"
-            app:cardBackgroundColor="#BBDEFB"
-            app:cardCornerRadius="100dp"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="#BBDEFB"
+            app:cardCornerRadius="@dimen/icon_small_radius"
             app:cardElevation="5dp"
             app:layout_constraintEnd_toStartOf="@+id/guideline7"
             app:layout_constraintStart_toStartOf="parent"
@@ -77,12 +77,12 @@
 
 
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/icon_small"
+            android:layout_height="@dimen/icon_small"
             android:layout_gravity="end"
             android:layout_marginEnd="8dp"
             android:backgroundTint="#BBDEFB"
-            app:cardCornerRadius="100dp"
+            app:cardCornerRadius="@dimen/icon_small_radius"
             app:cardElevation="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline10"
@@ -111,8 +111,7 @@
         android:id="@+id/sponsor_layout_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:constraint_referenced_ids="rv_sponsors,frameLayout" />
+        android:visibility="gone" />
 
     <ProgressBar
         android:id="@+id/pb_sponsors"

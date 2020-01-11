@@ -24,18 +24,18 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:layout_margin="15dp"
+            android:layout_margin="25dp"
             android:scaleType="centerInside"
             app:srcCompat="@drawable/ic_note" />
     </com.google.android.material.card.MaterialCardView>
 
 
     <com.google.android.material.card.MaterialCardView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/icon_small"
+        android:layout_height="@dimen/icon_small"
         android:layout_marginStart="8dp"
         android:backgroundTint="#BBDEFB"
-        app:cardCornerRadius="100dp"
+        app:cardCornerRadius="@dimen/icon_small_radius"
         app:cardElevation="5dp"
         app:layout_constraintEnd_toStartOf="@+id/guideline7"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,9 +43,9 @@
 
         <ImageButton
             android:id="@+id/imbtn_previous"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical"
+            android:layout_width="@dimen/icon_small"
+            android:layout_height="@dimen/icon_small"
+            android:layout_gravity="center"
             android:background="@android:color/transparent"
             android:padding="10dp"
             android:src="@drawable/ic_chevron_left"
@@ -54,11 +54,11 @@
 
 
     <com.google.android.material.card.MaterialCardView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/icon_small"
+        android:layout_height="@dimen/icon_small"
         android:layout_marginEnd="8dp"
         android:backgroundTint="#BBDEFB"
-        app:cardCornerRadius="100dp"
+        app:cardCornerRadius="@dimen/icon_small_radius"
         app:cardElevation="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline10"
@@ -68,7 +68,7 @@
             android:id="@+id/imbtn_next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical"
+            android:layout_gravity="center"
             android:background="@android:color/transparent"
             android:padding="10dp"
             android:src="@drawable/ic_chevron_right"

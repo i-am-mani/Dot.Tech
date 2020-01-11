@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?><!-- 4.00" 480 x 800-->
 <resources>
     <item name="event_card_width" type="dimen">120dp</item>
+
     <dimen name="startup_dialog_icon_card">80dp</dimen>
     <dimen name="startup_dialog_icon_card_corner_radius">40dp</dimen>
+
+    <dimen name="medium_icon_card">70dp</dimen>
+    <dimen name="medium_icon_card_corner_radius">35dp</dimen>
+
+    <dimen name="icon_small">30dp</dimen>
+    <dimen name="icon_small_radius">15dp</dimen>
+
+
     <dimen name="medium_progress_bar">90dp</dimen>
     <dimen name="item_sponsers_image_height">130dp</dimen>
     <dimen name="event_details_image_card_height">170dp</dimen>
     <dimen name="authentication_header_image_height">150dp</dimen>
-    <dimen name="medium_icon_card">70dp</dimen>
-    <dimen name="medium_icon_card_corner_radius">35dp</dimen>
 
 
     <!-- Registration -->
