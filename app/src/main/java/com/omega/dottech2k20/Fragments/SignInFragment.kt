@@ -2,7 +2,6 @@ package com.omega.dottech2k20.Fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +15,7 @@ import com.omega.dottech2k20.MainActivity
 import com.omega.dottech2k20.R
 import com.omega.dottech2k20.R.layout
 import com.omega.dottech2k20.Utils.AuthenticationUtils
+import com.omega.dottech2k20.Utils.Utils
 import com.omega.dottech2k20.dialogs.SingleTextFieldDialog
 import com.omega.dottech2k20.models.UserEventViewModel
 import es.dmoral.toasty.Toasty
@@ -88,7 +88,39 @@ class SignInFragment : Fragment() {
 	private fun isDataValid(): Boolean {
 		val email: String = et_login_email.text.toString()
 		val password: String = et_login_password.text.toString()
-		return !TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)
+
+		return (validateEmail(email) && validatePassword(password))
+	}
+
+	private fun validatePassword(password: String): Boolean {
+		if (password.isEmpty()) {
+			input_layout_password.error = "Please enter your password"
+			return false
+		}
+		input_layout_password.error = ""
+		return true
+	}
+
+	/**
+	 * Validate email, checks performed
+	 * 1) it's not emtpy
+	 * 2) it conforms to email regex defined by Patterns lib.
+	 */
+	private fun validateEmail(email: String): Boolean {
+		return when {
+			email.isEmpty() -> {
+				input_layout_email.error = "Email field cannot be left empty"
+				false
+			}
+			!Utils.isValidEmail(email) -> {
+				input_layout_email.error = "Please enter valid email address"
+				false
+			}
+			else -> {
+				input_layout_email.error = ""
+				true
+			}
+		}
 	}
 
 	private fun onSignInCompletionCallback(state: Boolean, exception: Exception?) {

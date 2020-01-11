@@ -56,12 +56,13 @@
                 tools:layout_editor_absoluteY="95dp">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textInputLayout3"
+                    android:id="@+id/input_layout_email"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
+                    app:errorEnabled="true"
                     app:boxStrokeColor="@color/colorPrimaryDark"
                     app:hintTextAppearance="@style/TextInputLayoutStyle"
                     tools:layout_editor_absoluteX="90dp"
@@ -78,15 +79,17 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/input_layout_password"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    app:passwordToggleEnabled="true"
+                    app:passwordToggleTint="@color/Blue800"
+                    app:errorEnabled="true"
                     android:layout_weight="1"
                     app:boxStrokeColor="@color/colorPrimaryDark"
-                    app:hintTextAppearance="@style/TextInputLayoutStyle"
-                    tools:layout_editor_absoluteX="90dp"
-                    tools:layout_editor_absoluteY="520dp">
+                    app:hintTextAppearance="@style/TextInputLayoutStyle">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_login_password"
