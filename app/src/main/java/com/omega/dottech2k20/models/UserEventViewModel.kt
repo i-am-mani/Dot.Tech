@@ -12,12 +12,14 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.omega.dottech2k20.Fragments.EventTeamsFragment
 import com.omega.dottech2k20.Utils.FirestoreFieldNames.EVENT_COLLECTION
 import com.omega.dottech2k20.Utils.FirestoreFieldNames.EVENT_PARTICIPANTS_COUNT_FIELD
 import com.omega.dottech2k20.Utils.FirestoreFieldNames.EVENT_TEAM_COLLECTION
 import com.omega.dottech2k20.Utils.FirestoreFieldNames.TEAMMATES_FIELD
 import com.omega.dottech2k20.Utils.FirestoreFieldNames.USERS_EVENT_FIELD
 import com.omega.dottech2k20.Utils.FirestoreFieldNames.USER_COLLECTION
+import com.omega.dottech2k20.Utils.SharedPreferenceUtils
 import es.dmoral.toasty.Toasty
 import java.util.*
 
@@ -287,6 +289,8 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 				} else {
 					Toasty.success(getApplication(), "Failed To Leave Event").show()
 					Log.e(TAG, "UnJoining Events Failed")
+					// since task failed, remove timestamp from sp
+					SharedPreferenceUtils.removeTimestamp(getApplication(), eventId)
 				}
 			}
 		}
@@ -538,6 +542,10 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 				} else {
 					Toasty.error(getApplication(), "Deleting Team Failed").show()
 					Log.e(TAG, "Failed to Delete Team", it.exception)
+					SharedPreferenceUtils.removeTimestamp(
+						getApplication(),
+						EventTeamsFragment.getSharedPreferenceIdForTeam(tid)
+					)
 				}
 			}
 
@@ -658,6 +666,8 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 					Toasty.success(getApplication(), "Leaving Team Successful").show()
 				} else {
 					Toasty.error(getApplication(), "Leaving Team Failed").show()
+					// since task failed, remove timestamp from sp
+					SharedPreferenceUtils.removeTimestamp(getApplication(), eid)
 				}
 			}
 		}
