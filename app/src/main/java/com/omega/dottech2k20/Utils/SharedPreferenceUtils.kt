@@ -38,6 +38,20 @@ object SharedPreferenceUtils {
 		}
 	}
 
+	fun removeTimestamp(context: Context?, id: String?) {
+		if (context != null && id != null) {
+			// Whenever user leaves event, mark the event against timestamp
+			// Prevent user from joining for next defined time interval - to prevent spamming
+			val sharedPreference = PreferenceManager.getDefaultSharedPreferences(context)
+			val editor = sharedPreference.edit()
+			editor.remove(id)
+			editor.apply()
+			Log.d(TAG, "Removed Timestamp with id = $id")
+		} else {
+			Log.e(TAG, "Context or id is null", NullPointerException())
+		}
+	}
+
 	/**
 	 * Return true if user join same event within defined time interval.
 	 */
