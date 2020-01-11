@@ -66,20 +66,112 @@ class SignUpFragment : Fragment() {
 	}
 
 	private fun isDataValid(): Boolean {
-		// todo Check the structure of full name and strength of password
-		val email = et_sign_up_email!!.text.toString()
-		val password = et_sign_up_password1!!.text.toString()
+		val fullname = et_sign_up_full_name.text.toString()
+		val email = et_sign_up_email.text.toString()
+		val password = et_sign_up_password1.text.toString()
 		val rePassword = et_sign_up_password2.text.toString()
 		val phone = et_phone_no.text.toString()
-		return (!TextUtils.isEmpty(email)
-				&& !TextUtils.isEmpty(password)
-				&& !TextUtils.isEmpty(rePassword)
-				&& Utils.isValidEmail(email)
-				&& TextUtils.equals(password, rePassword)
-				&& phone.length == 10)
+
+		return (validateFullName(fullname) &&
+				validateEmail(email) &&
+				validatePhoneNumber(phone) &&
+				validatePasswords(password, rePassword))
 	}
 
-	private fun highlightEmptyFields() {}
+	private fun validatePhoneNumber(phone: String): Boolean {
+		return when {
+			phone.isEmpty() -> {
+				input_layout_phone.error = "Phone number field cannot be left empty"
+				false
+			}
+			!TextUtils.isDigitsOnly(phone) -> {
+				input_layout_phone.error = "Please enter valid phone number"
+				false
+			}
+			phone.length < 10 -> {
+				input_layout_phone.error = "Please enter 10 digit valid phone number"
+				false
+			}
+			else -> {
+				input_layout_phone.error = ""
+				true
+			}
+		}
+	}
+
+	/**
+	 * Validate Passwords. Checks performed.
+	 * 1) Not empty
+	 * 2) both match
+	 * 3) length greater then 6.
+	 */
+	private fun validatePasswords(password: String, rePassword: String): Boolean {
+		when {
+			password.isEmpty() -> {
+				input_layout_password1.error = "Password field cannot be left empty"
+				return false
+			}
+			password.length < 6 -> {
+				input_layout_password1.error = "Password length cannot be shorter then 5 characters"
+				return false
+			}
+			password != rePassword -> {
+				input_layout_password1.error = "Passwords don't match!"
+				input_layout_password2.error = "Passwords don't match!"
+				return false
+			}
+			else -> {
+				input_layout_password1.error = ""
+				input_layout_password2.error = ""
+				return true
+			}
+		}
+	}
+
+	/**
+	 * Validate email, checks performed
+	 * 1) it's not emtpy
+	 * 2) it conforms to email regex defined by Patterns lib.
+	 */
+	private fun validateEmail(email: String): Boolean {
+		return when {
+			email.isEmpty() -> {
+				input_layout_email.error = "Email field cannot be left empty"
+				false
+			}
+			!Utils.isValidEmail(email) -> {
+				input_layout_email.error = "Please enter valid email address"
+				false
+			}
+			else -> {
+				input_layout_email.error = ""
+				true
+			}
+		}
+	}
+
+	/**
+	 * Validate full name. Checks performed
+	 * 1) not empty
+	 * 2) length greater then 4
+	 */
+	private fun validateFullName(fullname: String): Boolean {
+		return when {
+			fullname.isEmpty() -> {
+				input_layout_fullname.error = "Name cannot be empty"
+				false
+			}
+			fullname.length < 4 -> {
+				input_layout_fullname.error = "Name is too short"
+				false
+			}
+			else -> {
+				input_layout_fullname.error = ""
+				true
+			}
+		}
+	}
+
 
 	private fun onRegistrationCompletionCallBack(state: Boolean, exception: Exception?) {
 		progress_bar_sign_up.visibility = View.INVISIBLE

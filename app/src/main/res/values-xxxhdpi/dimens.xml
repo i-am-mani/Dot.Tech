@@ -9,4 +9,8 @@
     <dimen name="authentication_header_image_height">300dp</dimen>
     <dimen name="medium_icon_card">100dp</dimen>
     <dimen name="medium_icon_card_corner_radius">50dp</dimen>
+
+    <!-- Registration -->
+    <dimen name="registration_top_padding">120dp</dimen>
+    <dimen name="registration_bottom_padding">60dp</dimen>
 </resources>
