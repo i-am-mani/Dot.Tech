@@ -219,12 +219,10 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:layout_marginEnd="8dp"
-                    android:backgroundTint="#9CCC65"
-                    android:elevation="10dp"
+                    android:backgroundTint="@color/SuccessBackgroundColor"
+                    android:textColor="@color/SuccessTextColor"
                     android:text="Sign up"
-                    android:textAppearance="@style/NormalTextRubik"
-                    android:textColor="#FFF"
-                    app:cornerRadius="6dp" />
+                    android:textAppearance="@style/NormalTextRubik" />
 
             </LinearLayout>
 

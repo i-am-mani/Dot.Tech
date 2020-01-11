@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardUseCompatPadding="true"
-    app:cardElevation="6dp">
+    app:cardElevation="6dp"
+    app:cardUseCompatPadding="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,8 +23,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                tools:text="Team 1"
-                android:textAppearance="@style/SubTitleTextRubik" />
+                android:textAppearance="@style/SubTitleTextRubik"
+                tools:text="Team 1" />
 
             <ImageButton
                 android:id="@+id/imbtn_remove_team"
@@ -39,9 +38,9 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_teammates"
-            android:layout_marginTop="8dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_join"
@@ -49,9 +48,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginTop="8dp"
-            android:backgroundTint="@color/BackgroundGreen"
+            android:backgroundTint="@color/SuccessBackgroundColor"
             android:text="Join"
-            android:textColor="@color/TextGreen"
+            android:textColor="@color/SuccessTextColor"
             android:visibility="visible" />
 
         <com.google.android.material.button.MaterialButton

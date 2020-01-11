@@ -199,9 +199,9 @@
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="#8BC34A"
-            android:text="Join"
-            android:textSize="14sp" />
+            android:backgroundTint="@color/SuccessBackgroundColor"
+            android:textColor="@color/SuccessTextColor"
+            android:text="Join" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_leave"

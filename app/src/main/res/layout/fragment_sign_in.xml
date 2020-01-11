@@ -125,16 +125,12 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_sign_in"
-                style="@style/Widget.MaterialComponents.Button"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#9CCC65"
-                android:elevation="10dp"
-                android:text="Login"
-                android:textColor="#FFF"
-                app:cornerRadius="6dp"
-                tools:layout_editor_absoluteX="274dp"
-                tools:layout_editor_absoluteY="477dp" />
+                android:backgroundTint="@color/SuccessBackgroundColor"
+                android:textColor="@color/SuccessTextColor"
+                android:text="Login" />
 
 
         </LinearLayout>
