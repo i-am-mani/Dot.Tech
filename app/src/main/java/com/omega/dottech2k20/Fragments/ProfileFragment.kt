@@ -145,9 +145,6 @@ class ProfileFragment : Fragment() {
 		tv_full_name.text = user.fullName
 		tv_email.text = user.email
 		tv_phone.text = user.phone
-		btn_edit_profile?.setOnClickListener {
-			showEditDialog(user)
-		}
 	}
 
 	override fun onCreateView(
@@ -213,6 +210,11 @@ class ProfileFragment : Fragment() {
 	}
 
 
+	/**
+	 * Dialog to edit profile details. This feature has been removed, it's incomplete.
+	 *
+	 * Specifically, renaming participants of team is a task which remains.
+	 */
 	fun showEditDialog(user: User) {
 		val dialog = Dialog(context)
 		setDialogProperties(dialog)
@@ -276,11 +278,11 @@ class ProfileFragment : Fragment() {
 
 		dialog.requestWindowFeature(Window.FEATURE_SWIPE_TO_DISMISS)
 		dialog.setContentView(R.layout.dialog_edit_profile)
-		dialog.window.setLayout(
+		dialog.window?.setLayout(
 			ViewGroup.LayoutParams.MATCH_PARENT,
 			ViewGroup.LayoutParams.WRAP_CONTENT
 		)
-		dialog.window.setBackgroundDrawableResource(android.R.color.transparent)
+		dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
 	}
 
 
