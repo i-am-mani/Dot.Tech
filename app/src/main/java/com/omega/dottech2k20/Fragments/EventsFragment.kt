@@ -70,7 +70,7 @@ class EventsFragment : Fragment() {
 	override fun onPause() {
 		super.onPause()
 		val index = mLayoutManager.activeCardPosition
-		mViewModel.setEventIndex(index)
+		mViewModel.setEventIndex(index) // To restore previous state
 	}
 
 	override fun onActivityCreated(savedInstanceState: Bundle?) {

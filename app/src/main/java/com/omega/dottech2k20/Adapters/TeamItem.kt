@@ -179,10 +179,9 @@ class TeamItem(
 		val onRemoveTeammateCallback: (team: Team, teammate: Teammate) -> Unit
 	) : Item() {
 		override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-			val user = AuthenticationUtils.currentUser
 			viewHolder.apply {
 				val (id, name) = teammate
-				if (id != null && name != null && user != null) {
+				if (id != null && name != null) {
 					tv_teammate_name.text = name
 
 					if (isRemoveTeammateEnabled) {

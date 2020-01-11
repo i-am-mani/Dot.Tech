@@ -79,15 +79,21 @@ class EventTeamsFragment : Fragment() {
 	override fun onActivityCreated(savedInstanceState: Bundle?) {
 		super.onActivityCreated(savedInstanceState)
 		mViewModel = ViewModelProviders.of(mActivity).get(UserEventViewModel::class.java)
-		mViewModel.getUserProfile()?.observe(this, Observer { user ->
-			if (user != null) {
-				isUserPartOfTeam = user.events.find {
-					it.eventId == mEvent.id
-				} != null
-				setTeamsObserver()
-				updateFAB()
-			}
-		})
+		if (AuthenticationUtils.currentUser != null) {
+			mViewModel.getUserProfile()?.observe(this, Observer { user ->
+				if (user != null) {
+					isUserPartOfTeam = user.events.find {
+						it.eventId == mEvent.id
+					} != null
+					setTeamsObserver()
+					updateFAB()
+				}
+			})
+		} else {
+			isUserPartOfTeam = false
+			setTeamsObserver()
+			updateFAB()
+		}
 	}
 
 	private fun updateFAB() {
