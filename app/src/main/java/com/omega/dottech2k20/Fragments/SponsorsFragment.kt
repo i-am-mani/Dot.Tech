@@ -3,7 +3,6 @@ package com.omega.dottech2k20.Fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,10 +25,9 @@ import java.lang.Math.abs
 
 class SponsorsFragment : Fragment() {
 
-	val TAG = "SponsorsFragment"
-	val mAdapter: GroupAdapter<GroupieViewHolder> = GroupAdapter()
-	lateinit var mViewModel: SponsorsViewModel
-	val linearLayoutManager =
+	private lateinit var mAdapter: GroupAdapter<GroupieViewHolder>
+	private lateinit var mViewModel: SponsorsViewModel
+	private val linearLayoutManager =
 		LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
 	lateinit var mActivity: MainActivity
@@ -43,6 +41,7 @@ class SponsorsFragment : Fragment() {
 		inflater: LayoutInflater, container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View? {
+		mAdapter = GroupAdapter()
 		mViewModel = ViewModelProviders.of(mActivity).get(SponsorsViewModel::class.java)
 		mViewModel.getSponsorsData().observe(this, Observer { sponsors ->
 			if (sponsors != null && sponsors.count() > 0) {
@@ -88,8 +87,7 @@ class SponsorsFragment : Fragment() {
 			override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
 				super.onScrollStateChanged(recyclerView, newState)
 				if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-					var curPosition = linearLayoutManager.findFirstCompletelyVisibleItemPosition()
-					Log.d(TAG, "curPosition = $curPosition")
+					val curPosition = linearLayoutManager.findFirstCompletelyVisibleItemPosition()
 					if (curPosition != position) {
 						indicator_sponsors.selection = curPosition
 						position = curPosition
@@ -99,14 +97,14 @@ class SponsorsFragment : Fragment() {
 		})
 
 		imbtn_next.setOnClickListener {
-			var curPosition = linearLayoutManager.findFirstCompletelyVisibleItemPosition()
+			val curPosition = linearLayoutManager.findFirstCompletelyVisibleItemPosition()
 			position = abs(curPosition + 1) % mAdapter.itemCount
 			linearLayoutManager.scrollToPosition(position)
 			indicator_sponsors.selection = position
 		}
 
 		imbtn_previous.setOnClickListener {
-			var curPosition = linearLayoutManager.findFirstCompletelyVisibleItemPosition()
+			val curPosition = linearLayoutManager.findFirstCompletelyVisibleItemPosition()
 			position = abs(curPosition - 1) % mAdapter.itemCount
 			linearLayoutManager.scrollToPosition(position)
 			indicator_sponsors.selection = position
