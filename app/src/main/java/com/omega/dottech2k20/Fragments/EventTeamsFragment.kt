@@ -125,12 +125,27 @@ class EventTeamsFragment : Fragment() {
 	}
 
 	private fun populateAdapter(eventTeams: List<Team>) {
+		val data = getSortedData(eventTeams.toMutableList())
 		if (mAdapter.itemCount == 0) {
-			mTeamSection.addAll(getTeamItems(eventTeams))
+			mTeamSection.addAll(getTeamItems(data))
 		} else {
-			mTeamSection.update(getTeamItems(eventTeams))
+			mTeamSection.update(getTeamItems(data))
 		}
-		setTeamsHeader(eventTeams.count())
+		setTeamsHeader(data.count())
+	}
+
+	private fun getSortedData(eventTeams: MutableList<Team>): List<Team> {
+		if (isUserPartOfTeam == true) {
+			val userTeamIndex = eventTeams.indexOfFirst { team ->
+				team.teammates.filter { it.id == AuthenticationUtils.currentUser?.uid }.size == 1
+			}
+			if (userTeamIndex != -1) {
+				val userTeam = eventTeams[userTeamIndex]
+				eventTeams.removeAt(userTeamIndex)
+				eventTeams.add(0, userTeam)
+			}
+		}
+		return eventTeams
 	}
 
 	private fun getTeamItems(eventTeams: List<Team>): List<TeamItem> {
