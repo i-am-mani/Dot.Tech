@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
 import com.omega.dottech2k20.Adapters.NoticeItem
@@ -61,6 +62,10 @@ class MainActivity : AppCompatActivity() {
 		initStartUpDialog()
 	}
 
+	override fun onResume() {
+		super.onResume()
+		FirebaseAuth.getInstance().currentUser?.reload()
+	}
 	override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 		super.onCreateOptionsMenu(menu)
 		menuInflater.inflate(R.menu.action_bar_menu, menu)
