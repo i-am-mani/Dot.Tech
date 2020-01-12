@@ -62,15 +62,18 @@ class EventParticipantsFragment : Fragment() {
 	}
 
 	private fun setUpScrollListener() {
+
 		rv_participants.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 			override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
 				super.onScrolled(recyclerView, dx, dy)
 				val view = recyclerView.getChildAt(0)
-				if (view != null && recyclerView.getChildAdapterPosition(view) == 0) {
-					val card = view.findViewById<CardView>(R.id.card_total_count)
-					Log.d(TAG, "view.top = ${view.top}")
-					// Basically we are moving against the scroll, applying same magnitude of scroll on opposite direction
-					card.translationX = -(view.top) / 2f
+				context?.let { ctx ->
+					if (view != null && recyclerView.getChildAdapterPosition(view) == 0) {
+						val card = view.findViewById<CardView>(R.id.card_total_count)
+						Log.d(TAG, "view.top = ${view.top}")
+						// Basically we are moving against the scroll, applying same magnitude of scroll on opposite direction
+						card.translationY = -(view.top) / 2f
+					}
 				}
 			}
 		})
