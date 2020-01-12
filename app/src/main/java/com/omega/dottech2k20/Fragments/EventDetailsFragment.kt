@@ -21,7 +21,6 @@ import com.omega.dottech2k20.MainActivity
 import com.omega.dottech2k20.R
 import com.omega.dottech2k20.Utils.EventCallbacks
 import com.omega.dottech2k20.Utils.FirestoreFieldNames
-import com.omega.dottech2k20.dialogs.BinaryDialog
 import com.omega.dottech2k20.models.Event
 import com.omega.dottech2k20.models.UserEventViewModel
 import com.xwray.groupie.GroupAdapter
@@ -119,7 +118,6 @@ class EventDetailsFragment : Fragment() {
 	private fun addClickListeners() {
 		setJoinEventCallback()
 		setLeaveEventCallback()
-		btn_leave.hide()
 	}
 
 	private fun setJoinEventCallback() {
@@ -175,20 +173,6 @@ class EventDetailsFragment : Fragment() {
 		}
 	}
 
-	private fun requestForLoginDialog() {
-		context?.let { c ->
-			BinaryDialog(c).apply {
-				title = "Unsigned user"
-				description = "Please Sign in or Sign Up to Continue"
-				leftButtonName = "Sign In"
-				rightButtonName = "Sign Up"
-				rightButtonId = R.id.btn_right
-				leftButtonId = R.id.btn_left
-				leftButtonCallback = { findNavController().navigate(R.id.signInFragment) }
-				rightButtonCallback = { findNavController().navigate(R.id.signUpFragment) }
-			}.build()
-		}
-	}
 
 	private fun initRV() {
 		context?.let { ctx ->
@@ -196,10 +180,20 @@ class EventDetailsFragment : Fragment() {
 
 			val imagesItem = HorizontalImageViewerItem(ctx, mEvent.images)
 			val eventDetails = EventDetailItem(ctx, mEvent) {
-				findNavController().navigate(
-					R.id.eventParticipantsFragment,
-					bundleOf(EventParticipantsFragment.BUNDLE_KEY to mEvent)
-				)
+				if (mEvent.type == FirestoreFieldNames.EVENT_TYPE_INDIVIDUAL) {
+					findNavController().navigate(
+						R.id.eventParticipantsFragment,
+						bundleOf(EventParticipantsFragment.BUNDLE_KEY to mEvent)
+					)
+				} else if (mEvent.type == FirestoreFieldNames.EVENT_TYPE_TEAM) {
+					findNavController().navigate(
+						R.id.eventTeamsFragment,
+						bundleOf(
+							EventTeamsFragment.EVENT_KEY to mEvent,
+							EventTeamsFragment.READ_ONLY to true
+						)
+					)
+				}
 			}
 
 			mAdapter.add(imagesItem)
