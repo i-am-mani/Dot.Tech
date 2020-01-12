@@ -1,115 +1,171 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".Fragments.AboutFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <com.google.android.material.card.MaterialCardView
+        app:cardCornerRadius="@dimen/card_corner_radius"
+        app:cardElevation="4dp"
+        app:cardUseCompatPadding="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_view_source_code"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                app:icon="@drawable/ic_code_file"
+                app:iconSize="@dimen/icon_small"
+                app:iconTint="@android:color/transparent"
+                app:iconTintMode="add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:text="Source Code"
+                android:textAppearance="@style/NormalText" />
+
+            <View
+                android:layout_width="2dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="2dp"
+                android:alpha="0.5"
+                android:background="@color/Blue800" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_view_attribution"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                app:icon="@drawable/ic_info_outline_white_24dp"
+                app:iconTint="@color/Blue800"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="Attribution"
+                android:textAppearance="@style/NormalText" />
+
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_weight="10"
+        android:animateLayoutChanges="true"
+        app:cardCornerRadius="@dimen/card_corner_radius"
+        app:cardElevation="5dp"
+        app:cardUseCompatPadding="true">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:animateLayoutChanges="true">
+
+            <TextView
+                android:id="@+id/tv_about_description"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:autoLink="web"
+                android:paddingStart="16dp"
+                android:paddingTop="18dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="18dp"
+                android:textAppearance="@style/NormalText"
+                android:visibility="gone"
+                tools:text="@tools:sample/lorem[100]" />
+
+            <ProgressBar
+                android:id="@+id/pb_about"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="@dimen/large_progress_bar"
+                android:layout_height="@dimen/large_progress_bar"
+                android:layout_gravity="center"
+                android:indeterminate="true"
+                android:indeterminateTint="@color/Blue400" />
+        </FrameLayout>
+    </com.google.android.material.card.MaterialCardView>
+
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:gravity="center">
 
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
-            app:cardCornerRadius="@dimen/card_corner_radius"
-            app:cardElevation="4dp"
-            app:cardUseCompatPadding="true">
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="16dp"
+            app:cardCornerRadius="25dp"
+            app:cardElevation="7dp"
+            app:cardPreventCornerOverlap="false">
 
-            <LinearLayout
+            <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_view_source_code"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:text="Source Code"
-                    android:textAppearance="@style/NormalText"
-                    app:icon="@drawable/ic_code_file"
-                    app:iconSize="@dimen/icon_small"
-                    app:iconTint="@android:color/transparent"
-                    app:iconTintMode="add" />
-
-                <View
-                    android:layout_width="2dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginEnd="12dp"
-                    android:layout_marginBottom="2dp"
-                    android:alpha="0.5"
-                    android:background="@color/Blue800" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_view_attribution"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:text="Attribution"
-                    android:textAppearance="@style/NormalText"
-                    app:icon="@drawable/ic_info_outline_white_24dp"
-                    app:iconTint="@color/Blue800" />
-
-
-            </LinearLayout>
-
+                android:tint="#303F9F"
+                app:srcCompat="@drawable/ic_facebook" />
         </com.google.android.material.card.MaterialCardView>
-
 
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:animateLayoutChanges="true"
-            app:cardCornerRadius="@dimen/card_corner_radius"
-            app:cardElevation="5dp"
-            app:cardUseCompatPadding="true">
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:cardCornerRadius="25dp"
+            app:cardElevation="7dp"
+            app:cardPreventCornerOverlap="false"
+            app:cardUseCompatPadding="false">
 
-            <FrameLayout
+            <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:animateLayoutChanges="true">
-
-                <TextView
-                    android:id="@+id/tv_about_description"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:autoLink="web"
-                    android:paddingStart="16dp"
-                    android:paddingTop="18dp"
-                    android:paddingEnd="16dp"
-                    android:paddingBottom="18dp"
-                    android:textAppearance="@style/NormalText"
-                    android:visibility="gone"
-                    tools:text="@tools:sample/lorem[100]" />
-
-                <ProgressBar
-                    android:id="@+id/pb_about"
-                    style="?android:attr/progressBarStyle"
-                    android:layout_width="@dimen/large_progress_bar"
-                    android:layout_height="@dimen/large_progress_bar"
-                    android:layout_gravity="center"
-                    android:indeterminate="true"
-                    android:indeterminateTint="@color/Blue400" />
-            </FrameLayout>
+                android:src="@drawable/ic_instagram"
+                android:tint="#303F9F" />
         </com.google.android.material.card.MaterialCardView>
+
     </LinearLayout>
 
 
-</ScrollView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_gmail" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="DotTech@gmail.com"
+            android:textAppearance="@style/NormalText" />
+    </LinearLayout>
+
+</LinearLayout>
