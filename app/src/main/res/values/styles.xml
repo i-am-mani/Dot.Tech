@@ -36,61 +36,73 @@
     <style name="TitleTextEczar" parent="TextAppearance.AppCompat.Title">
         <item name="android:textSize">@dimen/text_title_size</item>
         <item name="android:fontFamily">@font/eczar_medium</item>
+        <item name="android:textColor">#B0000000</item>
     </style>
 
     <style name="TitleTextRubik" parent="TextAppearance.AppCompat.Title">
         <item name="android:textSize">@dimen/text_title_size</item>
         <item name="android:fontFamily">@font/rubik</item>
+        <item name="android:textColor">#B0000000</item>
     </style>
 
     <style name="SubTitleTextRubik" parent="TextAppearance.AppCompat.Title">
         <item name="android:textSize">@dimen/text_sub_title_size</item>
         <item name="android:fontFamily">@font/rubik</item>
+        <item name="android:textColor">#B0000000</item>
     </style>
 
     <style name="SubTitleTextEczar" parent="TextAppearance.AppCompat.Title">
         <item name="android:textSize">@dimen/text_sub_title_size</item>
         <item name="android:fontFamily">@font/eczar_medium</item>
+        <item name="android:textColor">#B0000000</item>
     </style>
 
     <style name="SubTitleTextDosis">
         <item name="android:textSize">@dimen/text_sub_title_size</item>
         <item name="android:fontFamily">@font/dosis</item>
+        <item name="android:textColor">#B0000000</item>
     </style>
 
     <style name="CaptionText">
         <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">@font/eczar</item>
+        <item name="android:textColor">#B0000000</item>
     </style>
 
     <style name="NormalText" parent="TextAppearance.AppCompat.Body1">
         <item name="android:textSize">@dimen/text_size_normal</item>
         <item name="android:fontFamily">@font/dosis</item>
+        <item name="android:textColor">#B0000000</item>
     </style>
 
     <style name="NormalTextRubik" parent="TextAppearance.AppCompat.Body1">
         <item name="android:textSize">@dimen/text_size_normal</item>
         <item name="android:fontFamily">@font/rubik</item>
+        <item name="android:textColor">#B0000000</item>
     </style>
 
     <style name="ButtonTextEczar" parent="TextAppearance.MaterialComponents.Body1">
         <item name="fontFamily">@font/eczar</item>
         <item name="android:textSize">@dimen/text_size_normal</item>
+        <item name="android:textColor">#B0000000</item>
     </style>
 
     <style name="DateTimeAppearance">
         <item name="android:textSize">@dimen/text_size_normal</item>
         <item name="android:fontFamily">@font/eczar_medium</item>
+        <item name="android:textColor">#B0000000</item>
     </style>
 
     <style name="ProfileTitleLight">
         <item name="android:textSize">@dimen/text_title_size</item>
         <item name="android:fontFamily">@font/rubik</item>
+        <item name="android:textColor">#B0000000</item>
     </style>
 
     <style name="ProfileSubTitleLight">
         <item name="android:textSize">@dimen/text_size_normal</item>
         <item name="android:fontFamily">@font/rubik</item>
+        <item name="android:textColor">#B0000000</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
