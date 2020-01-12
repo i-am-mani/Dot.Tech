@@ -1,29 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_teams"
+    android:animateLayoutChanges="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:orientation="vertical">
 
-    <include layout="@layout/include_horizontal_shaders" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_teams"
+    <SearchView
+        android:id="@+id/search_team"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:paddingTop="16dp"
-        android:paddingBottom="36dp" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_create_team"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="36dp"
-        android:backgroundTint="@color/BackgroundGreen"
-        android:src="@drawable/ic_plus"
-        android:tint="@color/TextGreen"
-        app:borderWidth="0dp" />
+        android:visibility="gone" />
 
-</FrameLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="-8dp"
+            android:backgroundTint="@color/Blue100"
+            android:src="@android:drawable/ic_search_category_default"
+            android:tint="@color/Blue800"
+            app:borderWidth="0dp" />
+
+        <include layout="@layout/include_horizontal_shaders" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_teams"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingTop="16dp"
+            android:paddingBottom="50dp" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_create_team"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="36dp"
+            android:backgroundTint="@color/BackgroundGreen"
+            android:src="@drawable/ic_plus"
+            android:tint="@color/TextGreen"
+            app:borderWidth="0dp" />
+    </FrameLayout>
+
+</LinearLayout>

@@ -6,7 +6,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -41,6 +44,7 @@ class EventTeamsFragment : Fragment() {
 	private lateinit var mViewModel: UserEventViewModel
 	private lateinit var mEvent: Event
 	private lateinit var mTeamSection: Section
+	private lateinit var mDataSet: List<Team>
 	private var isUserPartOfTeam: Boolean? = null
 
 	override fun onCreateView(
@@ -70,6 +74,7 @@ class EventTeamsFragment : Fragment() {
 		initRV()
 		addFABCallback()
 		updateFAB()
+		addSearchCallbacks()
 	}
 
 	override fun onAttach(context: Context) {
@@ -112,6 +117,7 @@ class EventTeamsFragment : Fragment() {
 					val eventTeams = teams[eid]
 					if (eventTeams != null) {
 						populateAdapter(eventTeams)
+						mDataSet = eventTeams
 					}
 				}
 			})
@@ -276,6 +282,40 @@ class EventTeamsFragment : Fragment() {
 			Log.e(TAG, "Null Event Passed", NullPointerException())
 			findNavController().navigate(R.id.eventsFragment)
 		}
+	}
+
+	// Search Functionality
+
+	private fun addSearchCallbacks() {
+		fab_search.setOnClickListener {
+			search_team.visibility = VISIBLE
+			fab_search.hide()
+		}
+
+		search_team.setOnCloseListener {
+			search_team.visibility = GONE
+			fab_search.show()
+			true
+		}
+
+		search_team.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+			override fun onQueryTextSubmit(query: String?): Boolean {
+				return false
+			}
+
+			override fun onQueryTextChange(newText: String?): Boolean {
+				val newDataSet = mDataSet.filter {
+					val teamName = it.name
+					return@filter if (newText != null && teamName != null) {
+						teamName.contains(newText, true)
+					} else {
+						false
+					}
+				}
+				mTeamSection.update(getTeamItems(newDataSet))
+				return true
+			}
+		})
 	}
 
 
