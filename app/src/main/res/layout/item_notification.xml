@@ -8,7 +8,8 @@
     android:layout_margin="@dimen/small_margin"
     android:orientation="vertical"
     app:cardCornerRadius="5dp"
-    app:cardElevation="4dp"
+    app:cardElevation="3dp"
+    app:cardPreventCornerOverlap="false"
     app:cardUseCompatPadding="true">
 
     <LinearLayout
@@ -21,7 +22,6 @@
             android:id="@+id/root_im_notification"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:padding="8dp"
             android:visibility="gone">
 
             <ImageView
@@ -53,27 +53,23 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="8dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/tv_notification_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingStart="@dimen/small_margin"
-                    android:paddingTop="@dimen/small_margin"
-                    android:paddingEnd="@dimen/small_margin"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
+                    android:textAppearance="@style/SubTitleTextEczar"
                     tools:text="Title" />
 
                 <TextView
                     android:id="@+id/tv_notification_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:alpha="0"
-                    android:paddingStart="@dimen/small_margin"
-                    android:paddingEnd="@dimen/small_margin"
-                    android:visibility="gone"
+                    android:alpha="1"
+                    android:fontFamily="serif"
+                    android:visibility="visible"
                     tools:text="Jan,Fri  2:30" />
 
 
@@ -81,11 +77,8 @@
                     android:id="@+id/tv_notification_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingStart="@dimen/small_margin"
-                    android:paddingTop="@dimen/small_margin"
-                    android:paddingEnd="@dimen/small_margin"
-                    android:paddingBottom="@dimen/small_margin"
-                    android:textSize="@dimen/text_sub_title_size"
+                    android:layout_marginTop="8dp"
+                    android:textAppearance="@style/NormalTextRubik"
                     tools:text="Content" />
             </LinearLayout>
 

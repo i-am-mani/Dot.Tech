@@ -101,27 +101,18 @@
             android:paddingEnd="36dp"
             tools:text="12" />
 
-        <View
-            android:layout_gravity="top"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/small_shadow"
-            android:background="@drawable/fading_white_gradient"
-            android:elevation="3dp" />
+        <include layout="@layout/include_horizontal_shaders" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_user_events"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp" />
+            android:layout_marginEnd="8dp"
+            android:clipToPadding="false"
+            android:paddingTop="36dp"
+            android:paddingBottom="36dp" />
 
-        <View
-            android:layout_gravity="bottom"
-            android:layout_width="match_parent"
-            android:layout_height="16dp"
-            android:background="@drawable/fading_white_gradient"
-            android:rotation="180"
-            android:elevation="3dp" />
     </FrameLayout>
 
 

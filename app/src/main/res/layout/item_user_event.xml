@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     app:cardCornerRadius="20dp"
-    app:cardElevation="10dp"
+    app:cardElevation="2dp"
     app:cardUseCompatPadding="true">
 
     <LinearLayout
@@ -21,10 +21,10 @@
             android:id="@+id/tv_event_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/SubTitleTextEczar"
-            android:lineSpacingExtra="0dp"
-            android:includeFontPadding="false"
             android:layout_marginStart="@dimen/medium_margin"
+            android:includeFontPadding="false"
+            android:lineSpacingExtra="0dp"
+            android:textAppearance="@style/SubTitleTextEczar"
             tools:text="Event Name" />
 
         <TextView
@@ -32,9 +32,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/medium_margin"
-            android:textAppearance="@style/CaptionText"
             android:alpha="0.8"
             android:includeFontPadding="false"
+            android:textAppearance="@style/CaptionText"
             tools:text="Jan 21 Wed  12:30 - 2:00" />
 
         <LinearLayout

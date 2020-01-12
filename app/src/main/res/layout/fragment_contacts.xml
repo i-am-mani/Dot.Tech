@@ -12,7 +12,7 @@
         android:layout_height="@dimen/startup_dialog_icon_card"
         android:layout_gravity="center|center_horizontal|top"
         android:layout_marginTop="10dp"
-        android:visibility="visible"
+        android:visibility="gone"
         app:cardCornerRadius="@dimen/startup_dialog_icon_card_corner_radius"
         app:cardElevation="8dp">
 

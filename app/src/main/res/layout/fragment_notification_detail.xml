@@ -17,8 +17,7 @@
             android:id="@+id/card_im_notification"
             android:layout_width="match_parent"
             android:layout_height="250dp"
-            app:cardElevation="7dp"
-            app:cardCornerRadius="12dp">
+            app:cardElevation="7dp">
 
             <ImageView
                 android:id="@+id/im_notification"

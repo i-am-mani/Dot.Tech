@@ -56,7 +56,7 @@
             android:paddingStart="8dp"
             android:paddingEnd="24dp"
             android:textAppearance="@style/NormalText"
-            android:visibility="visible"
+            android:visibility="gone"
             tools:text="I am Fine" />
 
     </LinearLayout>
