@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
 import com.omega.dottech2k20.R
+import com.omega.dottech2k20.Utils.Utils
 import com.omega.dottech2k20.models.Event
 import com.omega.dottech2k20.models.UserEventViewModel
 
@@ -28,6 +29,7 @@ object JoinEventConfirmationDialog {
 			confirmBtn.setOnClickListener {
 				val isAnonymous = chbxAnonUser.isChecked
 				viewModel.joinEvent(event, isAnonymous)
+				Utils.contextClickHapticFeedback(it)
 				dismiss()
 			}
 

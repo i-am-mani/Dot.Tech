@@ -8,6 +8,7 @@ import android.widget.EditText
 import android.widget.Toast
 import com.google.android.material.textfield.TextInputLayout
 import com.omega.dottech2k20.R
+import com.omega.dottech2k20.Utils.Utils
 import es.dmoral.toasty.Toasty
 
 object CreateTeamDialog {
@@ -39,8 +40,11 @@ object CreateTeamDialog {
 						context
 					)
 				) {
+					Utils.contextClickHapticFeedback(it)
 					callback(name.trim(), passcode)
 					dismiss()
+				} else {
+					Utils.virtualClickHapticFeedback(it)
 				}
 			}
 

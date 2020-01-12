@@ -194,6 +194,7 @@ class EventsFragment : Fragment() {
 	private fun setJoinEventCallback() {
 		context?.let { ctx ->
 			btn_join.setOnClickListener {
+				Utils.contextClickHapticFeedback(it)
 				val activeCard: Int = mLayoutManager.activeCardPosition
 				val event = getEventAtPos(activeCard)
 
@@ -215,6 +216,8 @@ class EventsFragment : Fragment() {
 						}
 
 					}
+				} else {
+					Utils.virtualClickHapticFeedback(it)
 				}
 
 			}
@@ -223,6 +226,7 @@ class EventsFragment : Fragment() {
 
 	private fun setLeaveEventCallback() {
 		btn_leave.setOnClickListener {
+			Utils.contextClickHapticFeedback(it)
 			val activeCard: Int = mLayoutManager.activeCardPosition
 			val event: Event? = getEventAtPos(activeCard)
 			if (event != null) {

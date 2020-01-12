@@ -9,6 +9,7 @@ import android.view.Window
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.omega.dottech2k20.R
+import com.omega.dottech2k20.Utils.Utils
 import kotlinx.android.synthetic.main.dialog_submit_text.*
 
 class SingleTextFieldDialog(val context: Context) {
@@ -54,6 +55,7 @@ class SingleTextFieldDialog(val context: Context) {
 			im_dialog_header.setImageResource(headerIconId)
 			setQueryType(et_query, et_query_inputlayout)
 			btn_submit.setOnClickListener {
+				Utils.contextClickHapticFeedback(it)
 				onSubmit(et_name.text.toString(), et_query.text.toString())
 				dismiss()
 			}

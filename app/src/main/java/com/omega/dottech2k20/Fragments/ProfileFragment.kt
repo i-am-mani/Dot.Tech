@@ -1,7 +1,6 @@
 package com.omega.dottech2k20.Fragments
 
 
-import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.transition.ChangeBounds
@@ -10,9 +9,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.os.bundleOf
@@ -208,83 +204,6 @@ class ProfileFragment : Fragment() {
 			}
 		})
 	}
-
-
-	/**
-	 * Dialog to edit profile details. This feature has been removed, it's incomplete.
-	 *
-	 * Specifically, renaming participants of team is a task which remains.
-	 */
-	fun showEditDialog(user: User) {
-		val dialog = Dialog(context)
-		setDialogProperties(dialog)
-
-		val nameField = dialog.findViewById<EditText>(R.id.et_edit_fullname)
-		val phoneField = dialog.findViewById<EditText>(R.id.et_edit_phone)
-		val confirmBtn = dialog.findViewById<Button>(R.id.btn_confirm)
-
-		confirmBtn.setOnClickListener {
-			val name = nameField.text.toString()
-			val phone = phoneField.text.toString()
-
-			val isFullNameValid = Utils.isFullNameValid(name)
-			val isPhoneNumberValid = Utils.isPhoneNumberValid(phone)
-
-			when {
-				// First provide meaningful error message i.e check if they're not empty and not valid.
-				name.isNotEmpty() && !isFullNameValid -> showToast("Please check the name you have provided")
-
-				phone.isNotEmpty() && !isPhoneNumberValid -> showToast("Invalid phone number format!")
-
-				// whatever remains is valid, hence depending on field which is empty or not update user
-
-				name.isNotEmpty() && phone.isNotEmpty() -> { // Update both name and phone number
-					updateUser(user, name, phone)
-				}
-
-				name.isEmpty() && phone.isNotEmpty() -> { // Update phone number only
-					user.fullName?.let { updateUser(user, it, phone) }
-				}
-
-				phone.isEmpty() && name.isNotEmpty() -> { // Update full name only
-					user.phone?.let { updateUser(user, name, it) }
-				}
-
-				else -> showToast("Invalid Data Provided")
-			}
-			dialog.dismiss()
-		}
-		dialog.show()
-	}
-
-	private fun updateUser(
-		user: User,
-		name: String,
-		phone: String
-	) {
-		val updatedUser =
-			User(user.id, name, user.email, phone, user.events, user.notificationIds)
-		mViewModel.updateUserInformation(updatedUser) {
-			Toast.makeText(
-				mActivity,
-				"Updating User Details Successfull!",
-				Toast.LENGTH_SHORT
-			).show()
-		}
-	}
-
-	private fun setDialogProperties(dialog: Dialog) {
-		dialog.setCanceledOnTouchOutside(true)
-
-		dialog.requestWindowFeature(Window.FEATURE_SWIPE_TO_DISMISS)
-		dialog.setContentView(R.layout.dialog_edit_profile)
-		dialog.window?.setLayout(
-			ViewGroup.LayoutParams.MATCH_PARENT,
-			ViewGroup.LayoutParams.WRAP_CONTENT
-		)
-		dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-	}
-
 
 	private fun showUnsignedUserDialog(
 		inflater: LayoutInflater,

@@ -8,6 +8,7 @@ import android.view.Window
 import android.widget.Button
 import android.widget.TextView
 import com.omega.dottech2k20.R
+import com.omega.dottech2k20.Utils.Utils
 
 class BinaryDialog(
 	val context: Context,
@@ -75,6 +76,7 @@ class BinaryDialog(
 		leftBtn: Button
 	) {
 		rightBtn.setOnClickListener {
+			Utils.contextClickHapticFeedback(it)
 			rightButtonCallback()
 			dialog.dismiss()
 		}

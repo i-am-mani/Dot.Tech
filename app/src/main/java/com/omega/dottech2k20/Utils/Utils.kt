@@ -4,6 +4,8 @@ import android.content.Context
 import android.text.TextUtils
 import android.util.Patterns
 import android.util.TypedValue
+import android.view.HapticFeedbackConstants
+import android.view.View
 import com.google.firebase.Timestamp
 import java.text.SimpleDateFormat
 
@@ -56,13 +58,20 @@ object Utils {
 
 	}
 
-	fun isFullNameValid(name: String): Boolean {
-		// FIXME: Detect Misused words and block the user for next 10 minutes
-		return name.isNotEmpty() && name.length > 5
+	fun contextClickHapticFeedback(view: View) {
+		view.isHapticFeedbackEnabled = true
+		view.performHapticFeedback(
+			HapticFeedbackConstants.CONTEXT_CLICK,
+			HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING
+		)
 	}
 
-	fun isPhoneNumberValid(phone: String): Boolean {
-		return phone.isNotEmpty() && phone.length == 10
+	fun virtualClickHapticFeedback(view: View) {
+		view.isHapticFeedbackEnabled = true
+		view.performHapticFeedback(
+			HapticFeedbackConstants.VIRTUAL_KEY,
+			HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING
+		)
 	}
 
 }
