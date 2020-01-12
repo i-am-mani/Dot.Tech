@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.ViewGroup
 import android.view.Window
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.omega.dottech2k20.R
 import kotlinx.android.synthetic.main.dialog_submit_text.*
 
@@ -51,7 +52,7 @@ class SingleTextFieldDialog(val context: Context) {
 			et_query.minLines = minQueryFieldLines
 
 			im_dialog_header.setImageResource(headerIconId)
-			setQueryType(et_query)
+			setQueryType(et_query, et_query_inputlayout)
 			btn_submit.setOnClickListener {
 				onSubmit(et_name.text.toString(), et_query.text.toString())
 				dismiss()
@@ -60,10 +61,18 @@ class SingleTextFieldDialog(val context: Context) {
 		dialog.show()
 	}
 
-	private fun setQueryType(etQuery: TextInputEditText?) {
+	private fun setQueryType(
+		etQuery: TextInputEditText?,
+		etQueryInputlayout: TextInputLayout
+	) {
 		when (queryType) {
 			"email" -> etQuery?.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
 			"phone" -> etQuery?.inputType = InputType.TYPE_CLASS_PHONE
+			"password" -> {
+				etQuery?.inputType =
+					InputType.TYPE_CLASS_TEXT.or(InputType.TYPE_TEXT_VARIATION_PASSWORD)
+				etQueryInputlayout.isPasswordVisibilityToggleEnabled = true
+			}
 		}
 	}
 

@@ -43,6 +43,10 @@
             android:paddingBottom="24dp">
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_layout_team_name"
+                app:errorEnabled="true"
+                app:counterEnabled="true"
+                app:counterMaxLength="15"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -56,6 +60,11 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_layout_team_password"
+                app:errorEnabled="true"
+                app:counterEnabled="true"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/Blue800"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -66,6 +75,7 @@
                     android:id="@+id/et_team_passcode"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:inputType="textPassword"
                     android:textAppearance="@style/NormalTextRubik" />
             </com.google.android.material.textfield.TextInputLayout>
 

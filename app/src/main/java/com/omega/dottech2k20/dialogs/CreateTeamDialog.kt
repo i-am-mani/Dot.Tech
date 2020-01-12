@@ -5,6 +5,7 @@ import android.content.Context
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import com.google.android.material.textfield.TextInputLayout
 import com.omega.dottech2k20.R
 import es.dmoral.toasty.Toasty
@@ -96,9 +97,9 @@ object CreateTeamDialog {
 			}
 			!name.matches(Regex("^[a-zA-Z0-9]+(?:[_ -]?[a-zA-Z0-9])*\$")) -> {
 				layoutName.error = "Invalid Name"
-				Toasty.error(
+				Toasty.info(
 					context, "Team Name must not consists of trailing or leading spaces" +
-							"or use of any special characters(&,*,^,...)"
+							"or use of any special characters(&,*,^,...)", Toast.LENGTH_LONG
 				).show()
 				false
 			}
