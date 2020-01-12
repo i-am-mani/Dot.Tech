@@ -19,5 +19,7 @@
     <color name="Blue100">#BBDEFB</color>
     <color name="Blue800">#1565C0</color>
     <color name="Blue400">#42A5F5</color>
+    <color name="SuccessBackgroundColor">#8BC34A</color>
+    <color name="SuccessTextColor">#1B5E20</color>
 
 </resources>
