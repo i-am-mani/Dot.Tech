@@ -304,6 +304,7 @@ class EventTeamsFragment : Fragment() {
 	private fun addSearchCallbacks() {
 		fab_search.setOnClickListener {
 			search_team.visibility = VISIBLE
+			search_team.isIconified = false
 			fab_search.hide()
 		}
 
