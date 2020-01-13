@@ -154,6 +154,7 @@ class SignUpFragment : Fragment() {
 	 * Validate full name. Checks performed
 	 * 1) not empty
 	 * 2) length greater then 4
+	 * 3) maxLength of edit text is set to 20
 	 */
 	private fun validateFullName(fullname: String): Boolean {
 		return when {
@@ -163,6 +164,10 @@ class SignUpFragment : Fragment() {
 			}
 			fullname.length < 4 -> {
 				input_layout_fullname.error = "Name is too short"
+				false
+			}
+			!fullname.matches(Regex("^[a-zA-Z0-9]+(?:[_ -]?[a-zA-Z0-9])*\$")) -> {
+				input_layout_fullname.error = "Invalid Name"
 				false
 			}
 			else -> {
