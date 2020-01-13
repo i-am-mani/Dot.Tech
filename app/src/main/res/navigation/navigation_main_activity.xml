@@ -136,7 +136,7 @@
     <fragment
         android:id="@+id/notificationDetailFragment"
         android:name="com.omega.dottech2k20.Fragments.NotificationDetailFragment"
-        android:label="fragment_notification_detail"
+        android:label="Notifications"
         tools:layout="@layout/fragment_notification_detail">
         <argument
             android:name="Notification"
@@ -145,7 +145,7 @@
     <fragment
         android:id="@+id/eventTeamsFragment"
         android:name="com.omega.dottech2k20.Fragments.EventTeamsFragment"
-        android:label="fragment_event_teams"
+        android:label="Teams"
         tools:layout="@layout/fragment_event_teams">
         <argument
             android:name="event"
