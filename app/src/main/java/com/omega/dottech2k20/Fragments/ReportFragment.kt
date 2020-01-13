@@ -7,20 +7,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseUser
-import com.omega.dottech2k20.Adapters.FAQItem
 import com.omega.dottech2k20.MainActivity
 import com.omega.dottech2k20.R
 import com.omega.dottech2k20.dialogs.SingleTextFieldDialog
-import com.omega.dottech2k20.models.FAQ
 import com.omega.dottech2k20.models.MetaDataViewModel
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Section
 import com.xwray.groupie.kotlinandroidextensions.Item
+import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.fragment_report.*
 import kotlinx.android.synthetic.main.item_report_header.*
 
@@ -41,23 +39,24 @@ class ReportFragment : Fragment() {
 	override fun onActivityCreated(savedInstanceState: Bundle?) {
 		super.onActivityCreated(savedInstanceState)
 		mViewModel = ViewModelProviders.of(mActivity).get(MetaDataViewModel::class.java)
-		mViewModel.getReports().observe(this, Observer {
-			if (it != null) {
-				// As a temporary measure using FAQ item since both have same purpose to
-				// show description upon clicking it. Fix this later.
-				val listOfReports = mutableListOf<FAQItem>()
-
-				for (report in it) {
-					listOfReports.add(FAQItem(FAQ(report.title ?: "", report.description ?: "")))
-				}
-
-				if (mAdapterSection.itemCount == 0) {
-					mAdapterSection.addAll(listOfReports)
-				} else {
-					mAdapterSection.update(listOfReports)
-				}
-			}
-		})
+		// Showing live reports is suspended
+//		mViewModel.getReports().observe(this, Observer {
+//			if (it != null) {
+//				// As a temporary measure using FAQ item since both have same purpose to
+//				// show description upon clicking it. Fix this later.
+//				val listOfReports = mutableListOf<FAQItem>()
+//
+//				for (report in it) {
+//					listOfReports.add(FAQItem(FAQ(report.title ?: "", report.description ?: "")))
+//				}
+//
+//				if (mAdapterSection.itemCount == 0) {
+//					mAdapterSection.addAll(listOfReports)
+//				} else {
+//					mAdapterSection.update(listOfReports)
+//				}
+//			}
+//		})
 	}
 
 	override fun onCreateView(
@@ -87,7 +86,11 @@ class ReportFragment : Fragment() {
 				hint = "Description"
 				headerIconId = R.drawable.ic_ladybug
 				onSubmit = { name, query ->
-					mViewModel.addBugReport(name, query)
+					if (query.length < 250 && name.length < 100) {
+						mViewModel.addBugReport(name, query)
+					} else {
+						Toasty.warning(ctx, "Query To Long").show()
+					}
 				}
 				build()
 			}
@@ -104,7 +107,11 @@ class ReportFragment : Fragment() {
 				hint = "Description"
 				headerIconId = R.drawable.ic_features_bulb
 				onSubmit = { name, query ->
-					mViewModel.addFeatureRequest(name, query)
+					if (query.length < 250) {
+						mViewModel.addFeatureRequest(name, query)
+					} else {
+						Toasty.warning(ctx, "Description too long").show()
+					}
 				}
 				build()
 			}

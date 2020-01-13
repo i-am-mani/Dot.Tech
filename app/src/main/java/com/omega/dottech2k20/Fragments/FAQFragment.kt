@@ -21,6 +21,7 @@ import com.omega.dottech2k20.models.FAQ
 import com.omega.dottech2k20.models.MetaDataViewModel
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
+import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.fragment_faq.*
 
 
@@ -92,8 +93,13 @@ class FAQFragment : Fragment() {
 						title = "Query Request"
 						name = user.email ?: ""
 						headerIconId = R.drawable.ic_faq
+						hint = "Enter your question."
 						onSubmit = { _, query ->
-							mViewModel.requestQuery(user.uid, query)
+							if (query.length < 250) {
+								mViewModel.requestQuery(user.uid, query)
+							} else {
+								Toasty.warning(ctx, "Query Too Long").show()
+							}
 						}
 						build()
 					}
