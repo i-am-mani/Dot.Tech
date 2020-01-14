@@ -115,11 +115,12 @@
         android:gravity="center">
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_facebook"
             android:layout_width="@dimen/icon_small"
             android:layout_height="@dimen/icon_small"
             android:layout_marginEnd="16dp"
             app:cardCornerRadius="@dimen/icon_small_radius"
-            app:cardElevation="7dp"
+            app:cardElevation="4dp"
             app:cardPreventCornerOverlap="false">
 
             <ImageView
@@ -130,10 +131,11 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_instagram"
             android:layout_width="@dimen/icon_small"
             android:layout_height="@dimen/icon_small"
             app:cardCornerRadius="@dimen/icon_small_radius"
-            app:cardElevation="7dp"
+            app:cardElevation="4dp"
             app:cardPreventCornerOverlap="false"
             app:cardUseCompatPadding="false">
 
@@ -159,14 +161,16 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginEnd="8dp"
-            android:src="@drawable/ic_gmail" />
+            android:src="@drawable/ic_gmail"
+            android:tint="#1565C0" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="DotTech@gmail.com"
-            android:textAppearance="@style/NormalText" />
+            android:text="dottech2020@gmail.com"
+            android:textAppearance="@style/NormalText"
+            android:textColor="#283593" />
     </LinearLayout>
 
 </LinearLayout>

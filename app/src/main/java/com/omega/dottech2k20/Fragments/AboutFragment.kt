@@ -65,18 +65,29 @@ class AboutFragment : Fragment() {
 
 	private fun setViewSourceCodeCallback() {
 		btn_view_source_code.setOnClickListener {
-			val viewIntent = Intent(
-				"android.intent.action.VIEW",
-				Uri.parse("http://www.github.com/") // FIXME Add repo link here
-			)
-			startActivity(viewIntent)
+			goToWebSite("https://github.com/llGOKUll/Dot.Tech")
 		}
+		card_facebook.setOnClickListener {
+			goToWebSite("https://www.facebook.com/dotTech2015/")
+		}
+		card_instagram.setOnClickListener {
+			goToWebSite("https://instagram.com/dottech_2020?igshid=1cn0mt06kmahp")
+		}
+
 	}
 
 	private fun setViewAttributionCallback() {
 		btn_view_attribution.setOnClickListener {
 			startActivity(Intent(mActivity, OssLicensesMenuActivity::class.java))
 		}
+	}
+
+	private fun goToWebSite(url: String) {
+		val viewIntent = Intent(
+			"android.intent.action.VIEW",
+			Uri.parse(url)
+		)
+		startActivity(viewIntent)
 	}
 
 
