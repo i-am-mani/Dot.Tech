@@ -6,7 +6,9 @@ import android.util.Patterns
 import android.util.TypedValue
 import android.view.HapticFeedbackConstants
 import android.view.View
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.google.firebase.Timestamp
+import com.omega.dottech2k20.R
 import java.text.SimpleDateFormat
 
 object Utils {
@@ -56,6 +58,15 @@ object Utils {
 		)
 		return px.toInt()
 
+	}
+
+	fun getCircularDrawable(context: Context): CircularProgressDrawable {
+		val circularProgressDrawable = CircularProgressDrawable(context)
+		circularProgressDrawable.strokeWidth = 10f
+		circularProgressDrawable.centerRadius = 40f
+		circularProgressDrawable.setColorSchemeColors(context.getColor(R.color.Blue800))
+		circularProgressDrawable.start()
+		return circularProgressDrawable
 	}
 
 	fun contextClickHapticFeedback(view: View) {

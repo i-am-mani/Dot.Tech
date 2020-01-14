@@ -29,7 +29,8 @@ class SponsorItem(val context: Context, val sponsor: Sponsor) : Item() {
 						.into(im_sponsor)
 				} else {
 					val reference = FirebaseStorage.getInstance().getReference(image)
-					Glide.with(itemView).load(reference).into(im_sponsor)
+					Glide.with(itemView).load(reference)
+						.placeholder(Utils.getCircularDrawable(context)).into(im_sponsor)
 				}
 			} else {
 				im_sponsor.visibility = View.GONE

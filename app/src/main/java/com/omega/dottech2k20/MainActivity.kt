@@ -30,6 +30,7 @@ import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
 import com.omega.dottech2k20.Adapters.NoticeItem
 import com.omega.dottech2k20.Utils.AuthenticationUtils
+import com.omega.dottech2k20.Utils.Utils
 import com.omega.dottech2k20.models.Notice
 import com.omega.dottech2k20.models.UserEventViewModel
 import com.xwray.groupie.GroupAdapter
@@ -64,6 +65,7 @@ class MainActivity : AppCompatActivity() {
 
 	override fun onResume() {
 		super.onResume()
+		Utils.virtualClickHapticFeedback(navigation_bar)
 		FirebaseAuth.getInstance().currentUser?.reload()
 	}
 	override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -96,7 +98,7 @@ class MainActivity : AppCompatActivity() {
 		if (::notices.isInitialized && notices.count() > 0) {
 			val noticesItems = mutableListOf<NoticeItem>()
 			for (notice in notices) {
-				noticesItems.add(NoticeItem(notice))
+				noticesItems.add(NoticeItem(this, notice))
 			}
 
 			initStartDialog(noticesItems)
@@ -274,7 +276,6 @@ class MainActivity : AppCompatActivity() {
 
 	private fun setDestinationListener() {
 		navController.addOnDestinationChangedListener { controller, destination, arguments ->
-			run {
 				if (destination.id == R.id.eventsFragment || destination.id == R.id.profileFragment || destination.id == R.id.notificationsFragment) {
 					navigation_bar.show(destination.id, true)
 					navigation_bar.visibility = View.VISIBLE
@@ -289,7 +290,6 @@ class MainActivity : AppCompatActivity() {
 					startActivity(intent)
 					finish()
 				}
-			}
 		}
 	}
 
@@ -311,6 +311,7 @@ class MainActivity : AppCompatActivity() {
 
 		navigation_bar.show(2, true)
 		navigation_bar.setOnClickMenuListener {
+			Utils.virtualClickHapticFeedback(navigation_bar)
 			when (it.id) {
 				R.id.profileFragment -> {
 					Log.d(TAG, "Navigating To ProfileFragment")

@@ -67,7 +67,7 @@ class AboutFragment : Fragment() {
 		btn_view_source_code.setOnClickListener {
 			val viewIntent = Intent(
 				"android.intent.action.VIEW",
-				Uri.parse("http://www.github.com/")
+				Uri.parse("http://www.github.com/") // FIXME Add repo link here
 			)
 			startActivity(viewIntent)
 		}

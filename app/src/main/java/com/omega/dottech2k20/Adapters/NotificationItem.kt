@@ -1,5 +1,6 @@
 package com.omega.dottech2k20.Adapters
 
+import android.content.Context
 import android.util.Log
 import android.view.View
 import androidx.core.os.bundleOf
@@ -16,6 +17,7 @@ import kotlinx.android.synthetic.main.item_notification.*
 
 
 class NotificationItem(
+	private val context: Context,
 	private val navController: NavController,
 	private val notification: Notification
 ) : Item() {
@@ -74,10 +76,12 @@ class NotificationItem(
 			image?.trim()?.let {
 				Log.d(TAG, "image = $it")
 				if (it.contains(Regex("https|HTTPS"))) {
-					Glide.with(itemView).load(it).into(im_notification)
+					Glide.with(itemView).load(it).placeholder(Utils.getCircularDrawable(context))
+						.into(im_notification)
 				} else {
 					val reference = store.getReference(it)
-					Glide.with(itemView).load(reference).into(im_notification)
+					Glide.with(itemView).load(reference)
+						.placeholder(Utils.getCircularDrawable(context)).into(im_notification)
 				}
 				root_im_notification.visibility = View.VISIBLE
 			}

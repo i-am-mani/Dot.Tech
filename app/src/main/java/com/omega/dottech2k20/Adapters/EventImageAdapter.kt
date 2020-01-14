@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.google.firebase.storage.FirebaseStorage
 import com.omega.dottech2k20.R.id
 import com.omega.dottech2k20.R.layout
+import com.omega.dottech2k20.Utils.Utils
 import com.omega.dottech2k20.models.Event
 
 class EventImageAdapter(private val mContext: Context) :
@@ -48,7 +49,16 @@ class EventImageAdapter(private val mContext: Context) :
 	}
 
 	fun getItem(position: Int): Event? {
-		return mDataset?.get(position)
+		if (mDataset != null) {
+			mDataset?.let {
+				return if (it.size > position) {
+					it[position]
+				} else {
+					null
+				}
+			}
+		}
+		return null
 	}
 
 	inner class ViewHolder(itemView: View) :
@@ -60,10 +70,12 @@ class EventImageAdapter(private val mContext: Context) :
 			imageUrl?.let {
 				Log.d("ImageViewItem", "Binding image - $imageUrl")
 				if (it.contains(Regex("https|HTTPS"))) {
-					Glide.with(itemView).load(it).into(imEvent)
+					Glide.with(itemView).load(it).placeholder(Utils.getCircularDrawable(mContext))
+						.into(imEvent)
 				} else {
 					val reference = FirebaseStorage.getInstance().getReference(it)
-					Glide.with(itemView).load(reference).into(imEvent)
+					Glide.with(itemView).load(reference)
+						.placeholder(Utils.getCircularDrawable(mContext)).into(imEvent)
 				}
 			}
 		}

@@ -69,9 +69,12 @@ class NotificationsFragment : Fragment() {
 
 		val sortedList = notificationList.sortedByDescending { it.issued_time?.toDate()?.time }
 		for (notification in sortedList) {
-			val notificationItem = NotificationItem(findNavController(), notification)
-			Log.d(TAG, "Timestamp = ${notification.issued_time?.toDate()?.time}}")
-			list.add(notificationItem)
+			context?.let {
+				val notificationItem =
+					NotificationItem(it, findNavController(), notification)
+				Log.d(TAG, "Timestamp = ${notification.issued_time?.toDate()?.time}}")
+				list.add(notificationItem)
+			}
 		}
 		return list
 	}
