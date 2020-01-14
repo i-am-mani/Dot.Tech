@@ -63,7 +63,7 @@ object Utils {
 	fun getCircularDrawable(context: Context): CircularProgressDrawable {
 		val circularProgressDrawable = CircularProgressDrawable(context)
 		circularProgressDrawable.strokeWidth = 10f
-		circularProgressDrawable.centerRadius = 40f
+		circularProgressDrawable.centerRadius = context.resources.getDimension(R.dimen.icon_small)
 		circularProgressDrawable.setColorSchemeColors(context.getColor(R.color.Blue800))
 		circularProgressDrawable.start()
 		return circularProgressDrawable
