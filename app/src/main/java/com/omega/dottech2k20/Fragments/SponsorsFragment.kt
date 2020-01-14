@@ -62,7 +62,7 @@ class SponsorsFragment : Fragment() {
 	private fun getSponsorItems(sponsors: List<Sponsor>): List<SponsorItem> {
 		val items = mutableListOf<SponsorItem>()
 		for (sponsor in sponsors) {
-			items.add(SponsorItem(sponsor))
+			context?.let { items.add(SponsorItem(it, sponsor)) }
 		}
 		return items
 	}
