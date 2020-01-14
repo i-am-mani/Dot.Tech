@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.util.TypedValue
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,13 +45,12 @@ class WelcomeScreenFragment : Fragment() {
 		val welcomeStringList: List<String> = welcomeString.split("/")
 
 		for (i in welcomeStringList) {
-			val tempTV = TextView(context, null, 0, R.style.TitleTextEczar)
-			tempTV.apply {
-				gravity = Gravity.CENTER
-				text = i
-				setTextSize(TypedValue.COMPLEX_UNIT_SP, 32f)
-				alpha = 0f
-			}
+			val tempTV = layoutInflater.inflate(
+				R.layout.welcome_text_view,
+				root_welcome_text,
+				false
+			) as TextView
+			tempTV.text = i
 			root_welcome_text.addView(tempTV)
 		}
 	}
