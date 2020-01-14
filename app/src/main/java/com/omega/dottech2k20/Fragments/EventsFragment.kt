@@ -8,6 +8,8 @@ import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
@@ -112,6 +114,10 @@ class EventsFragment : Fragment() {
 					updateAdapterDataset(events)
 				}
 				initCallbacks()
+				if (events.count() > 0) {
+					group_loaders.visibility = GONE
+					group_events_elements.visibility = VISIBLE
+				}
 			}
 		}
 	}

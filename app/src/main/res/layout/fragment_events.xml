@@ -8,6 +8,27 @@
     tools:context=".Fragments.EventsFragment">
 
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="@dimen/medium_progress_bar"
+        android:layout_height="@dimen/medium_progress_bar"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/Blue400"
+        app:layout_constraintBottom_toTopOf="@+id/guideline4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/illustration_loading"
+        app:layout_constraintBottom_toTopOf="@+id/guideline5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/barrier"
         android:layout_width="wrap_content"
@@ -105,6 +126,7 @@
         app:layout_constraintGuide_percent="0.55" />
 
     <FrameLayout
+        android:id="@+id/frameLayout3"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline4"
@@ -200,8 +222,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/SuccessBackgroundColor"
-            android:textColor="@color/SuccessTextColor"
-            android:text="Join" />
+            android:text="Join"
+            android:textColor="@color/SuccessTextColor" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_leave"
@@ -232,6 +254,19 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.91" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_events_elements"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="btn_details,frameLayout3,linearLayout,root_btn_join,rv_event_thumb_nails,ts_title" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_loaders"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="imageView2,progressBar" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
