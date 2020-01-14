@@ -18,6 +18,7 @@ import com.omega.dottech2k20.R
 import com.omega.dottech2k20.StartUpActivity
 import kotlinx.android.synthetic.main.fragment_splash_screen.*
 
+
 class SplashScreenFragment : Fragment() {
 
 	lateinit var mainActivity: StartUpActivity
@@ -52,12 +53,6 @@ class SplashScreenFragment : Fragment() {
 				ConstraintSet.BOTTOM,
 				R.id.guideline_mid,
 				ConstraintSet.TOP
-			)
-			constraintSet.connect(
-				R.id.text_fest_name,
-				ConstraintSet.TOP,
-				R.id.guideline_mid,
-				ConstraintSet.BOTTOM
 			)
 
 			val changeBounds = ChangeBounds().apply {
