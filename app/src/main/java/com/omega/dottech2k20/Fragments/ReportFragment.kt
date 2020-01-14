@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseUser
 import com.omega.dottech2k20.MainActivity
 import com.omega.dottech2k20.R
+import com.omega.dottech2k20.Utils.AuthenticationUtils
 import com.omega.dottech2k20.dialogs.SingleTextFieldDialog
 import com.omega.dottech2k20.models.MetaDataViewModel
 import com.xwray.groupie.GroupAdapter
@@ -75,6 +76,10 @@ class ReportFragment : Fragment() {
 
 		rv_reports.adapter = mAdapter
 		rv_reports.layoutManager = layoutManager
+
+		if (AuthenticationUtils.currentUser == null) {
+			context?.let { Toasty.info(it, "Please Sign in to use report feature").show() }
+		}
 	}
 
 	fun showReportBugDialog() {
@@ -86,15 +91,28 @@ class ReportFragment : Fragment() {
 				hint = "Description"
 				headerIconId = R.drawable.ic_ladybug
 				onSubmit = { name, query ->
-					if (query.length < 250 && name.length < 100) {
-						mViewModel.addBugReport(name, query)
-					} else {
-						Toasty.warning(ctx, "Query To Long").show()
+					when {
+						name.length < 10 -> Toasty.warning(
+							ctx,
+							"Title must be at least 10 characters long"
+						).show()
+						name.length > 100 -> Toasty.warning(
+							ctx,
+							"Title must be at most 100 characters long"
+						).show()
+						query.length < 20 -> Toasty.warning(
+							ctx,
+							"Query must be at least 20 characters long"
+						).show()
+						query.length > 250 && name.length > 100 -> Toasty.warning(
+							ctx,
+							"Query can be at most 250 characters long"
+						).show()
+						else -> mViewModel.addBugReport(name, query)
 					}
 				}
 				build()
 			}
-
 		}
 	}
 
@@ -107,10 +125,24 @@ class ReportFragment : Fragment() {
 				hint = "Description"
 				headerIconId = R.drawable.ic_features_bulb
 				onSubmit = { name, query ->
-					if (query.length < 250) {
-						mViewModel.addFeatureRequest(name, query)
-					} else {
-						Toasty.warning(ctx, "Description too long").show()
+					when {
+						name.length < 10 -> Toasty.warning(
+							ctx,
+							"Title must be at least 10 characters long"
+						).show()
+						name.length > 100 -> Toasty.warning(
+							ctx,
+							"Title must be at most 100 characters long"
+						).show()
+						query.length < 20 -> Toasty.warning(
+							ctx,
+							"Description must be at least 20 characters long"
+						).show()
+						query.length > 250 -> Toasty.warning(
+							ctx,
+							"Description can be at most 250 characters long"
+						).show()
+						else -> mViewModel.addFeatureRequest(name, query)
 					}
 				}
 				build()
