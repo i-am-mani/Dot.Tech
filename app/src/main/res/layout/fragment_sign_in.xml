@@ -25,7 +25,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:alpha="0.8"
             android:gravity="center"
             android:paddingStart="8dp"
             android:text="Sign In"
@@ -40,7 +39,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             app:cardCornerRadius="10dp"
-            app:cardElevation="7dp"
+            app:cardElevation="4dp"
             app:cardUseCompatPadding="true"
             tools:layout_editor_absoluteX="57dp"
             tools:layout_editor_absoluteY="242dp">
@@ -125,14 +124,11 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_sign_in"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/SuccessBackgroundColor"
                 android:textColor="@color/SuccessTextColor"
                 android:text="Login" />
-
-
         </LinearLayout>
 
 

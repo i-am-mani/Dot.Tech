@@ -7,9 +7,9 @@
     <dimen name="medium_margin">18dp</dimen>
     <dimen name="small_margin">8dp</dimen>
 
-    <dimen name="small_shadow">30dp</dimen>
-    <dimen name="medium_shadow">40dp</dimen>
-    <dimen name="large_shadow">50dp</dimen>
+    <dimen name="small_shadow">20dp</dimen>
+    <dimen name="medium_shadow">30dp</dimen>
+    <dimen name="large_shadow">40dp</dimen>
 
     <dimen name="fab_margin">16dp</dimen>
 

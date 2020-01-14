@@ -20,7 +20,7 @@
     <ImageView
         android:id="@+id/im_notice"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="@dimen/event_details_image_card_height"
         android:layout_gravity="center"
         android:layout_marginTop="-8dp"
         android:padding="8dp"
@@ -68,6 +68,10 @@
                     android:paddingEnd="8dp"
                     android:textAppearance="@style/NormalText"
                     tools:text="@tools:sample/lorem[20]" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp" />
 
             </LinearLayout>
         </ScrollView>

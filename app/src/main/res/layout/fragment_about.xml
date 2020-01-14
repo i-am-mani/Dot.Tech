@@ -29,15 +29,15 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_view_source_code"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                app:icon="@drawable/ic_code_file"
-                app:iconSize="@dimen/icon_small"
-                app:iconTint="@android:color/transparent"
-                app:iconTintMode="add"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
                 android:text="Source Code"
-                android:textAppearance="@style/NormalText" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                app:icon="@drawable/ic_code_file"
+                app:iconSize="24dp"
+                app:iconTint="@android:color/transparent"
+                app:iconTintMode="add" />
 
             <View
                 android:layout_width="2dp"
@@ -52,13 +52,14 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_view_attribution"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                app:icon="@drawable/ic_info_outline_white_24dp"
-                app:iconTint="@color/Blue800"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:text="Attribution"
-                android:textAppearance="@style/NormalText" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                app:icon="@drawable/ic_info_outline_white_24dp"
+                app:iconSize="24dp"
+                app:iconTint="@color/Blue800" />
 
 
         </LinearLayout>
@@ -114,10 +115,10 @@
         android:gravity="center">
 
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="@dimen/icon_small"
+            android:layout_height="@dimen/icon_small"
             android:layout_marginEnd="16dp"
-            app:cardCornerRadius="25dp"
+            app:cardCornerRadius="@dimen/icon_small_radius"
             app:cardElevation="7dp"
             app:cardPreventCornerOverlap="false">
 
@@ -129,9 +130,9 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            app:cardCornerRadius="25dp"
+            android:layout_width="@dimen/icon_small"
+            android:layout_height="@dimen/icon_small"
+            app:cardCornerRadius="@dimen/icon_small_radius"
             app:cardElevation="7dp"
             app:cardPreventCornerOverlap="false"
             app:cardUseCompatPadding="false">
