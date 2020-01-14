@@ -8,6 +8,22 @@
     tools:context=".Fragments.EventsFragment">
 
 
+    <ImageButton
+        android:id="@+id/imbtn_events_next"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="8dp"
+        android:alpha="1"
+        android:background="@android:color/transparent"
+        android:elevation="10dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_next"
+        app:layout_constraintBottom_toTopOf="@+id/guideline2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
@@ -260,13 +276,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:constraint_referenced_ids="btn_details,frameLayout3,linearLayout,root_btn_join,rv_event_thumb_nails,ts_title" />
+        app:constraint_referenced_ids="btn_details,frameLayout3,linearLayout,root_btn_join,rv_event_thumb_nails,ts_title,imbtn_events_next" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/group_loaders"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="imageView2,progressBar" />
+        app:constraint_referenced_ids="imageView2,progressBar"
+        tools:visibility="visible" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

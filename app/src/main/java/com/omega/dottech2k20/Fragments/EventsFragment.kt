@@ -361,6 +361,16 @@ class EventsFragment : Fragment() {
 			setParticipantCount(event.participantCount, animTypeVertical)
 			mCurrentPosition = position
 		}
+
+		if (position == mAdapter?.itemCount?.minus(1)) {
+			imbtn_events_next.animate().rotation(180f)
+		} else if (position == 0) {
+			imbtn_events_next.animate().rotation(0f)
+		} else {
+			imbtn_events_next.animate().scaleX(0f).scaleY(0f).setDuration(300).withEndAction {
+				imbtn_events_next.animate().scaleX(1f).scaleY(1f).duration = 500
+			}
+		}
 	}
 
 	private fun setParticipantCount(
