@@ -121,7 +121,8 @@ class EventsFragment : Fragment() {
 			val pos = mLayoutManager.activeCardPosition
 
 			// Update the participant Count in case it's updated in new list.
-			if (it.getItem(pos)?.participantCount != events[pos].participantCount) {
+			val item = it.getItem(pos)
+			if (item != null && item.participantCount != events[pos].participantCount) {
 				setParticipantCount(
 					events[pos].participantCount,
 					TextAnimationType.LEFT_TO_RIGHT
