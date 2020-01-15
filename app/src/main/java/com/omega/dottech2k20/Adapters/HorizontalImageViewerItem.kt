@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.omega.dottech2k20.R
+import com.omega.dottech2k20.Utils.HorizontalEqualSpaceItemDecoration
 import com.rd.animation.type.AnimationType
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
@@ -32,7 +33,7 @@ class HorizontalImageViewerItem(val context: Context, val imageUrls: List<String
 				// Indicator dots
 				initIndicator(imageItems.count(), viewHolder)
 
-//				rv_event_images.addItemDecoration(HorizontalEqualSpaceItemDecoration(10))
+				rv_event_images.addItemDecoration(HorizontalEqualSpaceItemDecoration(10))
 				LinearSnapHelper().attachToRecyclerView(rv_event_images)
 			} else {
 				root_event_images.visibility = View.GONE
