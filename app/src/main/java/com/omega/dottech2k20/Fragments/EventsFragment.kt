@@ -210,7 +210,9 @@ class EventsFragment : Fragment() {
 
 				val authenticationDialogStatus =
 					EventCallbacks.authenticationDialog(ctx, findNavController())
-				if (authenticationDialogStatus && event != null) {
+				val isUserPartOfEvent =
+					mUserEventList?.find { userEvent -> userEvent.id == event?.id } != null
+				if (authenticationDialogStatus && event != null && !isUserPartOfEvent) {
 					when {
 						event.type == FirestoreFieldNames.EVENT_TYPE_INDIVIDUAL -> {
 							EventCallbacks.joinEvent(ctx, event, mViewModel)
@@ -239,7 +241,9 @@ class EventsFragment : Fragment() {
 			Utils.contextClickHapticFeedback(it)
 			val activeCard: Int = mLayoutManager.activeCardPosition
 			val event: Event? = getEventAtPos(activeCard)
-			if (event != null) {
+			val isUserPartOfEvent =
+				mUserEventList?.find { userEvent -> userEvent.id == event?.id } != null
+			if (event != null && isUserPartOfEvent) {
 				if (event.type == FirestoreFieldNames.EVENT_TYPE_INDIVIDUAL) {
 					context?.let {
 						EventCallbacks.leave(it, event, mViewModel)
@@ -298,10 +302,8 @@ class EventsFragment : Fragment() {
 				newState: Int
 			) {
 				if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-//					if(btn_join != null && btn_leave != null){
-//						btn_join.isEnabled = true
-//						btn_leave.isEnabled = true
-//					}
+					btn_join.isEnabled = true
+					btn_leave.isEnabled = true
 					onCardChanged()
 				} else {
 					if (btn_join != null && btn_leave != null) {
@@ -332,8 +334,7 @@ class EventsFragment : Fragment() {
 			btn_join.visibility = GONE
 			btn_leave.visibility = VISIBLE
 		}
-		// Disable the button if registration is closed, done after changing visibilities since
-		// buttons are disabled when they come out of scrolled state (Look at onScrollListener of rv)
+		// Disable the button if registration is closed
 		btn_join.isEnabled = event.registrationOpen
 		btn_leave.isEnabled = event.registrationOpen
 
@@ -373,7 +374,9 @@ class EventsFragment : Fragment() {
 			imbtn_events_next.animate().rotation(0f)
 		} else {
 			imbtn_events_next.animate().scaleX(0f).scaleY(0f).setDuration(300).withEndAction {
-				imbtn_events_next.animate().scaleX(1f).scaleY(1f).duration = 500
+				if (imbtn_events_next != null) {
+					imbtn_events_next.animate().scaleX(1f).scaleY(1f).duration = 500
+				}
 			}
 		}
 	}
