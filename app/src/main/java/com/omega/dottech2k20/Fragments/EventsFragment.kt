@@ -298,7 +298,16 @@ class EventsFragment : Fragment() {
 				newState: Int
 			) {
 				if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+//					if(btn_join != null && btn_leave != null){
+//						btn_join.isEnabled = true
+//						btn_leave.isEnabled = true
+//					}
 					onCardChanged()
+				} else {
+					if (btn_join != null && btn_leave != null) {
+						btn_join.isEnabled = false
+						btn_leave.isEnabled = false
+					}
 				}
 			}
 		})
@@ -315,30 +324,18 @@ class EventsFragment : Fragment() {
 			//			Log.d(TAG, "it.id = ${it.id}, even.id = ${event.id}")
 			it.id == event.id
 		}
-		// Disable the button if registration is closed
-		btn_join.isEnabled = event.registrationOpen
-		btn_leave.isEnabled = event.registrationOpen
 		// null event would imply that event doesn't exist in user's events field
 		if (matchingEvent == null) {
-			Log.d(TAG, "Changing Visibility")
-			btn_join.animate().alpha(1f).withEndAction {
-				if (btn_join != null && btn_leave != null) {
-					btn_join.visibility = View.VISIBLE
-					btn_leave.visibility = View.GONE
-					btn_leave.alpha = 1f
-					btn_join.alpha = 1f
-				}
-			}
+			btn_join.visibility = VISIBLE
+			btn_leave.visibility = GONE
 		} else {
-			btn_leave.animate().alpha(1f).withEndAction {
-				if (btn_join != null && btn_leave != null) {
-					btn_join.visibility = View.GONE
-					btn_leave.visibility = View.VISIBLE
-					btn_leave.alpha = 1f
-					btn_join.alpha = 1f
-				}
-			}
+			btn_join.visibility = GONE
+			btn_leave.visibility = VISIBLE
 		}
+		// Disable the button if registration is closed, done after changing visibilities since
+		// buttons are disabled when they come out of scrolled state (Look at onScrollListener of rv)
+		btn_join.isEnabled = event.registrationOpen
+		btn_leave.isEnabled = event.registrationOpen
 
 	}
 
