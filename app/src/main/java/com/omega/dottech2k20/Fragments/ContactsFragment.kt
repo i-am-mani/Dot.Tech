@@ -59,8 +59,13 @@ class ContactsFragment : Fragment() {
 	}
 
 	private fun getContactItems(contacts: List<Contact>): List<ContactItem> {
+		val contactsSorted = contacts.sortedByDescending {
+			it.post?.contains("Core", true)
+		}
+
 		val contactsItem = mutableListOf<ContactItem>()
-		for (contact in contacts) {
+
+		for (contact in contactsSorted) {
 			contactsItem.add(ContactItem(contact))
 		}
 		return contactsItem
@@ -84,13 +89,11 @@ class ContactsFragment : Fragment() {
 				val child = recyclerView.getChildAt(0)
 				if (child != null && recyclerView.getChildAdapterPosition(child) == 0) {
 					val card = card_header_icon
-					Log.d(TAG, "view.top = ${child.top} ")
 					// Basically we are moving against the scroll, applying same magnitude of scroll on opposite direction
 					context?.let {
 						val topPadding =
 							resources.getDimensionPixelSize(R.dimen.startup_dialog_icon_card)
 						Log.d(TAG, "TopPadding = $topPadding")
-//						val difference = resources.getDimensionPixelSize(R.dimen.startup_dialog_icon_card)
 						card.translationX =
 							-((child.top) - resources.getDimensionPixelSize(R.dimen.startup_dialog_icon_card)) / 1f
 						val alphaVal = (child.top * 1.5 / topPadding).toFloat()
