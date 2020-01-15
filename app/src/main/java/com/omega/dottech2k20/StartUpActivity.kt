@@ -143,8 +143,8 @@ class StartUpActivity : AppCompatActivity() {
 	private fun getOnBoardingPages(): ArrayList<PaperOnboardingPage> {
 		val browseEventsPage = PaperOnboardingPage(
 			"Explore",
-			"Browse through over 14 Events spanning across 3 days!",
-			Color.parseColor("#EDE7F6"),
+			"Browse through over 14 Events spanning across 3 days! \n\n (swipe right to continue)",
+			Color.parseColor("#90CAF9"),
 			R.drawable.illustration_explore,
 			R.drawable.illustration_explore
 		)
@@ -159,8 +159,8 @@ class StartUpActivity : AppCompatActivity() {
 
 		val realTimePage = PaperOnboardingPage(
 			"Blazing Fast",
-			"Events, Participants, Notifications, are updated in Real-Time," +
-					" available across multiple devices instantaneously",
+			"Events, Participants, Notifications, and all the data is updated in Real-Time," +
+					" available across multiple devices instantaneously!",
 			Color.parseColor("#C5CAE9"),
 			R.drawable.illustration_speed,
 			R.drawable.illustration_speed
@@ -168,8 +168,8 @@ class StartUpActivity : AppCompatActivity() {
 
 		val notificationPage = PaperOnboardingPage(
 			"Notifications",
-			"Be updated with latest information on events.",
-			Color.parseColor("#8C9EFF"),
+			"Be updated with latest information on events, rounds and more",
+			Color.parseColor("#9FA8DA"),
 			R.drawable.illustration_notification,
 			R.drawable.illustration_notification
 		)
@@ -177,7 +177,7 @@ class StartUpActivity : AppCompatActivity() {
 		val signupPage = PaperOnboardingPage(
 			"Join Us!",
 			"Register now, and get started! \n\n (swipe right to continue)",
-			Color.parseColor("#FFCDD2"),
+			Color.parseColor("#E57373"),
 			R.drawable.illustration_rocket_launch,
 			R.drawable.illustration_rocket_launch
 		)
