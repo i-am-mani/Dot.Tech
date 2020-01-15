@@ -20,4 +20,8 @@
     <!-- Registration -->
     <dimen name="registration_top_padding">100dp</dimen>
     <dimen name="registration_bottom_padding">50dp</dimen>
+    <!-- Contacts -->
+    <dimen name="contact_card_height">210dp</dimen>
+    <!-- Teammate card-->
+    <dimen name="teammate_card_height">160dp</dimen>
 </resources>
