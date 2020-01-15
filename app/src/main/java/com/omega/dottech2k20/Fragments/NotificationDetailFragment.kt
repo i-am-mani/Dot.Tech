@@ -14,9 +14,6 @@ import com.omega.dottech2k20.Utils.Utils
 import com.omega.dottech2k20.models.Notification
 import kotlinx.android.synthetic.main.fragment_notification_detail.*
 
-/**
- * A simple [Fragment] subclass.
- */
 class NotificationDetailFragment : Fragment() {
 
 	override fun onCreateView(
@@ -66,10 +63,12 @@ class NotificationDetailFragment : Fragment() {
 		val ctx = context
 		if (image != null && ctx != null && image.isNotEmpty()) {
 			if (image.contains(Regex("https|HTTPS"))) {
-				Glide.with(ctx).load(image).into(im_notification)
+				Glide.with(ctx).load(image).placeholder(Utils.getCircularDrawable(ctx))
+					.into(im_notification)
 			} else {
 				val reference = FirebaseStorage.getInstance().getReference(image)
-				Glide.with(ctx).load(reference).into(im_notification)
+				Glide.with(ctx).load(reference).placeholder(Utils.getCircularDrawable(ctx))
+					.into(im_notification)
 			}
 		} else {
 			card_im_notification.visibility = View.GONE

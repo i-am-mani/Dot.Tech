@@ -86,7 +86,7 @@ class HorizontalImageViewerItem(val context: Context, val imageUrls: List<String
 		val listOfItems = mutableListOf<EventImageItem>()
 		if (imageUrls != null) {
 			for (img in imageUrls) {
-				listOfItems.add(EventImageItem(img))
+				listOfItems.add(EventImageItem(context, img))
 			}
 		}
 		return listOfItems
