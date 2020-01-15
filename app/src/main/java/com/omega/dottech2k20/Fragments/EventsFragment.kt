@@ -164,23 +164,26 @@ class EventsFragment : Fragment() {
 
 	private fun setViewParticipantsCallback() {
 		imbtn_view_participants.setOnClickListener {
-			val activeCard: Int = mLayoutManager.activeCardPosition
-			val event: Event? = getEventAtPos(activeCard)
-			if (event != null) {
-				if (event.type == FirestoreFieldNames.EVENT_TYPE_INDIVIDUAL) {
-					findNavController().navigate(
-						R.id.eventParticipantsFragment,
-						bundleOf(EventParticipantsFragment.BUNDLE_KEY to event)
-					)
-				} else if (event.type == FirestoreFieldNames.EVENT_TYPE_TEAM) {
-					findNavController().navigate(
-						R.id.eventTeamsFragment,
-						bundleOf(
-							EventTeamsFragment.EVENT_KEY to event,
-							EventTeamsFragment.READ_ONLY to true
+			val activeCardPosition = mLayoutManager.activeCardPosition
+			if (activeCardPosition != RecyclerView.NO_POSITION) {
+				val event: Event? = getEventAtPos(activeCardPosition)
+				if (event != null) {
+					if (event.type == FirestoreFieldNames.EVENT_TYPE_INDIVIDUAL) {
+						findNavController().navigate(
+							R.id.eventParticipantsFragment,
+							bundleOf(EventParticipantsFragment.BUNDLE_KEY to event)
 						)
-					)
+					} else if (event.type == FirestoreFieldNames.EVENT_TYPE_TEAM) {
+						findNavController().navigate(
+							R.id.eventTeamsFragment,
+							bundleOf(
+								EventTeamsFragment.EVENT_KEY to event,
+								EventTeamsFragment.READ_ONLY to true
+							)
+						)
+					}
 				}
+
 			}
 		}
 	}
@@ -319,19 +322,24 @@ class EventsFragment : Fragment() {
 		if (matchingEvent == null) {
 			Log.d(TAG, "Changing Visibility")
 			btn_join.animate().alpha(1f).withEndAction {
-				btn_join.visibility = View.VISIBLE
-				btn_leave.visibility = View.GONE
-				btn_leave.alpha = 1f
-				btn_join.alpha = 1f
+				if (btn_join != null && btn_leave != null) {
+					btn_join.visibility = View.VISIBLE
+					btn_leave.visibility = View.GONE
+					btn_leave.alpha = 1f
+					btn_join.alpha = 1f
+				}
 			}
 		} else {
 			btn_leave.animate().alpha(1f).withEndAction {
-				btn_join.visibility = View.GONE
-				btn_leave.visibility = View.VISIBLE
-				btn_leave.alpha = 1f
-				btn_join.alpha = 1f
+				if (btn_join != null && btn_leave != null) {
+					btn_join.visibility = View.GONE
+					btn_leave.visibility = View.VISIBLE
+					btn_leave.alpha = 1f
+					btn_join.alpha = 1f
+				}
 			}
 		}
+
 	}
 
 
