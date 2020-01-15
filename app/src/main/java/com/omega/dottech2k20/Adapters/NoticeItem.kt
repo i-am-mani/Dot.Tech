@@ -1,6 +1,7 @@
 package com.omega.dottech2k20.Adapters
 
 import android.content.Context
+import android.text.Html
 import android.view.View
 import com.bumptech.glide.Glide
 import com.google.firebase.storage.FirebaseStorage
@@ -19,7 +20,7 @@ class NoticeItem(val context: Context, val notice: Notice) : Item() {
 				tv_notice_title.text = it
 			}
 			notice.content?.let {
-				tv_notice_content.text = it
+				tv_notice_content.text = Html.fromHtml(it, Html.FROM_HTML_MODE_COMPACT)
 			}
 			val image: String? = notice.image
 			if (image != null) {
