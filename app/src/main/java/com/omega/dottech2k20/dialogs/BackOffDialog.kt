@@ -17,7 +17,7 @@ object BackOffDialog {
 			val cooldownTimeString = getTimeString(cooldownTime)
 			description =
 				"It looks like you have joined and left the event in last $backOffTimeString.\n" +
-						"Please wait and try again after ${cooldownTimeString}M"
+						"Please wait and try again after $cooldownTimeString"
 			isLeftButtonVisible = false
 			rightButtonName = "Close"
 			leftButtonCallback = {}
