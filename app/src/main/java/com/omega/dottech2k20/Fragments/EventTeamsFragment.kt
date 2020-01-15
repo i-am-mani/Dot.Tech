@@ -338,7 +338,7 @@ class EventTeamsFragment : Fragment() {
 	companion object {
 		val READ_ONLY = "readOnly"
 		val EVENT_KEY = "event"
-		val TEAM_COOLDOWN: Long = 12 * 60 // 12 hours in minutes
+		val TEAM_COOLDOWN: Long = 30 // 12 hours in minutes
 		val getSharedPreferenceIdForTeam = { id: String? ->
 			"team_$id"
 		}
