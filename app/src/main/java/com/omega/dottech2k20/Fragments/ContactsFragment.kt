@@ -36,7 +36,7 @@ class ContactsFragment : Fragment() {
 		try {
 			mActivity = context as MainActivity
 		} catch (e: Exception) {
-			Log.d(TAG, "Error occured while casting")
+			Log.e(TAG, "Error occurred while casting", e)
 		}
 	}
 
@@ -93,7 +93,6 @@ class ContactsFragment : Fragment() {
 					context?.let {
 						val topPadding =
 							resources.getDimensionPixelSize(R.dimen.startup_dialog_icon_card)
-						Log.d(TAG, "TopPadding = $topPadding")
 						card.translationX =
 							-((child.top) - resources.getDimensionPixelSize(R.dimen.startup_dialog_icon_card)) / 1f
 						val alphaVal = (child.top * 1.5 / topPadding).toFloat()

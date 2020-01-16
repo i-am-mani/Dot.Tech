@@ -4,7 +4,6 @@ package com.omega.dottech2k20.Fragments
 import android.content.Context
 import android.os.Bundle
 import android.text.Html
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -81,7 +80,6 @@ class EventsFragment : Fragment() {
 		mViewModel.getEvents().observe(this, getEventsObserver())
 
 		val currentUser = AuthenticationUtils.currentUser
-		Log.d(TAG, "Current User is email verified = ${currentUser?.isEmailVerified}")
 		btn_join?.isEnabled = false // disable join button until UserEventData is fetched.
 		mViewModel.getUserEvent()?.observe(this, getUserEventObserver())
 
@@ -95,7 +93,6 @@ class EventsFragment : Fragment() {
 				// enable join button since, we know Event's user is part of.
 				val activeCardPosition = mLayoutManager.activeCardPosition
 				if (activeCardPosition != RecyclerView.NO_POSITION) {
-					Log.d(TAG, "position = $activeCardPosition")
 					val event: Event? = getEventAtPos(activeCardPosition)
 					if (event != null) {
 						updateButtons(event)
@@ -323,7 +320,6 @@ class EventsFragment : Fragment() {
 	private fun updateButtons(event: Event) {
 
 		val matchingEvent = mUserEventList?.find {
-			//			Log.d(TAG, "it.id = ${it.id}, even.id = ${event.id}")
 			it.id == event.id
 		}
 		// null event would imply that event doesn't exist in user's events field

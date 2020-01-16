@@ -1,6 +1,5 @@
 package com.omega.dottech2k20.Utils
 
-import android.util.Log
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
@@ -48,7 +47,6 @@ class AuthenticationUtils {
 					// Sign in User
 					signInUser(email,password, callback)
 				} else{
-					Log.d(TAG, "AuthenticationUtils : Login Failed")
 					user.delete() // Delete user since writing to FireStore failed
 					callback(false,it.exception)
 				}
@@ -71,8 +69,6 @@ class AuthenticationUtils {
 						}
 					}
 				} else{
-
-					Log.d(TAG, "AuthenticationUtils : Login Failed")
 					callback(false,it.exception)
 				}
 			}
@@ -92,7 +88,6 @@ class AuthenticationUtils {
 				callback(true,null)
 			} else{
 				callback(false,it.exception)
-				Log.d(TAG, "AuthenticationUtils : Login Failed")
 			}}
 		}
 
@@ -100,18 +95,6 @@ class AuthenticationUtils {
 			mAuth.signOut()
 		}
 
-		fun deleteCurrentUser(callback: (Boolean,Exception?) -> Unit){
-			val user = currentUser
-			if (user != null) {
-				user.delete().addOnCompleteListener{
-					if(it.isSuccessful){
-						callback(true,null)
-					} else{
-						callback(false,it.exception)
-					}
-				}
-			}
-		}
 
 		fun sendResetPasswordEmail(email: String, callback: (Exception?) -> Unit) {
 			mAuth.sendPasswordResetEmail(email).addOnCompleteListener {

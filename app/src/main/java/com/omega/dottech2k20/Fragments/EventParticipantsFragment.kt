@@ -70,7 +70,6 @@ class EventParticipantsFragment : Fragment() {
 				context?.let { ctx ->
 					if (view != null && recyclerView.getChildAdapterPosition(view) == 0) {
 						val card = view.findViewById<CardView>(R.id.card_total_count)
-						Log.d(TAG, "view.top = ${view.top}")
 						// Basically we are moving against the scroll, applying same magnitude of scroll on opposite direction
 						card.translationY = -(view.top) / 2f
 					}

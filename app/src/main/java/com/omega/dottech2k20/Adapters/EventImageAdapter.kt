@@ -1,7 +1,6 @@
 package com.omega.dottech2k20.Adapters
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -68,7 +67,6 @@ class EventImageAdapter(private val mContext: Context) :
 		fun onBind(event: Event) {
 			val imageUrl = event.thumbnail
 			imageUrl?.let {
-				Log.d("ImageViewItem", "Binding image - $imageUrl")
 				if (it.contains(Regex("https|HTTPS"))) {
 					Glide.with(itemView).load(it).placeholder(Utils.getCircularDrawable(mContext))
 						.into(imEvent)

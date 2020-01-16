@@ -1,7 +1,6 @@
 package com.omega.dottech2k20.Adapters
 
 import android.content.Context
-import android.util.Log
 import com.bumptech.glide.Glide
 import com.google.firebase.storage.FirebaseStorage
 import com.omega.dottech2k20.R
@@ -16,7 +15,6 @@ class EventImageItem(val context: Context, val imageUrl: String) : Item() {
 	override fun bind(viewHolder: GroupieViewHolder, position: Int) {
 		viewHolder.apply {
 			imageUrl.let {
-				Log.d("ImageViewItem", "Binding image - $imageUrl")
 				if (it.contains(Regex("https|HTTPS"))) {
 					Glide.with(itemView).load(it).placeholder(Utils.getCircularDrawable(context))
 						.into(im_event_image)

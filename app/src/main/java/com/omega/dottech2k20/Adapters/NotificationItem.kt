@@ -1,7 +1,6 @@
 package com.omega.dottech2k20.Adapters
 
 import android.content.Context
-import android.util.Log
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
@@ -58,7 +57,6 @@ class NotificationItem(
 
 	private fun setTitleAndContent(viewHolder: GroupieViewHolder) {
 		viewHolder.apply {
-			Log.d(TAG, "Title = ${notification.title}")
 			// Set Title
 			tv_notification_title.text = notification.title
 			// Set content
@@ -74,7 +72,6 @@ class NotificationItem(
 		viewHolder.apply {
 			//Set Image
 			image?.trim()?.let {
-				Log.d(TAG, "image = $it")
 				if (it.contains(Regex("https|HTTPS"))) {
 					Glide.with(itemView).load(it).placeholder(Utils.getCircularDrawable(context))
 						.into(im_notification)

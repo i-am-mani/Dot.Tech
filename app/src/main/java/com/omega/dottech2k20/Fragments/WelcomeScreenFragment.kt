@@ -5,7 +5,6 @@ import android.content.Context
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -98,7 +97,6 @@ class WelcomeScreenFragment : Fragment() {
 			var i = 0
 
 			for (child in children) {
-				Log.d(TAG, "childText = ${(child as TextView).text}")
 				child.animate().alpha(1f).apply {
 					duration = DURATION
 					startDelay = calculateDelay(i)

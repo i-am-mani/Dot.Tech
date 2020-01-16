@@ -1,7 +1,6 @@
 package com.omega.dottech2k20.dialogs
 
 import android.content.Context
-import android.util.Log
 import com.omega.dottech2k20.Utils.AuthenticationUtils
 
 object UnVerifiedEmailDialog {
@@ -21,8 +20,6 @@ object UnVerifiedEmailDialog {
 					currentUser.sendEmailVerification()
 				}
 			}.build()
-		} else {
-			Log.d(TAG, "Current User = Null")
 		}
 
 	}

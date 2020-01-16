@@ -3,7 +3,6 @@ package com.omega.dottech2k20.Fragments
 import android.content.Context
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -60,7 +59,6 @@ class SignUpFragment : Fragment() {
 				password, this::onRegistrationCompletionCallBack
 			)
 		} else {
-			Log.d(TAG, "signUp: Data is invalid")
 			context?.let { Toasty.warning(it, "Data Provided is Invalid!").show() }
 		}
 	}
@@ -112,7 +110,7 @@ class SignUpFragment : Fragment() {
 				return false
 			}
 			password.length < 6 -> {
-				input_layout_password1.error = "Password length cannot be shorter then 5 characters"
+				input_layout_password1.error = "Password length cannot be shorter then 6 characters"
 				return false
 			}
 			password != rePassword -> {

@@ -3,7 +3,6 @@ package com.omega.dottech2k20.dialogs
 import android.app.Dialog
 import android.content.Context
 import android.text.InputType
-import android.util.Log
 import android.view.ViewGroup
 import android.view.Window
 import com.google.android.material.textfield.TextInputEditText
@@ -24,7 +23,7 @@ class SingleTextFieldDialog(val context: Context) {
 	var queryType = "name"
 
 	var onSubmit: (name: String, query: String) -> Unit =
-		{ name, query -> Log.d(TAG, "Submit button clicked") }
+		{ name, query -> }
 	var headerIconId = R.drawable.ic_info_outline_white_24dp
 	var isNameFieldEnabled = false
 	var nameFieldHint = ""
@@ -36,11 +35,11 @@ class SingleTextFieldDialog(val context: Context) {
 
 		dialog.requestWindowFeature(Window.FEATURE_SWIPE_TO_DISMISS)
 		dialog.setContentView(layoutId)
-		dialog.window.setLayout(
+		dialog.window?.setLayout(
 			ViewGroup.LayoutParams.MATCH_PARENT,
 			ViewGroup.LayoutParams.WRAP_CONTENT
 		)
-		dialog.window.setBackgroundDrawableResource(android.R.color.transparent)
+		dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
 
 		dialog.apply {
 			tv_dialog_title.text = title

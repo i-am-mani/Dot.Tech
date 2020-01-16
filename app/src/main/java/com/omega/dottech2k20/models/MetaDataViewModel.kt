@@ -61,7 +61,6 @@ class MetaDataViewModel(application: Application) : AndroidViewModel(application
 			.addOnCompleteListener {
 				if (it.isSuccessful) {
 					displayFeedback("Request Placed Successfully")
-					Log.i(TAG, "FAQ request successfully placed : $queryMap")
 				}
 			}
 	}
@@ -133,7 +132,6 @@ class MetaDataViewModel(application: Application) : AndroidViewModel(application
 				}
 
 				mReportsLiveData.value = listOfReports
-				Log.d(TAG, "Reports data set $listOfReports")
 			}
 		}
 		return mReportsLiveData
@@ -149,6 +147,8 @@ class MetaDataViewModel(application: Application) : AndroidViewModel(application
 					displayFeedback("Thank you, Bug report has been submitted")
 				}
 			}
+		} else {
+			Toasty.warning(getApplication(), "Please log in to report").show()
 		}
 	}
 
@@ -162,6 +162,8 @@ class MetaDataViewModel(application: Application) : AndroidViewModel(application
 					displayFeedback("Thank you, Feature request has been submitted")
 				}
 			}
+		} else {
+			Toasty.warning(getApplication(), "Please log in to report").show()
 		}
 	}
 
@@ -169,7 +171,7 @@ class MetaDataViewModel(application: Application) : AndroidViewModel(application
 		try {
 			Toasty.success(getApplication(), message, Toast.LENGTH_SHORT).show()
 		} catch (e: Exception) {
-			Log.e(TAG, "Error Occured while processing Toasty Request: ", e)
+			Log.e(TAG, "Error Occurred while processing Toasty Request: ", e)
 		}
 	}
 }

@@ -5,7 +5,6 @@ import android.content.Context
 import android.os.Bundle
 import android.transition.ChangeBounds
 import android.transition.TransitionManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -166,7 +165,6 @@ class ProfileFragment : Fragment() {
 				val view = recyclerView.getChildAt(0)
 				if (view != null && recyclerView.getChildAdapterPosition(view) === 0) {
 					val card = view.findViewById<CardView>(R.id.card_total_count)
-					Log.d(TAG, "view.top = ${view.top}")
 					// Basically we are moving against the scroll, applying same magnitude of scroll on opposite direction
 					card.translationY = -(view.top) / 2f
 				}
@@ -192,11 +190,9 @@ class ProfileFragment : Fragment() {
 			override fun onFling(velocityX: Int, velocityY: Int): Boolean {
 				// +ve Y = Swipe Up, -ve Y = Swipe Down
 				if (velocityY > 1000) {
-					Log.d(TAG, "Fling values = $velocityX, $velocityY")
 					updateLayout(150)
 					return true
 				} else if (velocityY < -2000) {
-					Log.d(TAG, "Fling values = $velocityX, $velocityY")
 					updateLayout(250)
 					return true
 				}

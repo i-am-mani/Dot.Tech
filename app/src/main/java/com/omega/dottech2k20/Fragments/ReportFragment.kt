@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -78,7 +79,13 @@ class ReportFragment : Fragment() {
 		rv_reports.layoutManager = layoutManager
 
 		if (AuthenticationUtils.currentUser == null) {
-			context?.let { Toasty.info(it, "Please Sign in to use report feature").show() }
+			context?.let {
+				Toasty.info(
+					it,
+					"Please Sign in to use report feature",
+					Toast.LENGTH_LONG
+				).show()
+			}
 		}
 	}
 
@@ -92,9 +99,9 @@ class ReportFragment : Fragment() {
 				headerIconId = R.drawable.ic_ladybug
 				onSubmit = { name, query ->
 					when {
-						name.length < 10 -> Toasty.warning(
+						name.length < 5 -> Toasty.warning(
 							ctx,
-							"Title must be at least 10 characters long"
+							"Title must be at least 5 characters long"
 						).show()
 						name.length > 100 -> Toasty.warning(
 							ctx,
@@ -126,9 +133,9 @@ class ReportFragment : Fragment() {
 				headerIconId = R.drawable.ic_features_bulb
 				onSubmit = { name, query ->
 					when {
-						name.length < 10 -> Toasty.warning(
+						name.length < 5 -> Toasty.warning(
 							ctx,
-							"Title must be at least 10 characters long"
+							"Title must be at least 5 characters long"
 						).show()
 						name.length > 100 -> Toasty.warning(
 							ctx,

@@ -163,17 +163,12 @@ class MainActivity : AppCompatActivity() {
 			if (user != null) {
 				FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener { task ->
 					if (task.isSuccessful) {
-
 						task.result?.token?.let { token ->
-
 							val notificationIds = user.notificationIds
-
 							// If token isn't present, add it to list and replace the notificationIds
 							if (notificationIds.find { it == token } == null) {
 								mViewModel.updateNotificationId(token)
-								Log.d("Notification", "New User data $user")
 							}
-							Log.d(TAG, "FirebaseInstanceId = $token")
 						}
 					}
 				}
@@ -183,13 +178,7 @@ class MainActivity : AppCompatActivity() {
 	}
 
 	private fun subscribeToTopicAll() {
-		FirebaseMessaging.getInstance().subscribeToTopic("all").addOnCompleteListener {
-			if (it.isSuccessful) {
-				Log.d(TAG, "User Subscribed to Topic successfully")
-			} else {
-				Log.d(TAG, "Failed to subscribe to topic")
-			}
-		}
+		FirebaseMessaging.getInstance().subscribeToTopic("all")
 	}
 
 	private fun createNotificationChannel() {
@@ -279,7 +268,6 @@ class MainActivity : AppCompatActivity() {
 				if (destination.id == R.id.eventsFragment || destination.id == R.id.profileFragment || destination.id == R.id.notificationsFragment) {
 					navigation_bar.show(destination.id, true)
 					navigation_bar.visibility = View.VISIBLE
-					Log.d(TAG, "Showing Nav bar")
 				} else {
 					navigation_bar.visibility = View.GONE
 					TransitionManager.beginDelayedTransition(root_main, ChangeBounds())
@@ -314,17 +302,14 @@ class MainActivity : AppCompatActivity() {
 			Utils.virtualClickHapticFeedback(navigation_bar)
 			when (it.id) {
 				R.id.profileFragment -> {
-					Log.d(TAG, "Navigating To ProfileFragment")
 					navController.navigate(R.id.profileFragment)
 				}
 
 				R.id.eventsFragment -> {
 					navController.navigate(R.id.eventsFragment)
-					Log.d(TAG, "Navigating To Events")
 				}
 				R.id.notificationsFragment -> {
 					navController.navigate(R.id.notificationsFragment)
-					Log.d(TAG, "Navigating To Notification")
 				}
 			}
 		}

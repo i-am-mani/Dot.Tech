@@ -3,7 +3,6 @@ package com.omega.dottech2k20.Fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -66,7 +65,6 @@ class EventDetailsFragment : Fragment() {
 		inflater: LayoutInflater, container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View? {
-		Log.d(TAG, "Bundle values - ${arguments?.toString()}")
 		extractEvent()
 		return inflater.inflate(R.layout.fragment_event_details, container, false)
 	}
@@ -79,7 +77,6 @@ class EventDetailsFragment : Fragment() {
 		if (event != null) {
 			mEvent = event
 		} else {
-			Log.e(TAG, "Null Event Passed", NullPointerException())
 			findNavController().navigate(R.id.eventsFragment)
 		}
 	}

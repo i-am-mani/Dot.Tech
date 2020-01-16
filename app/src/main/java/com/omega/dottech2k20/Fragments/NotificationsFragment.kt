@@ -3,7 +3,6 @@ package com.omega.dottech2k20.Fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -72,7 +71,6 @@ class NotificationsFragment : Fragment() {
 			context?.let {
 				val notificationItem =
 					NotificationItem(it, findNavController(), notification)
-				Log.d(TAG, "Timestamp = ${notification.issued_time?.toDate()?.time}}")
 				list.add(notificationItem)
 			}
 		}

@@ -33,7 +33,7 @@ class HorizontalImageViewerItem(val context: Context, val imageUrls: List<String
 				// Indicator dots
 				initIndicator(imageItems.count(), viewHolder)
 
-				rv_event_images.addItemDecoration(HorizontalEqualSpaceItemDecoration(10))
+				rv_event_images.addItemDecoration(HorizontalEqualSpaceItemDecoration(0, 20))
 				LinearSnapHelper().attachToRecyclerView(rv_event_images)
 			} else {
 				root_event_images.visibility = View.GONE

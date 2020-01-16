@@ -2,7 +2,6 @@ package com.omega.dottech2k20.Fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -70,7 +69,6 @@ class SignInFragment : Fragment() {
 	fun signInUser(view: View?) {
 		val email: String = et_login_email.text.toString()
 		val password: String = et_login_password.text.toString()
-		Log.d(TAG, "singInUser: name = " + email + "password " + password)
 		if (isDataValid()) {
 			progressbar_login.visibility = View.VISIBLE
 			AuthenticationUtils.signInUser(
@@ -130,9 +128,9 @@ class SignInFragment : Fragment() {
 			// If the data isn't refreshed, then userProfile/events stays null as no calls are made
 			// after logging in.
 			mViewModel.getUserProfile()?.observe(this, Observer {
-				Log.i(TAG, "Login Successful")
 				Snackbar.make(root_sign_in, "Login Successful", Snackbar.LENGTH_SHORT)
 				mActivity.setNavigationMenuItems()
+
 				progressbar_login.findNavController().popBackStack()
 				progressbar_login.findNavController().navigate(R.id.eventsFragment)
 			})

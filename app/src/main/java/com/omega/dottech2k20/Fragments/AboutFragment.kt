@@ -32,7 +32,7 @@ class AboutFragment : Fragment() {
 		try {
 			mActivity = context as MainActivity
 		} catch (e: Exception) {
-			Log.d(TAG, "Error occured while casting")
+			Log.e(TAG, "Error occurred while casting", e)
 		}
 	}
 
