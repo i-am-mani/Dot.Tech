@@ -2,7 +2,6 @@ package com.omega.dottech2k20.models
 
 import android.app.Application
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
@@ -39,7 +38,6 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 		val user = mFireAuth.currentUser ?: return null
 		val uid = user.uid
 
-		Log.d(TAG, "Initial value  = ${mUserProfileLiveData.value}")
 		val document: DocumentReference = mFirestore.collection("Users").document(uid)
 		if (mUserProfileLiveData.value == null) {
 			FirebaseSnapshotListeners.addDocumentSnapShotListener(document) {
@@ -57,6 +55,7 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 	}
 
 	/**
+	 * @deprecated
 	 * 	Update User data in Users Collection.
 	 *
 	 * 	Note :- the data is being replaced!
@@ -127,7 +126,6 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 		if (mEventsLiveData.value == null) {
 			FirebaseSnapshotListeners.addQuerySnapShotListener(eventTask) {
 				mEventsLiveData.value = it.toObjects(Event::class.java)
-				Log.d(TAG, "Current data: ${mEventsLiveData.value.toString()}")
 			}
 		}
 		return mEventsLiveData
@@ -157,14 +155,8 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 						}
 					}
 
-					val message = "Joining Event Successfull"
-					Toasty.success(
-						getApplication(),
-						message,
-						Toast.LENGTH_SHORT
-					).show()
-
 				} else {
+					Toasty.error(getApplication(), "Joining Event Failed").show()
 					Log.e(TAG, "Failed To get User : ", task.exception)
 				}
 			}
@@ -192,9 +184,9 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 			// visibleParticipants - with user permission make the user's name public in listing
 			// those who do not wish their names to be made public, will be shown as anonymous users
 			// i.e the difference between visibleParticipants count and participants could
-			val visibleParticipants = event.visibleParticipants
+			var visibleParticipants: Participant? = null
 			if (!isAnonymous) {
-				visibleParticipants[userId] = user.fullName
+				visibleParticipants = Participant(userId, user.fullName)
 			}
 
 			mFirestore.runBatch {
@@ -206,18 +198,23 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 				// increment participantCount of Event
 				it.update(events, FieldPath.of("participantCount"), FieldValue.increment(1))
 				// update event's visibleParticipants
-				it.update(events, FieldPath.of("visibleParticipants"), visibleParticipants)
+				if (visibleParticipants != null) {
+					it.update(
+						events,
+						FieldPath.of("visibleParticipants"),
+						FieldValue.arrayUnion(visibleParticipants)
+					)
+				}
 			}.addOnCompleteListener {
 				if (it.isSuccessful) {
 					Toasty.success(getApplication(), "Joining Event Successful").show()
-					Log.i(TAG, "Joining Events Successful")
 				} else {
-					Toasty.success(getApplication(), "Failed To Join Event").show()
+					Toasty.error(getApplication(), "Failed To Join Event").show()
 					Log.e(TAG, "Joining Events Failed")
 				}
 			}
 		} else {
-			Log.w(TAG, "event or user id is null")
+			Toasty.error(getApplication(), "Failed to join event").show()
 		}
 	}
 
@@ -269,8 +266,7 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 
 			val events = mFirestore.collection("Events").document(event.id)
 
-			val visibleParticipants = event.visibleParticipants
-			visibleParticipants.remove(userId)
+			val visibleParticipants = Participant(userId, user.fullName)
 
 			mFirestore.runBatch {
 				val eventIds = Ids(eventId) // Event Ids and Team Id.
@@ -281,18 +277,22 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 				// decrement participantCount
 				it.update(events, FieldPath.of("participantCount"), FieldValue.increment(-1))
 				// remove participant from visibleParticipant map
-				it.update(events, FieldPath.of("visibleParticipants"), visibleParticipants)
+				it.update(
+					events,
+					FieldPath.of("visibleParticipants"),
+					FieldValue.arrayRemove(visibleParticipants)
+				)
 			}.addOnCompleteListener {
 				if (it.isSuccessful) {
 					Toasty.success(getApplication(), "Leaving Event Successful").show()
-					Log.d(TAG, "UnJoining Events Successful")
 				} else {
-					Toasty.success(getApplication(), "Failed To Leave Event").show()
-					Log.e(TAG, "UnJoining Events Failed")
+					Toasty.error(getApplication(), "Failed To Leave Event").show()
 					// since task failed, remove timestamp from sp
 					SharedPreferenceUtils.removeTimestamp(getApplication(), eventId)
 				}
 			}
+		} else {
+			Toasty.error(getApplication(), "Failed to leave event").show()
 		}
 	}
 
@@ -346,11 +346,6 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 					return getMatchingEventsById(eventIds, events)
 				}
 			}
-		} else {
-			Log.d(
-				TAG,
-				"userLiveData = ${userLiveData.value} , eventsLiveData = ${eventsLiveData.value}"
-			)
 		}
 		return null
 	}
@@ -377,7 +372,6 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 				list.add(event)
 			}
 		}
-		Log.d("ViewModel", "Event list = ${list.count()}")
 		return list
 	}
 
@@ -410,7 +404,6 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 			val curValue = mTeams.value
 			curValue?.put(eventId, teams)
 			mTeams.value = curValue
-			Log.d(TAG, " eid = $eventId, Teams = $teams")
 		}
 
 		return mTeams
@@ -431,7 +424,6 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 						}
 					}
 				} else {
-					Log.e(TAG, "Failed To get User : ", task.exception)
 					Toasty.error(getApplication(), "Failed To Create Team").show()
 				}
 			}
@@ -507,35 +499,39 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 			).document(tid)
 			val updateParticipantsCountQuery = mFirestore.collection(EVENT_COLLECTION).document(eid)
 			val ids = Ids(eid, tid)
-			mFirestore.runBatch { batch ->
-				// Remove all teammates
-				for (teammate in team.teammates) {
-					val teammateId = teammate.id
-					if (teammateId != null) {
-						val updateUserQuery =
-							mFirestore.collection(USER_COLLECTION).document(teammateId)
-						// Remove teammate
-						batch.update(
-							teamQuery,
-							FieldPath.of(TEAMMATES_FIELD),
-							FieldValue.arrayRemove(teammate)
-						)
-						// Remove ids to user's `events` field
-						batch.update(
-							updateUserQuery,
-							FieldPath.of(USERS_EVENT_FIELD),
-							FieldValue.arrayRemove(ids)
-						)
-						// update participant's counter
-						batch.update(
-							updateParticipantsCountQuery, FieldPath.of(
-								EVENT_PARTICIPANTS_COUNT_FIELD
-							), FieldValue.increment(-1)
-						)
+			mFirestore.runTransaction { batch ->
+				val teamObject = batch.get(teamQuery).toObject(Team::class.java)
+				val teammates = teamObject?.teammates
+				if (teammates != null) {
+					// Remove all teammates
+					for (teammate in teammates) {
+						val teammateId = teammate.id
+						if (teammateId != null) {
+							val updateUserQuery =
+								mFirestore.collection(USER_COLLECTION).document(teammateId)
+							// Remove teammate
+							batch.update(
+								teamQuery,
+								FieldPath.of(TEAMMATES_FIELD),
+								FieldValue.arrayRemove(teammate)
+							)
+							// Remove ids to user's `events` field
+							batch.update(
+								updateUserQuery,
+								FieldPath.of(USERS_EVENT_FIELD),
+								FieldValue.arrayRemove(ids)
+							)
+							// update participant's counter
+							batch.update(
+								updateParticipantsCountQuery, FieldPath.of(
+									EVENT_PARTICIPANTS_COUNT_FIELD
+								), FieldValue.increment(-1)
+							)
+						}
 					}
+					// Delete team
+					batch.delete(teamQuery)
 				}
-				// Delete team
-				batch.delete(teamQuery)
 			}.addOnCompleteListener {
 				if (it.isSuccessful) {
 					Toasty.success(getApplication(), "Deleting Team Successful").show()
@@ -566,9 +562,8 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 							addUserToTeam(event, team, it)
 						}
 					}
-					showSuccessToast("Joining Event Successful")
-
 				} else {
+					Toasty.error(getApplication(), "Join Team Failed").show()
 					Log.e(TAG, "Failed To get User : ", task.exception)
 				}
 			}
@@ -577,21 +572,13 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 		}
 	}
 
-	private fun showSuccessToast(message: String) {
-		Toasty.success(
-			getApplication(),
-			message,
-			Toast.LENGTH_SHORT
-		).show()
-	}
-
 	private fun addUserToTeam(event: Event, tid: String, user: User) {
 		val eid = event.id
 		val uid = user.id
 		val fullName = user.fullName
 
 		if (eid != null && uid != null && fullName != null) {
-			val updateTeammateQuery =
+			val teamQuery =
 				mFirestore.collection(EVENT_COLLECTION).document(eid).collection(
 					EVENT_TEAM_COLLECTION
 				).document(tid)
@@ -601,25 +588,32 @@ class UserEventViewModel(application: Application) : AndroidViewModel(applicatio
 			val ids = Ids(eid, tid)
 			val teammate = Teammate(uid, fullName)
 
-			mFirestore.runBatch { batch ->
-				// Add teammate
-				batch.update(
-					updateTeammateQuery,
-					FieldPath.of(TEAMMATES_FIELD),
-					FieldValue.arrayUnion(teammate)
-				)
-				// Add ids to user's `events` field
-				batch.update(
-					updateUserQuery,
-					FieldPath.of(USERS_EVENT_FIELD),
-					FieldValue.arrayUnion(ids)
-				)
-				// update participant's counter
-				batch.update(
-					updateParticipantsCountQuery, FieldPath.of(
-						EVENT_PARTICIPANTS_COUNT_FIELD
-					), FieldValue.increment(1)
-				)
+			mFirestore.runTransaction { transaction ->
+				val team = transaction.get(teamQuery).toObject(Team::class.java)
+				val teamSize = event.teamSize
+				val nTeammates = team?.teammates?.size
+				if (teamSize != null && nTeammates != null) {
+					if (nTeammates < teamSize) {
+						// Add teammate
+						transaction.update(
+							teamQuery,
+							FieldPath.of(TEAMMATES_FIELD),
+							FieldValue.arrayUnion(teammate)
+						)
+						// Add ids to user's `events` field
+						transaction.update(
+							updateUserQuery,
+							FieldPath.of(USERS_EVENT_FIELD),
+							FieldValue.arrayUnion(ids)
+						)
+						// update participant's counter
+						transaction.update(
+							updateParticipantsCountQuery, FieldPath.of(
+								EVENT_PARTICIPANTS_COUNT_FIELD
+							), FieldValue.increment(1)
+						)
+					}
+				}
 			}.addOnCompleteListener {
 				if (it.isSuccessful) {
 					Toasty.success(getApplication(), "Joining Team Successful").show()

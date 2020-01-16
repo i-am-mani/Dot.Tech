@@ -11,7 +11,7 @@ data class Event(
 	val title: String? = null,
 	val thumbnail: String? = null,
 	val shortDescription: String = "",
-	val visibleParticipants: HashMap<String, String> = HashMap(),
+	val visibleParticipants: List<Participant> = listOf(),
 	val participantCount: Int = 0,
 	val longDescription: String = "",
 	val images: List<String> = listOf(),
@@ -22,47 +22,50 @@ data class Event(
 	val type: String = FirestoreFieldNames.EVENT_TYPE_INDIVIDUAL,
 	val teamSize: Int? = null
 ) : Parcelable {
-	constructor(source: Parcel) : this(
-		source.readString(),
-		source.readString(),
-		source.readString(),
-		source.readString(),
-		source.readSerializable() as HashMap<String, String>,
-		source.readInt(),
-		source.readString(),
-		source.createStringArrayList(),
-		source.readParcelable<Timestamp>(Timestamp::class.java.classLoader),
-		source.readParcelable<Timestamp>(Timestamp::class.java.classLoader),
-		1 == source.readInt(),
-		source.readInt(),
-		source.readString(),
-		source.readValue(Int::class.java.classLoader) as Int?
+	constructor(parcel: Parcel) : this(
+		parcel.readString(),
+		parcel.readString(),
+		parcel.readString(),
+		parcel.readString(),
+		TODO("visibleParticipants"),
+		parcel.readInt(),
+		parcel.readString(),
+		parcel.createStringArrayList(),
+		parcel.readParcelable(Timestamp::class.java.classLoader),
+		parcel.readParcelable(Timestamp::class.java.classLoader),
+		parcel.readByte() != 0.toByte(),
+		parcel.readInt(),
+		parcel.readString(),
+		parcel.readValue(Int::class.java.classLoader) as? Int
 	)
 
-	override fun describeContents() = 0
-
-	override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
-		writeString(id)
-		writeString(title)
-		writeString(thumbnail)
-		writeString(shortDescription)
-		writeSerializable(visibleParticipants)
-		writeInt(participantCount)
-		writeString(longDescription)
-		writeStringList(images)
-		writeParcelable(startTime, 0)
-		writeParcelable(endTime, 0)
-		writeInt((if (registrationOpen) 1 else 0))
-		writeInt(orderPreference)
-		writeString(type)
-		writeValue(teamSize)
+	override fun writeToParcel(parcel: Parcel, flags: Int) {
+		parcel.writeString(id)
+		parcel.writeString(title)
+		parcel.writeString(thumbnail)
+		parcel.writeString(shortDescription)
+		parcel.writeInt(participantCount)
+		parcel.writeString(longDescription)
+		parcel.writeStringList(images)
+		parcel.writeParcelable(startTime, flags)
+		parcel.writeParcelable(endTime, flags)
+		parcel.writeByte(if (registrationOpen) 1 else 0)
+		parcel.writeInt(orderPreference)
+		parcel.writeString(type)
+		parcel.writeValue(teamSize)
 	}
 
-	companion object {
-		@JvmField
-		val CREATOR: Parcelable.Creator<Event> = object : Parcelable.Creator<Event> {
-			override fun createFromParcel(source: Parcel): Event = Event(source)
-			override fun newArray(size: Int): Array<Event?> = arrayOfNulls(size)
+	override fun describeContents(): Int {
+		return 0
+	}
+
+	companion object CREATOR : Parcelable.Creator<Event> {
+		override fun createFromParcel(parcel: Parcel): Event {
+			return Event(parcel)
+		}
+
+		override fun newArray(size: Int): Array<Event?> {
+			return arrayOfNulls(size)
 		}
 	}
 }
