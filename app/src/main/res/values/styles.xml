@@ -65,7 +65,7 @@
 
     <style name="CaptionText">
         <item name="android:textSize">14sp</item>
-        <item name="android:fontFamily">@font/eczar</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
         <item name="android:textColor">#B0000000</item>
     </style>
 
