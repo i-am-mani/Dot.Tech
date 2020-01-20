@@ -59,7 +59,6 @@ class StartUpActivity : AppCompatActivity() {
 
 				if (result != null) {
 					notices = result.toObjects(Notice::class.java)
-					Log.d(TAG, "Notices = $notices")
 					goToMainActivity()
 				} else {
 					Log.e(TAG, "Failed to fetch notices: ", it.exception)
@@ -152,7 +151,7 @@ class StartUpActivity : AppCompatActivity() {
 		val joinEventsPage = PaperOnboardingPage(
 			"Participate",
 			"Join or Leave any Event on fly!",
-			Color.parseColor("#E8EAF6"),
+			Color.parseColor("#66BB6A"),
 			R.drawable.illustration_participation,
 			R.drawable.illustration_participation
 		)
