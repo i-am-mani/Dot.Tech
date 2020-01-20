@@ -83,18 +83,24 @@
             android:layout_height="match_parent"
             android:animateLayoutChanges="true">
 
-            <TextView
-                android:id="@+id/tv_about_description"
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:autoLink="web"
-                android:paddingStart="16dp"
-                android:paddingTop="18dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="18dp"
-                android:textAppearance="@style/NormalText"
-                android:visibility="gone"
-                tools:text="@tools:sample/lorem[100]" />
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/tv_about_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:autoLink="web"
+                    android:paddingStart="16dp"
+                    android:paddingTop="18dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="18dp"
+                    android:scrollbars="vertical"
+                    android:textAppearance="@style/NormalText"
+                    android:visibility="gone"
+                    tools:text="@tools:sample/lorem[100]" />
+            </ScrollView>
 
             <ProgressBar
                 android:id="@+id/pb_about"
