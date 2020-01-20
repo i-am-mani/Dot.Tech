@@ -20,9 +20,10 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_margin="20dp"
-            android:tint="@android:color/transparent"
-            android:tintMode="add"
-            android:scaleType="fitCenter">
+            android:scaleType="fitCenter"
+            android:tint="@color/Blue800"
+            android:tintMode="src_in"
+            app:srcCompat="@drawable/ic_person_add">
 
         </ImageView>
     </androidx.cardview.widget.CardView>
