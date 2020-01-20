@@ -79,11 +79,18 @@ class EventParticipantsFragment : Fragment() {
 	}
 
 	private fun getParticipantsItems(event: Event): MutableList<EventParticipantItem> {
-		val names = event.visibleParticipants.values
 		val listOfNames = mutableListOf<EventParticipantItem>()
 
-		for (name in names) {
-			listOfNames.add(EventParticipantItem(name))
+		for (participant in event.visibleParticipants) {
+			participant.let {
+				if (it != null) {
+					val name = it.name
+					if (name != null) {
+						listOfNames.add(EventParticipantItem(name))
+					}
+				}
+			}
+
 		}
 
 		event.participantCount.let { participantCount ->
