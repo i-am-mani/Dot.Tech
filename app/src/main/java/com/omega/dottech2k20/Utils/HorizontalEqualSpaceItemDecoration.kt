@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import androidx.recyclerview.widget.RecyclerView.State
 
-class HorizontalEqualSpaceItemDecoration(private val mSpaceHeight: Int) :
+class HorizontalEqualSpaceItemDecoration(private val left: Int, private val right: Int) :
 	ItemDecoration() {
 
 	override fun getItemOffsets(
@@ -15,8 +15,8 @@ class HorizontalEqualSpaceItemDecoration(private val mSpaceHeight: Int) :
 		parent: RecyclerView,
 		state: State
 	) {
-		outRect.left = mSpaceHeight
-		outRect.right = mSpaceHeight
+		outRect.left = left
+		outRect.right = right
 	}
 
 }
