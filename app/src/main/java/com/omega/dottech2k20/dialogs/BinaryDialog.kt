@@ -39,11 +39,11 @@ class BinaryDialog(
 
 		dialog.requestWindowFeature(Window.FEATURE_SWIPE_TO_DISMISS)
 		dialog.setContentView(layoutId)
-		dialog.window.setLayout(
+		dialog.window?.setLayout(
 			ViewGroup.LayoutParams.MATCH_PARENT,
 			ViewGroup.LayoutParams.WRAP_CONTENT
 		)
-		dialog.window.setBackgroundDrawableResource(android.R.color.transparent)
+		dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
 
 		val tvTitle = dialog.findViewById<TextView>(R.id.text_title)
 		val tvSubTitle = dialog.findViewById<TextView>(R.id.text_sub_title)

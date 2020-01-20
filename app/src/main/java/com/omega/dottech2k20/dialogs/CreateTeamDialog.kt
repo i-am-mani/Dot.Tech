@@ -17,11 +17,11 @@ object CreateTeamDialog {
 			setCanceledOnTouchOutside(true)
 
 			setContentView(R.layout.create_team_dialog)
-			window.setLayout(
+			window?.setLayout(
 				ViewGroup.LayoutParams.MATCH_PARENT,
 				ViewGroup.LayoutParams.WRAP_CONTENT
 			)
-			window.setBackgroundDrawableResource(android.R.color.transparent)
+			window?.setBackgroundDrawableResource(android.R.color.transparent)
 
 			val etName = findViewById<EditText>(R.id.et_team_name)
 			val etPasscode = findViewById<EditText>(R.id.et_team_passcode)

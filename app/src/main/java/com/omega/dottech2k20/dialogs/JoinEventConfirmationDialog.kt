@@ -16,11 +16,11 @@ object JoinEventConfirmationDialog {
 			setCanceledOnTouchOutside(true)
 
 			setContentView(R.layout.dialog_join_event_confirmation)
-			window.setLayout(
+			window?.setLayout(
 				ViewGroup.LayoutParams.MATCH_PARENT,
 				ViewGroup.LayoutParams.WRAP_CONTENT
 			)
-			window.setBackgroundDrawableResource(android.R.color.transparent)
+			window?.setBackgroundDrawableResource(android.R.color.transparent)
 
 			val confirmBtn = findViewById<Button>(R.id.btn_right)
 			val cancelBtn = findViewById<Button>(R.id.btn_left)
