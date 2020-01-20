@@ -53,13 +53,13 @@ class EventTeamsFragment : Fragment() {
 	): View? {
 		mAdapter = GroupAdapter()
 		mTeamSection = Section()
-		setTeamsHeader(0)
 		mAdapter.add(mTeamSection)
 		extractArguments()
+		setTotalTeamsHeader(0)
 		return inflater.inflate(R.layout.fragment_event_teams, container, false)
 	}
 
-	private fun setTeamsHeader(count: Int) {
+	private fun setTotalTeamsHeader(count: Int) {
 		mTeamSection.setHeader(HeaderCountItem("Total Teams", count))
 	}
 
@@ -131,7 +131,7 @@ class EventTeamsFragment : Fragment() {
 		} else {
 			mTeamSection.update(getTeamItems(data))
 		}
-		setTeamsHeader(data.count())
+		setTotalTeamsHeader(data.count())
 	}
 
 	private fun getSortedData(eventTeams: MutableList<Team>): List<Team> {
@@ -230,6 +230,7 @@ class EventTeamsFragment : Fragment() {
 						minQueryFieldLines = 1
 						hint = "Passcode"
 						queryType = "password"
+						headerIconId = R.drawable.ic_plus
 						onSubmit = { name: String, query: String ->
 							if (query == team.passcode) {
 								mViewModel.joinTeam(mEvent, tid)
@@ -311,6 +312,7 @@ class EventTeamsFragment : Fragment() {
 		search_team.setOnCloseListener {
 			search_team.visibility = GONE
 			fab_search.show()
+			populateAdapter(mDataSet)
 			true
 		}
 

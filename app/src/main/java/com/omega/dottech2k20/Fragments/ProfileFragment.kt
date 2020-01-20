@@ -163,7 +163,7 @@ class ProfileFragment : Fragment() {
 			override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
 				super.onScrolled(recyclerView, dx, dy)
 				val view = recyclerView.getChildAt(0)
-				if (view != null && recyclerView.getChildAdapterPosition(view) === 0) {
+				if (view != null && recyclerView.getChildAdapterPosition(view) == 0) {
 					val card = view.findViewById<CardView>(R.id.card_total_count)
 					// Basically we are moving against the scroll, applying same magnitude of scroll on opposite direction
 					card.translationY = -(view.top) / 2f

@@ -28,7 +28,6 @@ import com.google.firebase.Timestamp
 import com.omega.dottech2k20.Adapters.EventImageAdapter
 import com.omega.dottech2k20.MainActivity
 import com.omega.dottech2k20.R
-import com.omega.dottech2k20.Utils.AuthenticationUtils
 import com.omega.dottech2k20.Utils.EventCallbacks
 import com.omega.dottech2k20.Utils.FirestoreFieldNames
 import com.omega.dottech2k20.Utils.Utils
@@ -79,7 +78,6 @@ class EventsFragment : Fragment() {
 		mViewModel = ViewModelProviders.of(mMainActivity).get(UserEventViewModel::class.java)
 		mViewModel.getEvents().observe(this, getEventsObserver())
 
-		val currentUser = AuthenticationUtils.currentUser
 		btn_join?.isEnabled = false // disable join button until UserEventData is fetched.
 		mViewModel.getUserEvent()?.observe(this, getUserEventObserver())
 
@@ -149,7 +147,7 @@ class EventsFragment : Fragment() {
 		super.onViewCreated(view, savedInstanceState)
 		ts_title.setFactory(TextViewFactory(R.style.TitleTextEczar))
 		ts_date.setFactory(TextViewFactory(R.style.DateTimeAppearance))
-		ts_participants_count.setFactory(TextViewFactory((R.style.TextAppearance_MaterialComponents_Body1)))
+		ts_participants_count.setFactory(TextViewFactory((R.style.CaptionText)))
 	}
 
 	private fun initCallbacks() {
