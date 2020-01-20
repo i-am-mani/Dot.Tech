@@ -68,24 +68,25 @@ class TeamItem(
 			val uid = currentUser?.uid
 			if (uid == teammate.id && isUserPartOfTeam && !userCreator) {
 				btn_leave.visibility = View.VISIBLE
-
-				btn_leave.setOnClickListener {
-
-					BinaryDialog(context, R.layout.dialog_event_confirmation).apply {
-						title = "Leave ${mTeam.name} ?"
-						description =
-							"you won't be able to join another team for this event for next 1 Hours"
-						rightButtonCallback = {
-							val userTeammateObject = mTeam.teammates.find { it.id == uid }
-							if (userTeammateObject != null) {
-								onRemoveTeammateCallback(mTeam, teammate)
-							}
-						}
-						build()
-					}
-				}
+				break
 			} else {
 				btn_leave.visibility = View.GONE
+			}
+		}
+		btn_leave.setOnClickListener {
+
+			BinaryDialog(context, R.layout.dialog_event_confirmation).apply {
+				title = "Leave ${mTeam.name} ?"
+				description =
+					"you won't be able to join another team for this event for next 10 minutes"
+				rightButtonCallback = {
+					val uid = currentUser?.uid
+					val userTeammateObject = mTeam.teammates.find { it.id == uid }
+					if (userTeammateObject != null) {
+						onRemoveTeammateCallback(mTeam, userTeammateObject)
+					}
+				}
+				build()
 			}
 		}
 	}
@@ -99,7 +100,7 @@ class TeamItem(
 				BinaryDialog(context, R.layout.dialog_event_confirmation).apply {
 					title = "Delete ${mTeam.name} ?"
 					description =
-						"you won't be able to create another team for this event for next 12 Hours"
+						"you won't be able to create another team for this event for next 30 minutes"
 					rightButtonCallback = { onDeleteTeamCallback(mTeam) }
 					build()
 				}
