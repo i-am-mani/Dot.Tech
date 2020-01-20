@@ -19,7 +19,6 @@ object SharedPreferenceUtils {
 			val diff = System.currentTimeMillis() - lastRegisteredTimestamp
 			backOfTime - (diff / (1000 * 60))
 		} else {
-			Log.e(TAG, "COntext or id is null: ", NullPointerException())
 			0
 		}
 	}
@@ -32,7 +31,6 @@ object SharedPreferenceUtils {
 			val editor = sharedPreference.edit()
 			editor.putLong(id, System.currentTimeMillis())
 			editor.apply()
-			Log.d(TAG, "Registered Leave Event TimeStamp")
 		} else {
 			Log.e(TAG, ": Context or id is null", NullPointerException())
 		}
@@ -46,7 +44,6 @@ object SharedPreferenceUtils {
 			val editor = sharedPreference.edit()
 			editor.remove(id)
 			editor.apply()
-			Log.d(TAG, "Removed Timestamp with id = $id")
 		} else {
 			Log.e(TAG, "Context or id is null", NullPointerException())
 		}
